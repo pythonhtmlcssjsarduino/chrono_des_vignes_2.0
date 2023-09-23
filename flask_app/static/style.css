@@ -1,0 +1,10 @@
+.w-side{
+    width: 15%;
+    min-width: 77px;
+}
+.w-content{
+    width: 70%;
+}
+.dropdown-toggle{
+    width: 50px;
+}

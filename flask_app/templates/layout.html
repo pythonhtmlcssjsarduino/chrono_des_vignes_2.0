@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>course des vigne 2.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
+    <link rel="stylesheet" href="/static/style.css" />
+    <!-- FontAwesome 6.2.0 CSS -->
+    <script src="https://kit.fontawesome.com/7383067e37.js" crossorigin="anonymous"></script>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+      integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
+      crossorigin="anonymous"
+    ></script>
+    <!-- ✅ load Bootstrap bundle ✅ -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <body style="min-width: 305px; height: 100vh">
+    <header>
+      <nav
+        class="navbar navbar-expand-sm bg-info fixed-top"
+        style="height: 70px"
+      >
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <a href="{{ url_for('home') }}" class="navbar-brand nav-link"
+              ><img
+                src="{{ url_for('static', filename='favicon.ico') }}"
+                alt="cdv 2.0"
+                width="30"
+                height="30"
+                class="d-inline-block align-top m-1"
+              />course des vignes 2.0</a
+            >
+          </div>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapsibleNavbar"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="nav navbar-nav me-auto">
+              <li class="nav-item">
+                <a href="#about" class="nav-link">about</a>
+              </li>
+              <li class="nav-item">
+                <a href="#contact" class="nav-link">nous contacter</a>
+              </li>
+              <li class="nav-item">
+                <a
+                  href="{{ url_for('home_event', event_name='course des vignes') }}"
+                  class="nav-link"
+                  >view</a
+                >
+              </li>
+            </ul>
+            <ul class="nav navbar-nav d-flex">
+              {% if user_data %}
+              <li class="nav-item">
+                <a href="{{ url_for('logout') }}" class="nav-link"
+                  ><i class="fa-solid fa-right-from-bracket"></i>log out</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#profil"
+                  ><img
+                    src="{{ url_for('static', filename= 'icone.png') }}"
+                    alt="profil"
+                    style="width: 30px"
+                    class="rounded-circle"
+                /></a>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <a href="{{ url_for('login') }}" class="nav-link"
+                  ><i class="fa-solid fa-right-to-bracket"></i>log in</a
+                >
+              </li>
+              <li class="nav-item">
+                <a href="{{ url_for('signup') }}" class="nav-link"
+                  ><i class="fa-solid fa-user-plus"></i>sign up</a
+                >
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <center class="d-flex h-100 w-100" style="margin-top: 70px">
+      <div class="w-side bg-warning">
+        {% if event_data and event_data.name %} {% include 'sidebar.html' %} {% endif %}
+      </div>
+      <div class="w-content bg-body p-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            <hr />
+          {% endif %}
+        {% endwith %}
+        {% block content %} {% endblock content %}
+      </div>
+      <div class="w-side bg-warning"></div>
+    </center>
+  </body>
+</html>

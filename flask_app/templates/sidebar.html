@@ -1,0 +1,117 @@
+<div class="d-flex flex-column flex-md-row">
+  <nav class="navbar navbar-expand-md d-flex flex-md-column p-0 w-100">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#sidebarSupportedContent"
+      aria-controls="sidebarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle Navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse w-100" id="sidebarSupportedContent">
+      <ul
+        class="navbar-nav w-100 d-flex flex-md-column text-center text-md-end"
+      >
+        <li class="nav-item bg-danger btn mb-2">
+          <a
+            class="nav-link"
+            href="{{ url_for('home_event', event_name=event_data.name) }}"
+            >{{ event_data.name }}</a
+          >
+        </li>
+        <li class="nav-item btn-group-justified bg-info my-2">
+          <a
+            class="nav-link"
+            href="{{ url_for('editions', event_name=event_data.name) }}"
+            >editions</a
+          >
+          <div class="btn-group w-100">
+            <a
+              type="button"
+              class="btn btn-danger w-100"
+              href="#{{ event_data.editions[0].name }}"
+              >{{ event_data.editions[0].name }}</a
+            >
+            <button
+              type="button"
+              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+              {% for edition in event_data.editions[1:] %}
+              <li>
+                <a class="dropdown-item" href="#{{ edition.name }}"
+                  >{{ edition.name }}</a
+                >
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item btn-group-justified bg-info my-2">
+          <a class="nav-link" href="{{ url_for('parcours', event_name=event_data.name) }}">parcours</a>
+          <div class="btn-group w-100">
+            <a
+              type="button"
+              class="btn btn-danger w-100"
+              href="#{{ event_data.parcours[0].name }}"
+              >{{ event_data.parcours[0].name }}</a
+            >
+            <button
+              type="button"
+              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+              {% for parcours in event_data.parcours[1:] %}
+              <li>
+                <a class="dropdown-item" href="#{{ parcours.name }}"
+                  >{{ parcours.name }}</a
+                >
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+        <li class="nav-item btn-group-justified bg-info my-2">
+          <a class="nav-link" href="{{ url_for('coureurs', event_name=event_data.name) }}">coureurs</a>
+          <div class="btn-group w-100">
+            <a
+              type="button"
+              class="btn btn-danger w-100"
+              href="#{{ event_data.coureurs[0].name }}"
+              >{{ event_data.coureurs[0].name }}</a
+            >
+            <button
+              type="button"
+              class="btn btn-danger dropdown-toggle dropdown-toggle-split"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span class="visually-hidden">Toggle Dropdown</span>
+            </button>
+            <ul class="dropdown-menu">
+              {% for parcours in event_data.parcours[1:] %}
+              <li>
+                <a class="dropdown-item" href="#{{ parcours.name }}"
+                  >{{ parcours.name }}</a
+                >
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
