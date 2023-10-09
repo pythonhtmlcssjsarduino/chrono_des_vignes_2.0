@@ -1,0 +1,65 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div> {# name form #}
+        <form action="" method="post">
+            {{ name_form.hidden_tag() }}
+            <fieldset class="form-group">
+                <div class="form-group">{# name #}
+                    {{ name_form.name.label(class="form-control-label") }}
+                    {% if name_form.name.errors %}
+                        {{ name_form.name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in name_form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ name_form.name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div>modif info</div>
+    <div class="w-100 row container-fluid"> {# tracé #}
+        <div class="col-3 p-0 w-75"> {# map #}
+            {{ folium_map | safe }}
+        </div>
+        <script>
+            var iframe= document.getElementById('parcours_map')
+            var iframe_document  = iframe.contentWindow.document
+            var map = iframe_document.{{map_name}}
+            function get_map_param() {
+                return map
+            }
+            console.log(iframe_document)
+            console.log(get_map_param())
+        </script>
+        <div class="col-1 p-0 w-25 h-100"> {# list #}
+            <ul style="height: 450px;" class="w-100 overflow-auto list-group">
+                <li class="list-group-item list-group-item-action p-0">
+                    <i class="fa-solid fa-circle-plus"></i>
+                </li>
+                {% for element in program_list %}
+
+                    <li class="list-group-item list-group-item-action p-1">
+                    {% if element.type == "marker" %}
+                            <a class="page-link" href="{{ url_for('modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, marker=element.name) }}">
+                                <h4>{{ element.name }}</h4>
+                            </a>
+                    {% else %}
+                        <a class="page-link" href="{{ url_for('modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, trace= element.name) }}">
+                            <p>{{ element.name }}</p>
+                        </a>
+                    {% endif %}
+                    </li>
+                    {% if element.type == "marker" %}
+                        <li class="list-group-item list-group-item-action p-0">
+                            <i class="fa-solid fa-circle-plus"></i>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}

@@ -25,7 +25,7 @@
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_6afb325624ea1d411bf28c5644eff137 {
+                #map_4de1a788ea724598bb90ee5df985baf4 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
@@ -39,18 +39,17 @@
 <body>
     
     
-            <div class="folium-map" id="map_6afb325624ea1d411bf28c5644eff137" ></div>
-        
+            <div class="folium-map" id="map_4de1a788ea724598bb90ee5df985baf4" ></div>        
 </body>
 <script>
     
     
-            var map_6afb325624ea1d411bf28c5644eff137 = L.map(
-                "map_6afb325624ea1d411bf28c5644eff137",
+            var map_4de1a788ea724598bb90ee5df985baf4 = L.map(
+                "map_4de1a788ea724598bb90ee5df985baf4",
                 {
-                    center: [46.546753, 6.449788],
+                    center: [180.0, 0.0],
                     crs: L.CRS.EPSG3857,
-                    zoom: 10,
+                    zoom: 2,
                     zoomControl: true,
                     preferCanvas: false,
                 }
@@ -60,26 +59,20 @@
 
         
     
-            var tile_layer_a26250e679ccf7021d1ab35904edca01 = L.tileLayer(
+            var tile_layer_40e1a1d25fc1a1ec5be69992339e4f3a = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 22, "maxZoom": 22, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_6afb325624ea1d411bf28c5644eff137);
+                {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_4de1a788ea724598bb90ee5df985baf4);
         
     
-                function latLngPop(e) {
-                    window.location.href="map.html?lat="+e.latlng.lat.toFixed(4)+"&lng="+e.latlng.lng.toFixed(4)+"&zoomlevel="+map_6afb325624ea1d411bf28c5644eff137.getZoom()+"&latmap="+map_6afb325624ea1d411bf28c5644eff137.getCenter().lat+"&lngmap="+map_6afb325624ea1d411bf28c5644eff137.getCenter().lng
-                    }
-                map_6afb325624ea1d411bf28c5644eff137.on('click', latLngPop);
-            
-    
-            var marker_4504b6c4c94c7ffb0d030cb312840f9d = L.marker(
+            var marker_95188702dc3ce51456424dd6226b4e7e = L.marker(
                 [-12.0, -38.0],
                 {}
-            ).addTo(map_6afb325624ea1d411bf28c5644eff137);
+            ).addTo(map_4de1a788ea724598bb90ee5df985baf4);
         
     
-        var popup_d2cced8aeee658f19f3d6f28bb1075da = L.popup({"maxWidth": "100%"});
-        marker_4504b6c4c94c7ffb0d030cb312840f9d.once('click', function() {window.location.href='map.html'})
+        var popup_a58c4fd4b06b9f09173150beb2ebd605 = L.popup({"maxWidth": "100%"});
+        marker_95188702dc3ce51456424dd6226b4e7e.once('click', function() {window.location.href='https://ch.ch'})
         
 </script>
 </html>

@@ -1,7 +1,7 @@
 import folium
 from jinja2 import Template
 # Make an empty map
-m = folium.Map(location=[20,0], tiles="OpenStreetMap", zoom_start=2)
+m = folium.Map(location=[180,0], tiles="OpenStreetMap", zoom_start=2)
 
 popup = folium.Popup()
 popup._template = Template("""

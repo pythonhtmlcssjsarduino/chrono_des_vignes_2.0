@@ -3,7 +3,7 @@
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
-        <div class="form-group" id="username">
+        <div class="form-group"> {# username #}
             {{ form.username.label(class="form-control-label") }}
             {% if form.username.errors %}
                 {{ form.username(class="form-control form-control-lg is-invalid") }}
@@ -16,7 +16,7 @@
                 {{ form.username(class="form-control form-control-lg") }}
             {% endif %}
         </div>
-        <div class="form-group" id="password">
+        <div class="form-group"> {# password #}
             {{ form.password.label(class="form-control-label") }}
             {% if form.password.errors %}
                 {{ form.password(class="form-control form-control-lg is-invalid") }}
