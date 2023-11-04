@@ -1,11 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+<body>
+
+<iframe id="map" srcdoc='<!DOCTYPE html>
+  <html lang="en">
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-</head>
-<body>
-    <iframe src="" frameborder="0"></iframe>
+  </head>
+  <body>
+      <script>
+        function test(){
+          console.log("coucou")
+        }
+      </script>
+  </body>
+  </html>
+   'style="height:380px;width:100%"></iframe>
+
+<p>Click the "Tryit" button to hide the first H1 element in the iframe (another document).</p>
+
+<button onclick="myFunction()">Try it</button>
+<script>
+  myFunction()
+</script>
+<script>
+function myFunction() {
+  var iframe = document.getElementById("map");
+  iframe.contentWindow.test()
+}
+</script>
+
 </body>
 </html>
+

@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
-from flask_app.models import User, Edition, Parcours
-from wtforms import StringField, PasswordField, SubmitField, EmailField, DateField, DateTimeLocalField, FloatField
+from flask_app.models import User, Edition, Parcours, Stand, Trace
+from wtforms import StringField, PasswordField, SubmitField, EmailField, DateField, DateTimeLocalField, FloatField, DecimalField, BooleanField
 from flask_app.custum_validators import DataRequired, Length, EqualTo, DateTimeNotPast, DateTimeBefore, DonTExist
 
 class Login_form(FlaskForm):
@@ -36,3 +36,14 @@ class Parcours_name_form(FlaskForm):
     name= StringField('nom du parcours', validators=[DataRequired(), DonTExist(Parcours, 'name')])
     submit=SubmitField('sauvegarder')
 
+class Stand_modif_form(FlaskForm):
+    name = StringField('nom du stand', validators=[DataRequired(), DonTExist(Stand, 'name')])
+    lat = DecimalField('latidude du stand', validators=[DataRequired()])
+    lng = DecimalField('longitude du stand', validators=[DataRequired()])
+    color = StringField('couleur du stand', validators=[DataRequired()])
+    chrono = BooleanField('activer le chronometrage du stand', validators=[DataRequired()])
+    submit = SubmitField('enregistrer')
+
+class Etape_modif_form(FlaskForm):
+    name = StringField('nom de l\'etape', validators=[DataRequired(), DonTExist(Stand, 'name')])
+    submit = SubmitField('enregistrer')

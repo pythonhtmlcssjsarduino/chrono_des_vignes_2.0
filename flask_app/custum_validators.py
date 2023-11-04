@@ -54,13 +54,14 @@ class DateTimeBefore:
 
 
 class DonTExist:
-    def __init__(self, table, filter:[str], message = None):
+    def __init__(self, table, filter:[str], id = None, message = None):
         self.message = message
         self.table = table
         self.filter =filter
 
     def __call__(self, form, field):
         filter = {self.filter:field.data}
-        if self.table.query.filter_by(**filter).first():
-            message = self.message if self.message else f'This name is already took by someone else!'
+        first = self.table.query.filter_by(**filter).first()
+        if first and field.data != getattr(first, self.filter):
+            message = self.message if self.message else 'This name is already took by someone else!'
             raise validators.ValidationError(message)

@@ -1,11 +1,12 @@
 from flask import flash, redirect, url_for, render_template, request
 from flask_app import app, admin_required, db
-from flask_app.forms import Edition_form, Parcours_name_form
+from flask_app.forms import Edition_form, Parcours_name_form, Etape_modif_form, Stand_modif_form
 from flask_login import login_required, current_user
-from flask_app.models import Edition, Parcours, Inscription, Event
+from flask_app.models import Edition, Parcours, Inscription, Event, Stand, Trace
 from datetime import datetime
-from folium import Map, Marker, Icon, PolyLine
+from folium import Map, Marker, Icon, PolyLine, Popup
 from shapely.geometry import MultiPoint
+from jinja2 import Template
 
 
 @app.route('/event/<event_name>')
@@ -85,13 +86,24 @@ def modify_parcours(event_name, parcours_name):
     event = Event.query.filter_by(name=event_name).first()
     parcours= event.parcours.filter_by(name=parcours_name).first()
     user = current_user
+    modif = request.args.get('modif', 'map')
 
     #? formulaire pour le nom du parcours
     name_form= Parcours_name_form(data={'name':parcours.name})
     if name_form.validate_on_submit():
         flash('name saved')
+        return redirect(request.path)
 
-
+    #? formulaire modifications
+    if request.args.get('marker'):
+        stand= Stand.query.filter_by(id=request.args.get('marker')).first()
+        modif_form= Stand_modif_form(data={'name':stand.name, 'lat':stand.lat, 'lng':stand.lng, 'color':stand.color, 'chrono':stand.chrono})
+    elif request.args.get('trace'):
+        trace = Trace.query.filter_by(id=request.args.get('trace')).first()
+        modif_form = Etape_modif_form(data={'name':trace.name})
+    else:
+        modif_form=None
+    
 
     #? create the map
     program_list=[]
@@ -103,10 +115,16 @@ def modify_parcours(event_name, parcours_name):
     new_stand=start
     # si aucun depart alors ne mettre aucun stand
     if start:
+        popup = Popup()
+        popup._template = Template("""
+            var {{this.get_name()}} = L.popup({{ this.options|tojson }});
+            {{ this._parent.get_name() }}.on("click", function() {on_marker_click(%s)})
+            """%start.id)
         last_m=Marker((start.lat, start.lng),
                 tooltip=start.name,
-                icon=Icon(icon_color=start.color.hex, icon='flag-checkered', prefix='fa', color='orange')).add_to(map)
-        program_list.append({'type':'marker', 'lat':start.lat, 'lng':start.lng, 'name':start.name, 'color':start.color.hex})
+                icon=Icon(icon_color=start.color.hex, icon='flag-checkered', prefix='fa', color='orange'),
+                popup=popup).add_to(map)
+        program_list.append({'type':'marker', 'lat':start.lat, 'lng':start.lng, 'name':start.name, 'id':start.id, 'color':start.color.hex})
         marker_coordonee.append((start.lat, start.lng))
         stands.add(start)
         turn_nb = 0
@@ -119,17 +137,23 @@ def modify_parcours(event_name, parcours_name):
             if trace :
                 new_stand = trace.end
                 if new_stand not in stands:
+                    popup = Popup()
+                    popup._template = Template("""
+                            var {{this.get_name()}} = L.popup({{ this.options|tojson }});
+                            {{ this._parent.get_name() }}.on("click", function() {on_marker_click(%s)})
+                            """%new_stand.id)
                     last_m=Marker((new_stand.lat, new_stand.lng),
                         tooltip=new_stand.name,
-                        icon=Icon(icon_color=new_stand.color.hex)).add_to(map)
+                        icon=Icon(icon_color=new_stand.color.hex),
+                        popup=popup).add_to(map)
 
                     # ajoute le stand a la liste de coordonee pour trouver le milieux
                     # plus pour savoir si le stand est deja sur la map et la mettre sur la liste des programme
                     marker_coordonee.append((new_stand.lat, new_stand.lng))
                     stands.add(new_stand)
 
-                program_list.append({'type':'trace', 'dist':'bahbah', 'deni':'ahahah', 'name':trace.name})
-                program_list.append({'type':'marker', 'lat':new_stand.lat, 'lng':new_stand.lng, 'name':new_stand.name, 'color':new_stand.color.hex})
+                program_list.append({'type':'trace', 'dist':'bahbah', 'deni':'ahahah', 'name':trace.name, 'id':trace.id})
+                program_list.append({'type':'marker', 'lat':new_stand.lat, 'lng':new_stand.lng, 'name':new_stand.name, 'id':new_stand.id, 'color':new_stand.color.hex})
 
                 poly_points = [[old_stand.lat, old_stand.lng ],*eval(trace.trace),[new_stand.lat, new_stand.lng]]
                 PolyLine(poly_points, tooltip=trace.name).add_to(map)
@@ -144,10 +168,15 @@ def modify_parcours(event_name, parcours_name):
     #? render the map
     map.get_root().width = '100%'
     map.get_root().height = '450px'
-    iframe = map.get_root()._repr_html_()
-    iframe=iframe[:7]+' id="parcours_map" '+iframe[7:]
+    map.get_root().render()
 
-    return render_template('1.2.1-modify_parcours.html', user_data=user, event_data=event, parcours_data=parcours, name_form=name_form, folium_map=iframe, map_name=map.get_name() , program_list=program_list)
+    header= map.get_root().header.render()
+    body= map.get_root().html.render()
+    script= map.get_root().script.render()
+
+    folium_map={'header':header, 'body':body, 'script':script}
+
+    return render_template('1.2.1-modify_parcours.html', user_data=user, event_data=event, parcours_data=parcours, name_form=name_form, folium_map=folium_map, map_name=map.get_name() , program_list=program_list, modif=modif, modif_form=modif_form)
 
 
 @app.route('/event/<event_name>/coureurs')

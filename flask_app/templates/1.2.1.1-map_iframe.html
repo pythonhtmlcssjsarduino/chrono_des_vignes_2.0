@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>map</title>
+    {{ folium_map.header | safe }}
+</head>
+<body>
+    <script>
+        function on_marker_click(marker){
+            let url = window.parent.location.href;
+            if (url.indexOf("?") > -1){
+                url = url.slice(0, url.indexOf("?"))};
+            url += "?marker="+marker;
+            window.parent.location.href = url;
+        }
+        function get_map_data(){
+          console.log("map data")
+        }
+    </script>
+    {{ folium_map.body | safe }}
+    <script>
+        {{ folium_map.script | safe }}
+    </script>
+</body>
+</html>

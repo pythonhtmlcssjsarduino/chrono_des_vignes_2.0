@@ -3,6 +3,7 @@ from datetime import datetime
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
+from flask_colorpicker import colorpicker
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key'
@@ -13,6 +14,8 @@ db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+colorpicker(app)
 
 from flask_app.models import User
 @login_manager.user_loader
