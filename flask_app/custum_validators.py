@@ -8,6 +8,12 @@ class DataRequired:
     def __call__(self, form, field):
         self.validator.__call__(form, field)
 
+class InputRequired:
+    def __init__(self, message=None):
+        self.validator = validators.InputRequired(message)
+    def __call__(self, form, field):
+        self.validator.__call__(form, field)
+
 class Length:
     def __init__(self,min = -1, max=-1, message=None):
         self.validator = validators.Length(min,max,message)
@@ -29,9 +35,7 @@ class DateTimeNotPast:
     def __call__(self,form, field):
         if field.render_kw.get('disabled') == "disabled":
             return
-        print('check not past')
         if field.data < datetime.now():
-            print('is past')
             raise validators.ValidationError(self.message)
 
 class DateTimeBefore:

@@ -6,7 +6,7 @@ from functools import wraps
 from flask_colorpicker import colorpicker
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'secret_key'
+app.config['SECRET_KEY'] = 'secret_key' #! change that for deployment
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 
 db = SQLAlchemy()
@@ -34,7 +34,7 @@ def admin_required(func):
             flash('tu doit être admin pour acceder a cette page.', 'danger')
             return redirect(url_for('home'))
         if not current_user.creations.filter_by(name=kwargs.get('event_name')).first():
-            flash('tu doit être admin pour cet evenement pour acceder a cette page.', 'danger')
+            flash('tu doit être admin de cet evenement pour acceder a cette page.', 'danger')
             return redirect(url_for('home'))
         return func(*args, **kwargs)
     return decorated_view

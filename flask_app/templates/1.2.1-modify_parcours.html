@@ -19,14 +19,14 @@
                         {% endif %}
                     </div>
                     <div class="form-group">
-                        {{ name_form.submit(class="btn btn-outline-info") }}
+                        {{ name_form.submit_btn(class="btn btn-outline-info") }}
                     </div>
                 </fieldset>
             </form>
         {% else %}
             <div class="form-group">
                 <div class="form-group">
-                    <p class="form-control-label">{{ name_form.name.label.text }}</p>
+                    <p class="form-control-label">{{ name_form.name.label }}</p>
                     <p class="form-control form-control-lg text-start">{{ name_form.name.data }}</p>
                 </div>
                 <div>
@@ -44,10 +44,15 @@
             </div>
         {% endif %}
     </div>
-    <div> {# modif form #}
-        {% if modif_form %}
-        <form action="" method="post">
+    <hr>
+    {% if modif_form %}
+    {% if modif_form_type == "new" %}
+    <button type="button" onclick="my_modal.show()">show</button>
+    {% endif %}
+    <div {% if modif_form_type == "new" %} class="modal" id="modal_window" {% endif %} > {# modif form #}
+        <form action="" method="post" id="modif_form">
             {{ modif_form.hidden_tag() }}
+            {% if modif_form_type == "marker" %}
             <fieldset class="form-group">
                 <div class="form-group">{# name #}
                     {{ modif_form.name.label(class="form-control-label") }}
@@ -62,8 +67,12 @@
                         {{ modif_form.name(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                {% if modif_form.lat %}
-                <div class="form-group">{# lat #}
+                <div class="form-group">{# change position #}
+                    <button class="btn btn-outline-info m-2" type="button" onclick="select_position()">
+                        <p id="latlngbtn" class="d-inline">changer la position</p> <i class="fa-solid fa-location-dot d-inline"></i>
+                    </button>
+                </div>
+                <div class="form-group d-none">{# lat #}
                     {{ modif_form.lat.label(class="form-control-label") }}
                     {% if modif_form.lat.errors %}
                         {{ modif_form.lat(class="form-control form-control-lg is-invalid") }}
@@ -76,9 +85,7 @@
                         {{ modif_form.lat(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                {% endif %}
-                {% if modif_form.lng %}
-                <div class="form-group">{# lng #}
+                <div class="form-group d-none">{# lng #}
                     {{ modif_form.lng.label(class="form-control-label") }}
                     {% if modif_form.lng.errors %}
                         {{ modif_form.lng(class="form-control form-control-lg is-invalid") }}
@@ -91,12 +98,10 @@
                         {{ modif_form.lng(class="form-control form-control-lg") }}
                     {% endif %}
                 </div>
-                {% endif %}
-                {% if modif_form.color %}
                 <div class="form-group">{# color #}
 
                     {{ colorpicker.loader() }}
-                    {{ colorpicker.picker(ids=['#color']) }}
+                    {{ colorpicker.picker(ids=['#color'], color_format='hex') }}
 
                     {{ modif_form.color.label(class="form-control-label") }}
                     {% if modif_form.color.errors %}
@@ -110,8 +115,6 @@
                         {{ modif_form.color(class="form-control form-control-lg", id="color") }}
                     {% endif %}
                 </div>
-                {% endif %}
-                {% if modif_form.chrono %}
                 <div class="form-group">{# chrono #}
                     {{ modif_form.chrono.label(class="form-control-label form-check-label") }}
                     {% if modif_form.chrono.errors %}
@@ -125,25 +128,205 @@
                         {{ modif_form.chrono(class="form-control form-control-lg form-check-input form-check-inline") }}
                     {% endif %}
                 </div>
-                {% endif %}
-                <div class="form-group">
-                    {{ modif_form.submit(class="btn btn-outline-info") }}
+                <div class="form-group"> {# submit #}
+                    {{ modif_form.submit_btn(class="btn btn-outline-info") }}
                 </div>
             </fieldset>
+            {% endif %}
+            {% if modif_form_type == "trace" %}
+            <fieldset class="form-group">
+                <div class="form-group">{# name #}
+                    {{ modif_form.name.label(class="form-control-label") }}
+                    {% if modif_form.name.errors %}
+                        {{ modif_form.name(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in modif_form.name.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ modif_form.name(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group d-none">{# path #}
+                    {{ modif_form.path.label(class="form-control-label") }}
+                    {% if modif_form.path.errors %}
+                        {{ modif_form.path(class="form-control form-control-lg is-invalid") }}
+                        <div class="invalid-feedback">
+                            {% for error in modif_form.path.errors %}
+                                <span>{{ error }}</span>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {{ modif_form.path(class="form-control form-control-lg") }}
+                    {% endif %}
+                </div>
+                <div class="form-group">{# delete #}
+                    <button class="btn btn-outline-danger m-2" type="button" onclick="delete_trace()">
+                        supprimer l'etape
+                    </button>
+                </div>
+                <div class="form-group">{# submit #}
+                    {{ modif_form.submit_btn(class="btn btn-outline-info") }}
+                </div>
+            </fieldset>
+            {% endif %}
+            {% if modif_form_type == "new" %}
+            <fieldset class="form-group modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">ajouter un stand</h4>
+                        <button type="button" class="btn-close" onclick="my_modal.hide()"></button>
+                    </div>
+                    <script>error = false</script>
+                    <div class="form-group">{# name #}
+                        {{ modif_form.name.label(class="form-control-label") }}
+                        {% if modif_form.name.errors %}
+                            <script>error = true</script>
+                            {{ modif_form.name(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in modif_form.name.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ modif_form.name(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group d-none">{# lat #}
+                        {{ modif_form.lat.label(class="form-control-label") }}
+                        {% if modif_form.lat.errors %}
+                        <script>error = true</script>
+                            {{ modif_form.lat(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in modif_form.lat.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ modif_form.lat(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group d-none">{# lng #}
+                        {{ modif_form.lng.label(class="form-control-label") }}
+                        {% if modif_form.lng.errors %}
+                        <script>error = true</script>
+                            {{ modif_form.lng(class="form-control form-control-lg is-invalid") }}
+                            <div class="invalid-feedback">
+                                {% for error in modif_form.lng.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ modif_form.lng(class="form-control form-control-lg") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">{# color #}
+
+                        {{ colorpicker.loader() }}
+                        {{ colorpicker.picker(ids=['#color'], color_format='hex') }}
+
+                        {{ modif_form.color.label(class="form-control-label") }}
+                        {% if modif_form.color.errors %}
+                        <script>error = true</script>
+                            {{ modif_form.color(class="form-control form-control-lg is-invalid", id="color") }}
+                            <div class="invalid-feedback">
+                                {% for error in modif_form.color.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ modif_form.color(class="form-control form-control-lg", id="color") }}
+                        {% endif %}
+                    </div>
+                    <div class="form-group">{# chrono #}
+                        {{ modif_form.chrono.label(class="form-control-label form-check-label") }}
+                        {% if modif_form.chrono.errors %}
+                        <script>error = true</script>
+                            {{ modif_form.chrono(class="form-control form-control-lg is-invalid form-check-input form-check-inline") }}
+                            <div class="invalid-feedback">
+                                {% for error in modif_form.chrono.errors %}
+                                    <span>{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            {{ modif_form.chrono(class="form-control form-control-lg form-check-input form-check-inline") }}
+                        {% endif %}
+                        <div class="form-group"> {# submit #}
+                            {{ modif_form.submit_btn(class="btn btn-outline-info") }}
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            {% endif %}
         </form>
-        {% endif %}
     </div>
+    {% endif %}
     <div class="w-100 row container-fluid"> {# tracé #}
         <div class="col-3 p-0 w-75"> {# map #}
             <iframe id="map" class="w-100 h-100" srcdoc=' {% include "1.2.1.1-map_iframe.html" %} ' frameborder="0"></iframe>
 
             <script>
                 var iframe = document.getElementById("map");
+                var form = document.getElementById("modif_form")
                 function get_map_data() {
-                    return iframe.contentWindow.get_map_data()
+                    try {
+                        return iframe.contentWindow.get_map_data()
+                    } catch (error) {
+                        return null
+                    }
                 }
-                function set_form_data(){
-                    
+                function form_submit(){
+                    console.log(form)
+                    form.submit()
+                }
+                {% if modif_form_type =="marker" %}
+                function set_form_lat_lng(e){
+                    form.elements["lat"].value = e.latlng.lat;
+                    form.elements["lng"].value = e.latlng.lng;
+                    document.getElementById("latlngbtn").textContent = "changer la position";
+                };
+                function select_position(){
+                    try {
+                        iframe.contentWindow.select_position();
+                        document.getElementById("latlngbtn").textContent = "cliquer sur la carte pour deplacer le stand";
+                    } catch (error) {
+                    }
+                }
+                {% endif %}
+                {% if modif_form_type =="trace" %}
+                function delete_trace(){
+                    let url = window.parent.location.href;
+                    url += "&delete";
+                    window.parent.location.href = url;
+                }
+                function set_form_path_data(data){
+                    var value ="["
+                    data.forEach(latlng => {
+                         value += "["+latlng.lat.toString()+","+latlng.lng.toString()+"],"
+                    });
+                    form.elements["path"].value = value +"]"
+                };
+                function get_form_path_data(){
+                    data = form.elements["path"].value.replace(" ", "").slice(0,-1);
+                    data = data.split("]").slice(0,-1);
+                    new_data = [];
+                    data.forEach(latlngs => {latlng = latlngs.slice(2).split(","); new_data.push({"lat":parseFloat(latlng[0]), "lng":parseFloat(latlng[1])})});
+                    return new_data
+                }
+                {% endif %}
+                {% if modif_form_type =="new" %}
+                var my_modal = new bootstrap.Modal(document.getElementById('modal_window'))
+                if (error) {my_modal.show()}
+                var modal_form = document.getElementById("modif_form")
+                {% endif %}
+                function add_etape(last_marker){
+                    console.log(last_marker)
+                    let url = window.parent.location.href;
+                    if (url.indexOf("?") > -1){
+                        url = url.slice(0, url.indexOf("?"))};
+                    url += "?new="+last_marker;
+                    window.parent.location.href = url;
                 }
             </script>
 
@@ -151,24 +334,28 @@
         <div class="col-1 p-0 w-25 h-100"> {# list #}
             <ul style="height: 450px;" class="w-100 overflow-auto list-group">
                 <li class="list-group-item list-group-item-action p-0">
-                    <i class="fa-solid fa-circle-plus"></i>
+                    <button class="page-link w-100 h-100" onclick="add_etape(-1)">
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </button>
                 </li>
                 {% for element in program_list %}
 
                     <li class="list-group-item list-group-item-action p-1">
                     {% if element.type == "marker" %}
-                            <a class="page-link" href="{{ url_for('modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, marker=element.id) }}">
+                            <a class="page-link w-100 h-100" href="{{ url_for('modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, marker=element.id) }}">
                                 <h4>{{ element.name }}</h4>
                             </a>
                     {% else %}
-                        <a class="page-link" href="{{ url_for('modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, trace= element.id) }}">
+                        <a class="page-link w-100 h-100" href="{{ url_for('modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, trace= element.id) }}">
                             <p>{{ element.name }}</p>
                         </a>
                     {% endif %}
                     </li>
                     {% if element.type == "marker" %}
                         <li class="list-group-item list-group-item-action p-0">
-                            <i class="fa-solid fa-circle-plus"></i>
+                            <button class="page-link w-100 h-100" onclick="add_etape({{ element.step }})">
+                                <i class="fa-solid fa-circle-plus"></i>
+                            </button>
                         </li>
                     {% endif %}
                 {% endfor %}

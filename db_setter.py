@@ -20,10 +20,10 @@ with app.app_context():
 
     db.session.commit()
     # editions
-    e2020= Edition(name='2020',edition_date= datetime(year=2020,month=10, day=28), first_inscription=datetime(year=2020,month=8, day=28), last_inscription=datetime(year=2020,month=9, day=28) , event=cdv)
-    e2021= Edition(name='2021',edition_date= datetime(year=2021,month=10, day=28), first_inscription=datetime(year=2021,month=8, day=28), last_inscription=datetime(year=2021,month=9, day=28), event=cdv)
-    e2022= Edition(name='2022',edition_date= datetime(year=2022,month=10, day=28), first_inscription=datetime(year=2022,month=8, day=28), last_inscription=datetime(year=2022,month=9, day=28), event=cdv)
-    e2023= Edition(name='2023',edition_date= datetime(year=2023,month=10, day=28), first_inscription=datetime(year=2023,month=8, day=28), last_inscription=datetime(year=2023,month=9, day=28), event=cdv)
+    e2020= Edition(name='2020',edition_date= datetime(year=2024,month=10, day=28), first_inscription=datetime(year=2020,month=8, day=28), last_inscription=datetime(year=2020,month=9, day=28) , event=cdv)
+    e2021= Edition(name='2021',edition_date= datetime(year=2025,month=10, day=28), first_inscription=datetime(year=2021,month=8, day=28), last_inscription=datetime(year=2021,month=9, day=28), event=cdv)
+    e2022= Edition(name='2022',edition_date= datetime(year=2026,month=10, day=28), first_inscription=datetime(year=2022,month=8, day=28), last_inscription=datetime(year=2022,month=9, day=28), event=cdv)
+    e2023= Edition(name='2023',edition_date= datetime(year=2027,month=10, day=28), first_inscription=datetime(year=2023,month=8, day=28), last_inscription=datetime(year=2023,month=9, day=28), event=cdv)
     db.session.add_all([e2020, e2021, e2022, e2023])
 
     db.session.commit()
@@ -48,22 +48,24 @@ with app.app_context():
     c = Inscription(inscrit=lui, event=cdv, edition=e2020, parcours_id=3)
     d = Inscription(inscrit=eux, event=cdv, edition=e2020, parcours_id=4)
     e = Inscription(inscrit=toi, event=cdv, edition=e2023, parcours_id=1)
+    f = Inscription(inscrit=moi, event=cdv, edition=e2023, parcours_id=2)
     
-    db.session.add_all([a,b,c,d,e])
+    db.session.add_all([a,b,c,d,e, f])
 
-    stand = Stand(name='coucou', lat=46.58, lng=6.52, start_stand=1)
-    stand2 = Stand(name='salut', lat=40.58, lng=3.52)
-    stand3 = Stand(name='dafsd', lat=43.58, lng=0.52)
-    stand4 = Stand(name='fdsgdsf', lat=45.58, lng=3.52)
+    stand = Stand(name='start', parcours_id=1, lat=46.54542398593088, lng=6.447682455182076, chrono=1, start_stand=1)
+    stand2 = Stand(name='vignes', parcours_id=1, lat=46.54542882844609, lng=6.446514353156091)
+    stand3 = Stand(name='reverolle', parcours_id=1, lat=46.54074614505775, lng=6.444050073623658)
+    stand4 = Stand(name='end', parcours_id=1, lat=46.5402207996225, lng=6.444866806268693, chrono=1, end_stand=1)
     db.session.add_all([stand, stand2, stand3, stand4])
 
-    trace = Trace(name='1', start_id = 1, end_id = 2, turn_nb=1)
-    trace2 =  Trace(name='2', start_id = 2, end_id = 3, turn_nb=1)
-    trace3 =  Trace(name='3', start_id = 3, end_id = 4, turn_nb=1)
-    trace4 =  Trace(name='4', start_id = 4, end_id = 1, trace=str([[44, 7]]), turn_nb=1)
-    trace5 =  Trace(name='5', start_id = 1, end_id = 4, turn_nb=2)
+    trace = Trace(name='1', parcours_id=1, start_id = 1, end_id = 2, turn_nb=1)
+    trace2 =  Trace(name='2', parcours_id=1, start_id = 2, end_id = 3, turn_nb=1)
+    trace3 =  Trace(name='3', parcours_id=1, start_id = 3, end_id = 4, turn_nb=1)
+    trace4 =  Trace(name='4', parcours_id=1, start_id = 4, end_id = 1, trace=str([[46.54115202742685, 6.446485519409181]]), turn_nb=1)
+    trace5 =  Trace(name='5', parcours_id=1, start_id = 1, end_id = 4, turn_nb=2)
+    #trace6 =  Trace(name='6', parcours_id=1, start_id = 4, end_id = 2, turn_nb=2)
 
-    db.session.add_all([trace, trace2, trace3,trace4, trace5])
+    db.session.add_all([trace, trace2, trace3,trace4, trace5])#, trace5, trace6
 
     db.session.commit()
 

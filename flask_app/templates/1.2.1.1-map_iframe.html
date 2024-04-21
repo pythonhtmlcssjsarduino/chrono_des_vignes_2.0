@@ -8,20 +8,113 @@
 </head>
 <body>
     <script>
+        {% if modif_form_type =="new" %}
+        function on_marker_click(stand){
+            let url = window.parent.location.href;
+            url += "&stand="+stand;
+            window.parent.location.href = url;
+        };
+        {% else %}
         function on_marker_click(marker){
             let url = window.parent.location.href;
             if (url.indexOf("?") > -1){
                 url = url.slice(0, url.indexOf("?"))};
             url += "?marker="+marker;
             window.parent.location.href = url;
-        }
+        };
+        {% endif %}
+        function on_trace_click(trace){
+            let url = window.parent.location.href;
+            if (url.indexOf("?") > -1){
+                url = url.slice(0, url.indexOf("?"))};
+            url += "?trace="+trace;
+            window.parent.location.href = url;
+        };
         function get_map_data(){
           console.log("map data")
-        }
+        };
     </script>
+    <!-- map -->
     {{ folium_map.body | safe }}
     <script>
         {{ folium_map.script | safe }}
     </script>
+    
+    {% if modif_form.lat %}
+    <script>
+        var last_path_names = [{% for name in path_names.last %}{{ name }},{% endfor %}]
+        var next_path_names = [{% for name in path_names.next %}{{ name }},{% endfor %}]
+        function latLngPop(e) {
+            parent.set_form_lat_lng(e);
+            {{ map_name }}.off("click");
+            {{ element_name }}.setLatLng(e.latlng);
+            last_path_names.forEach(name => {
+                name.setLatLngs(name.getLatLngs().slice(0, -1).concat(e.latlng));
+            });
+            next_path_names.forEach(name => {
+                name.setLatLngs([].concat(e.latlng, name.getLatLngs().slice(1)));
+            });
+        };
+        function select_position(){
+            {{ map_name }}.on("click", latLngPop);
+        }
+    </script>
+    {% endif %}
+    {% if modif_form_type =="new" %}
+    <script>
+        function set_stand(e) {
+            parent.modal_form.elements["lat"].value = e.latlng.lat;
+            parent.modal_form.elements["lng"].value = e.latlng.lng;
+            parent.my_modal.show()
+        }
+        {{ map_name }}.on("click", set_stand);
+    </script>
+    {% endif %}
+    {% if modif_form_type =="trace" %}
+    <script>
+        var names = {{"{"}} {% for latlngname in path_names %} "{{latlngname.lat}},{{latlngname.lng}}":{{latlngname.name}}, {% endfor %} {{"}"}}
+        var current_point =null
+        function set_trace_point(e){
+            // enlever le click quand on click sur la map
+            {{ map_name }}.off("click");
+            // recupere les anciennes coordonée du point
+            var latlng = current_point.getLatLng();
+            // trouve l id du point dans les differents pints du chemin
+            var latlngid = {{ element_name }}.getLatLngs().findIndex(function(funclatlng){return latlng.lat == funclatlng.lat && latlng.lng == funclatlng.lng });
+            // change le coordonée du point
+            var latlngs = {{ element_name }}.getLatLngs().slice(0, latlngid).concat(e.latlng, {{ element_name }}.getLatLngs().slice(latlngid+1))
+            /*// insert les coordonée dans le chemin
+            {{ element_name }}.setLatLngs(latlngs)
+            // change les coordonée du point selectioné
+            current_point.setLatLng(e.latlng);*/
+            // insert les donnée dans le champ pour les envoyer au server
+            parent.set_form_path_data(latlngs.slice(1,-1));
+            parent.form_submit()
+        };
+        function trace_point_modif(lat, lng){
+            var old_point = current_point
+            current_point = names[lat.toString()+","+lng.toString()]
+            if(current_point==old_point){
+                data = parent.get_form_path_data()
+                var latlng = current_point.getLatLng()
+                var latlngid = data.findIndex(function(funclatlng){return latlng.lat == funclatlng.lat && latlng.lng == funclatlng.lng });
+                data.splice(latlngid, 1)
+                parent.set_form_path_data(data)
+                parent.form_submit()
+            }else{
+            current_point.setIcon(L.AwesomeMarkers.icon({icon: "arrow-pointer", prefix: "fa",markerColor: "green"}));
+            {{ map_name }}.on("click", set_trace_point);
+            }
+        };
+        function trace_point_add(lat, lng, i) {
+            console.log(i);
+            data = parent.get_form_path_data()
+            data.splice(i, 0, {"lat":lat, "lng":lng})
+            console.log(data)
+            parent.set_form_path_data(data)
+            parent.form_submit()
+        }
+    </script>
+    {% endif %}
 </body>
 </html>

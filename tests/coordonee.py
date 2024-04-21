@@ -25,4 +25,4 @@ marker = folium.Marker(
       popup=popup
    ).add_to(m)
 
-m.save('map.html')
+m.save('coordonee.html')
