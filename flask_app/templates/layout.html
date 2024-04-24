@@ -61,7 +61,7 @@
               </li>
               <li class="nav-item">
                 <a
-                  href="{{ url_for('home_event', event_name='course des vignes') }}"
+                  href="{{ url_for('admin.home_event', event_name='course des vignes') }}"
                   class="nav-link"
                   >view</a
                 >
@@ -70,7 +70,7 @@
             <ul class="nav navbar-nav d-flex">
               {% if user_data %}
               <li class="nav-item">
-                <a href="{{ url_for('logout') }}" class="nav-link"
+                <a href="{{ url_for('users.logout') }}" class="nav-link"
                   ><i class="fa-solid fa-right-from-bracket"></i>log out</a
                 >
               </li>
@@ -85,12 +85,12 @@
               </li>
               {% else %}
               <li class="nav-item">
-                <a href="{{ url_for('login') }}" class="nav-link"
+                <a href="{{ url_for('users.login') }}" class="nav-link"
                   ><i class="fa-solid fa-right-to-bracket"></i>log in</a
                 >
               </li>
               <li class="nav-item">
-                <a href="{{ url_for('signup') }}" class="nav-link"
+                <a href="{{ url_for('users.signup') }}" class="nav-link"
                   ><i class="fa-solid fa-user-plus"></i>sign up</a
                 >
               </li>

@@ -264,7 +264,7 @@
     {% endif %}
     <div class="w-100 row container-fluid"> {# tracé #}
         <div class="col-3 p-0 w-75"> {# map #}
-            <iframe id="map" class="w-100 h-100" srcdoc=' {% include "1.2.1.1-map_iframe.html" %} ' frameborder="0"></iframe>
+            <iframe id="map" class="w-100 h-100" srcdoc=' {% include "map_iframe.html" %} ' frameborder="0"></iframe>
 
             <script>
                 var iframe = document.getElementById("map");
@@ -342,11 +342,11 @@
 
                     <li class="list-group-item list-group-item-action p-1">
                     {% if element.type == "marker" %}
-                            <a class="page-link w-100 h-100" href="{{ url_for('modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, marker=element.id) }}">
+                            <a class="page-link w-100 h-100" href="{{ url_for('admin.parcours.modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, marker=element.id) }}">
                                 <h4>{{ element.name }}</h4>
                             </a>
                     {% else %}
-                        <a class="page-link w-100 h-100" href="{{ url_for('modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, trace= element.id) }}">
+                        <a class="page-link w-100 h-100" href="{{ url_for('admin.parcours.modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, trace= element.id) }}">
                             <p>{{ element.name }}</p>
                         </a>
                     {% endif %}

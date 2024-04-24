@@ -49,8 +49,9 @@ with app.app_context():
     d = Inscription(inscrit=eux, event=cdv, edition=e2020, parcours_id=4)
     e = Inscription(inscrit=toi, event=cdv, edition=e2023, parcours_id=1)
     f = Inscription(inscrit=moi, event=cdv, edition=e2023, parcours_id=2)
+    g = Inscription(inscrit=moi, event=cdv, edition=e2022, parcours_id=2)
     
-    db.session.add_all([a,b,c,d,e, f])
+    db.session.add_all([a,b,c,d,e, f,g])
 
     stand = Stand(name='start', parcours_id=1, lat=46.54542398593088, lng=6.447682455182076, chrono=1, start_stand=1)
     stand2 = Stand(name='vignes', parcours_id=1, lat=46.54542882844609, lng=6.446514353156091)

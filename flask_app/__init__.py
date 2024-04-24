@@ -39,12 +39,16 @@ def admin_required(func):
         return func(*args, **kwargs)
     return decorated_view
 
-# defini les pages du site web
-from flask_app import routes
-
 #* erreur 403 acces non autorisé
 def error403():
     flash('tu doit etre connecté pour acceder a cette page.', 'danger')
     return redirect(url_for('home'))
 login_manager.unauthorized_handler(error403)
+
+# defini les pages du site web
+from flask_app.users import users
+from flask_app.admin import admin
+app.register_blueprint(users)
+app.register_blueprint(admin)
+from flask_app import routes
 

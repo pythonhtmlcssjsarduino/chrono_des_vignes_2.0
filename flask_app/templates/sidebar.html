@@ -19,21 +19,21 @@
         <li class="nav-item bg-danger btn mb-2">
           <a
             class="nav-link"
-            href="{{ url_for('home_event', event_name=event_data.name) }}"
+            href="{{ url_for('admin.home_event', event_name=event_data.name) }}"
             >{{ event_data.name }}</a
           >
         </li>
         <li class="nav-item btn-group-justified bg-info my-2"> {# edition #}
           <a
             class="nav-link"
-            href="{{ url_for('editions', event_name=event_data.name) }}"
+            href="{{ url_for('admin.editions.editions_page', event_name=event_data.name) }}"
             >editions</a
           >
           <div class="btn-group w-100"> {# editions #}
             <a
               type="button"
               class="btn btn-danger w-100"
-              href="{{ url_for('modify_edition', event_name= event_data.name, edition_name=event_data.editions[0].name ) }}"
+              href="{{ url_for('admin.editions.modify_edition_page', event_name= event_data.name, edition_name=event_data.editions[0].name ) }}"
               >{{ event_data.editions[0].name }}</a
             >
             <button
@@ -47,7 +47,7 @@
             <ul class="dropdown-menu">
               {% for edition in event_data.editions[1:] %}
               <li>
-                <a class="dropdown-item" href="{{ url_for('modify_edition', event_name= event_data.name, edition_name=edition.name ) }}"
+                <a class="dropdown-item" href="{{ url_for('admin.editions.modify_edition_page', event_name= event_data.name, edition_name=edition.name ) }}"
                   >{{ edition.name }}</a
                 >
               </li>
@@ -56,12 +56,12 @@
           </div>
         </li>
         <li class="nav-item btn-group-justified bg-info my-2"> {# parcours #}
-          <a class="nav-link" href="{{ url_for('parcours_page', event_name=event_data.name) }}">parcours</a>
+          <a class="nav-link" href="{{ url_for('admin.parcours.parcours_page', event_name=event_data.name) }}">parcours</a>
           <div class="btn-group w-100">
             <a
               type="button"
               class="btn btn-danger w-100"
-              href="{{ url_for('modify_parcours', event_name= event_data.name, parcours_name=event_data.parcours[0].name ) }}"
+              href="{{ url_for('admin.parcours.modify_parcours', event_name= event_data.name, parcours_name=event_data.parcours[0].name ) }}"
               >{{ event_data.parcours[0].name }}</a
             >
             <button
@@ -75,7 +75,7 @@
             <ul class="dropdown-menu">
               {% for parcours in event_data.parcours[1:] %}
               <li>
-                <a class="dropdown-item" href="{{ url_for('modify_parcours', event_name= event_data.name, parcours_name=parcours.name ) }}"
+                <a class="dropdown-item" href="{{ url_for('admin.parcours.modify_parcours', event_name= event_data.name, parcours_name=parcours.name ) }}"
                   >{{ parcours.name }}</a
                 >
               </li>
@@ -84,7 +84,7 @@
           </div>
         </li>
         <li class="nav-item btn-group-justified bg-info my-2"> {# inscrit #}
-          <a class="nav-link" href="{{ url_for('coureurs', event_name=event_data.name) }}">coureurs</a>
+          <a class="nav-link" href="{{ url_for('admin.coureurs', event_name=event_data.name) }}">coureurs</a>
           <div class="btn-group w-100">
             <a
               type="button"
