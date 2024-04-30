@@ -12,10 +12,10 @@ class Login_form(FlaskForm):
 
 
 class Signup_form(FlaskForm):
-    name = StringField('nom', validators=[DataRequired(), Length(max=60)])
-    lastname = StringField('prénom', validators=[DataRequired(), Length(max=26)])
+    name = StringField('prénom', validators=[DataRequired(), Length(max=60)])
+    lastname = StringField('nom', validators=[DataRequired(), Length(max=26)])
     username = StringField('nom d\'utilisateur', validators=[
-                           DataRequired(), Length(min=2, max=20), DonTExist(User, 'username')], render_kw={'placeholder':'coucou'})
+                           DataRequired(), Length(min=2, max=20), DonTExist(User, 'username')])
     email = EmailField('email')
     phone = StringField('n de tel')
     datenaiss = DateField('date de naissance', validators=[DataRequired()])

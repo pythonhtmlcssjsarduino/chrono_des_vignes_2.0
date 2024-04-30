@@ -1,0 +1,71 @@
+{% extends 'layout.html' %}
+{% block content %}
+<h3>{{edition_data.event.name}} {{edition_data.name}}</h3>
+<div class="card mb-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">date</p>
+        </div>
+        <div class="col-sm-9">
+          <p class="text-muted mb-0">
+            {{edition_data.edition_date.strftime('%d.%m.%Y')}}
+          </p>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">heure</p>
+        </div>
+        <div class="col-sm-9">
+          <p class="text-muted mb-0">
+            {{edition_data.edition_date.strftime('%H:%M')}}
+          </p>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">evenement</p>
+        </div>
+        <div class="col-sm-9">
+          <a class="text-decoration-none link-dark" href="{{ url_for('view.view_event_page', event=edition_data.event.name) }}"><p class="text-muted mb-0">{{edition_data.event.name}}</p></a>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">rendez-vous</p>
+        </div>
+        <div class="col-sm-9">
+          <a href="{{rdv_url}}" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-muted mb-0">ouvrire sur google maps</a>
+        </div>
+      </div>
+      <hr />
+      <div class="row">
+        <div class="col-sm-3">
+          <p class="mb-0">inscriptions</p>
+        </div>
+        {% if time >= edition_data.first_inscription and edition_data.last_inscription >= time %}
+        {# les inscriptions sont ouvertes #}
+          <div class="col-sm-9">
+            <a href="{{ url_for('users.inscriptions_page', event=event_data.name, edition=edition_data.name) }}" class="text-decoration-none text-muted mb-0">s'inscrire</a>
+          </div>
+        {% else %}
+          {% if time > edition_data.last_inscription %}
+          {# il est trop tard #}
+            <div class="col-sm-9">
+              <p class="text-decoration-none text-muted mb-0">les inscriptions sont déjà fermées</p>
+            </div>
+          {% else %}
+          {# il est trop tôt #}
+            <div class="col-sm-9">
+              <p class="text-decoration-none text-muted mb-0">les inscriptions ne sont pas encore ouvertes</p>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock content %}

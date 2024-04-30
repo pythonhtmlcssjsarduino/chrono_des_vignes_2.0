@@ -10,7 +10,7 @@ with app.app_context():
     moi = User(name='moi', lastname='je', password='moije', username='moi.je', datenaiss=datetime(year=2007,month=7, day=28))
     toi = User(name='toi', lastname='tu', password='toitu', username='toi.tu', datenaiss=datetime(year=2007,month=7, day=28))
     lui = User(name='lui', lastname='il', password='luiil', username='lui.il', datenaiss=datetime(year=2007,month=7, day=28))
-    eux = User(name='eux', lastname='ils', password='euxils', username='eux.ils', datenaiss=datetime(year=2007,month=7, day=28))
+    eux = User(name='eux', lastname='ils', password='euxils', username='eux.ils', datenaiss=datetime(year=2007,month=7, day=28), email='eux.ils@text.ch')
     db.session.add_all([user, moi, toi, lui, eux])
     db.session.commit()
 
@@ -53,16 +53,16 @@ with app.app_context():
     
     db.session.add_all([a,b,c,d,e, f,g])
 
-    stand = Stand(name='start', parcours_id=1, lat=46.54542398593088, lng=6.447682455182076, chrono=1, start_stand=1)
-    stand2 = Stand(name='vignes', parcours_id=1, lat=46.54542882844609, lng=6.446514353156091)
-    stand3 = Stand(name='reverolle', parcours_id=1, lat=46.54074614505775, lng=6.444050073623658)
-    stand4 = Stand(name='end', parcours_id=1, lat=46.5402207996225, lng=6.444866806268693, chrono=1, end_stand=1)
+    stand = Stand(name='start', parcours_id=1, lat=46.54542398593088, lng=6.447682455182076, chrono=1, start_stand=1, elevation=534)
+    stand2 = Stand(name='vignes', parcours_id=1, lat=46.54542882844609, lng=6.446514353156091, elevation=534)
+    stand3 = Stand(name='reverolle', parcours_id=1, lat=46.54074614505775, lng=6.444050073623658, elevation=544)
+    stand4 = Stand(name='end', parcours_id=1, lat=46.5402207996225, lng=6.444866806268693, chrono=1, end_stand=1, elevation=544)
     db.session.add_all([stand, stand2, stand3, stand4])
 
     trace = Trace(name='1', parcours_id=1, start_id = 1, end_id = 2, turn_nb=1)
     trace2 =  Trace(name='2', parcours_id=1, start_id = 2, end_id = 3, turn_nb=1)
     trace3 =  Trace(name='3', parcours_id=1, start_id = 3, end_id = 4, turn_nb=1)
-    trace4 =  Trace(name='4', parcours_id=1, start_id = 4, end_id = 1, trace=str([[46.54115202742685, 6.446485519409181]]), turn_nb=1)
+    trace4 =  Trace(name='4', parcours_id=1, start_id = 4, end_id = 1, trace=str([[46.54115202742685, 6.446485519409181, 516.0]]), turn_nb=1)
     trace5 =  Trace(name='5', parcours_id=1, start_id = 1, end_id = 4, turn_nb=2)
     #trace6 =  Trace(name='6', parcours_id=1, start_id = 4, end_id = 2, turn_nb=2)
 

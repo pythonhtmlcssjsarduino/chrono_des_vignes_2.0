@@ -84,12 +84,12 @@
           </div>
         </li>
         <li class="nav-item btn-group-justified bg-info my-2"> {# inscrit #}
-          <a class="nav-link" href="{{ url_for('admin.coureurs', event_name=event_data.name) }}">coureurs</a>
+          <a class="nav-link" href="{{ url_for('admin.coureurs.coureurs_page', event_name=event_data.name) }}">coureurs</a>
           <div class="btn-group w-100">
             <a
               type="button"
               class="btn btn-danger w-100"
-              href=" #{{ event_data.inscrits[0].inscrit.name }}"
+              href="{{ url_for('admin.coureurs.view_coureur_page',  event_name=event_data.name, coureur=event_data.inscrits[0].inscrit.id) }}"
               >{{ event_data.inscrits[0].inscrit.name }}</a
             >
             <button
@@ -101,9 +101,9 @@
               <span class="visually-hidden">Toggle Dropdown</span>
             </button>
             <ul class="dropdown-menu">
-              {% for inscrit in event_data.inscrits[1:] %}
+              {% for inscrit in event_data.get_unique_inscrits()[1:] %}
               <li>
-                <a class="dropdown-item" href="#{{ inscrit.inscrit.name }}"
+                <a class="dropdown-item" href=" {{ url_for('admin.coureurs.view_coureur_page',  event_name=event_data.name, coureur=inscrit.inscrit.id) }}"
                   >{{ inscrit.inscrit.name }}</a
                 >
               </li>

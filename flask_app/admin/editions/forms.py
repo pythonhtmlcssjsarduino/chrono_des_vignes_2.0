@@ -1,10 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, DateTimeLocalField, FloatField, SubmitField
-from flask_app.custum_validators import DataRequired, Length, DonTExist, DateTimeNotPast, DateTimeBefore
-from flask_app.models import Edition
+from flask_app.custum_validators import DataRequired, Length, DateTimeNotPast, DateTimeBefore
 
 class Edition_form(FlaskForm):
-    name = StringField('nom de l\'edition', validators=[DataRequired(), Length(max=20), DonTExist(Edition, 'name')])
+    name = StringField('nom de l\'edition', validators=[DataRequired(), Length(max=20)])
     edition_date = DateTimeLocalField('date le l\'edition', format='%Y-%m-%dT%H:%M', render_kw={}, validators=[DataRequired(), DateTimeNotPast()])
     first_inscription = DateTimeLocalField('date d\'ouverture des inscriptions', format='%Y-%m-%dT%H:%M', render_kw={}, validators=[DataRequired(), DateTimeNotPast(), DateTimeBefore('last_inscription')])
     last_inscription = DateTimeLocalField('date de fermeture des inscriptions', format='%Y-%m-%dT%H:%M', render_kw={}, validators=[DataRequired(), DateTimeNotPast(), DateTimeBefore('edition_date')])

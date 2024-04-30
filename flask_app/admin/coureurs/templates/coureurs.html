@@ -1,16 +1,17 @@
-{% extends 'layout.html' %} {% block content %}
-<h3>parcours</h3>
+{% extends 'layout.html' %}
+{% block content %}
+<h3>coureurs</h3>
 <div class="d-flex justify-content-center flex-wrap">
-    {% for parcours in event_data.parcours %}
+    {% for inscrit in event_data.get_unique_inscrits() %}
         <div class="d-inline-flex card m-1">
             <div class="w-100 card-header d-flex justify-content-between align-items-center">
-                <h5 class="px-2">{{parcours.name}}</h5>
+                <h5 class="px-2">{{inscrit.inscrit.name}}</h5>
                 <div class="vr"></div>
                 <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
             </div>
             <div class="card-body">
-                <a href="{{ url_for('admin.parcours.modify_parcours', event_name=event_data.name, parcours_name=parcours.name) }}" class="text-decoration-none link-dark">
-                    modify
+                <a href="{{ url_for('admin.coureurs.view_coureur_page', event_name=event_data.name, coureur=inscrit.inscrit.id) }}" class="text-decoration-none link-dark">
+                    {{inscrit.inscrit.username}}
                 </a>
             </div>
         </div>

@@ -3,49 +3,54 @@
     {% if inscriptions %}
         <div class="pb-5">
             <h3 class="w-100 h1 bg-light rounded rounded-3">vos inscriptions</h3>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center flex-wrap">
                 {% for inscription in inscriptions %}
-                    <div class="d-inline-flex card">
-                        <div class="w-100 card-header">
-                            <h5 class="">{{inscription.event.name}} <a href="#"><i class="fa-solid fa-ellipsis-vertical"></i></a></h5>
+                    <div class="d-inline-flex card m-1">
+                        <div class="w-100 card-header d-flex justify-content-between align-items-center">
+                            <h5 class="px-2">{{inscription.event.name}}</h5>
+                            <div class="vr"></div>
+                            <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
                         </div>
-                        <a href="{{ url_for('admin.parcours.view_parcours_page', event=inscription.event.name, parcours=inscription.parcours.name) }}", class="">
-                            <div class="card-body">
-                                <p>parcours: {{inscription.parcours.name}}</p>
+                        <div class="card-body">
+                            <a href="{{ url_for('view.view_inscription_page', inscription=inscription.id) }}" class="text-decoration-none link-dark">
+                                <p>parcours {{inscription.parcours.name}}</p>
                                 <p>le {{inscription.edition.edition_date.strftime('%d.%m.%Y')}}</p>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
                 {% endfor %}
-                <div class="d-inline-flex card">
-                    <div class="card-body d-flex justify-content-center align-items-center">
-                        <i class="fa-solid fa-circle-plus"></i>
-                    </div>
-                </div>
             </div>
         </div>
     {% endif %}
     {% if events %}
         <div>
             <h3 class="w-100 h1 bg-light rounded rounded-3">les prochains evenements</h3>
-            <div class="d-flex justify-content-center">
+            <div class="d-flex justify-content-center flex-wrap">
                 {% for event in events %}
-                    <div class="d-inline-flex card">
-                        <div class="w-100 card-header">
-                            <h5 class="">{{event.name}} <a href="#"><i class="fa-solid fa-ellipsis-vertical"></i></a></h5>
+                    <div class="d-inline-flex card m-1">
+                        <div class="w-100 card-header d-flex justify-content-between align-items-center">
+                            <a class="text-decoration-none link-dark" href="{{ url_for('view.view_event_page', event=event.name) }}"><h5 class="px-2">{{event.name}}</h5></a>
+                            <div class="vr"></div>
+                            <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
                         </div>
                         <div class="card-body">
-                            <a href="{{ url_for('view_event_page', event=event.name) }}">
-                                ...
-                            </a>
+                            {% for edition in event.editions %}
+                                {% if edition.edition_date > time %}
+                                    <a href="{{ url_for('view.view_edition_page', event=event.name, edition=edition.name) }}" class="text-decoration-none link-dark">
+                                        <div class="card-group card d-flex align-items-center justify-content-center">
+                                            {{edition.name}}
+                                            <br>
+                                            {{edition.edition_date.strftime('%d.%m.%Y')}}
+                                        </div>
+                                    </a>
+                                    {% if not loop.last %}
+                                        <hr>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 {% endfor %}
-                <div class="d-inline-flex card">
-                    <div class="card-body d-flex justify-content-center align-items-center">
-                        <i class="fa-solid fa-circle-plus"></i>
-                    </div>
-                </div>
             </div>
         </div>
     {% endif %}

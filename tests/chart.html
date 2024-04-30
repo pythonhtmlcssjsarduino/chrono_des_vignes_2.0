@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Getting Started with Chart JS with www.chartjs3.com</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+      }
+      .chartMenu {
+        width: 100vw;
+        height: 40px;
+        background: #1a1a1a;
+        color: rgba(54, 162, 235, 1);
+      }
+      .chartMenu p {
+        padding: 10px;
+        font-size: 20px;
+      }
+      .chartCard {
+        width: 100vw;
+        height: calc(100vh - 40px);
+        background: rgba(54, 162, 235, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .chartBox {
+        width: 700px;
+        padding: 20px;
+        border-radius: 20px;
+        border: solid 3px rgba(54, 162, 235, 1);
+        background: white;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chartMenu">
+      <p>WWW.CHARTJS3.COM (Chart JS <span id="chartVersion"></span>)</p>
+    </div>
+    <div class="chartCard">
+      <div class="chartBox">
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"
+    ></script>
+    <script>
+      // setup
+      const data = {
+        //labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+        datasets: [
+          {
+            showLine: true,
+            label: "altitude",
+            data: [
+              { x: 50, y: 7, label: "1" },
+              { x: 60, y: 8, label: "2" },
+              { x: 70, y: 8, label: "3" },
+              { x: 80, y: 9, label: "4" },
+              { x: 90, y: 9, label: "5" },
+              { x: 100, y: 9, label: "6" },
+              { x: 110, y: 10, label: "7" },
+              { x: 120, y: 11, label: "8" },
+              { x: 130, y: 14, label: "" },
+              { x: 140, y: 14, label: "10" },
+              { x: 150, y: 15, label: "11" },
+            ],
+            backgroundColor: ["rgba(0, 255, 0, 0.2)"],
+            borderColor: ["rgba(255, 0, 0, 1)"],
+            borderWidth: 1,
+          },
+        ],
+      };
+
+      // config
+      const config = {
+        type: "scatter",
+        data,
+        options: {
+          plugins: {
+            tooltip: {
+              callbacks: {
+                label: (content) => {
+                  if (content.raw.label != "") {
+                    return content.raw.label;
+                  } else {
+                    return null
+                  }
+                },
+              },
+            },
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+            },
+          },
+        },
+      };
+
+      // render init block
+      console.log(config)
+      const myChart = new Chart(document.getElementById("myChart"), config);
+
+      // Instantly assign Chart.js version
+      const chartVersion = document.getElementById("chartVersion");
+      chartVersion.innerText = Chart.version;
+    </script>
+  </body>
+</html>

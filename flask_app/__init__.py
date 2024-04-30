@@ -48,7 +48,9 @@ login_manager.unauthorized_handler(error403)
 # defini les pages du site web
 from flask_app.users import users
 from flask_app.admin import admin
+from flask_app.view import view
 app.register_blueprint(users)
 app.register_blueprint(admin)
+app.register_blueprint(view)
 from flask_app import routes
 

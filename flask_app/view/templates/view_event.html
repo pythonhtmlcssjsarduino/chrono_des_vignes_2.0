@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h3>{{event_data.name}}</h3>
+    <div class="d-flex d-inline">
+        <div class="flex-column card p-2 w-50 m-2">
+            <h2 class="card-header">editions</h2>
+            <div class="card-body">
+                {% for edition in event_data.editions %}
+                    {% if edition.edition_date > time %}
+                    <a class="text-decoration-none link-dark" href="{{ url_for('view.view_edition_page', event=event_data.name, edition=edition.name) }}">
+                            <div class="card-group card d-flex align-items-center justify-content-center">
+                                {{edition.name}}
+                                <br>
+                                {{edition.edition_date.strftime('%d.%m.%Y')}}
+                            </div>
+                    </a>
+                        {% if not loop.last %}
+                            <hr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="flex-column card p-2 w-50 m-2">
+            <h2 class="card-header">parcours</h2>
+            <div class="card-body">
+                {% for parcours in event_data.parcours %}
+                    <a class="text-decoration-none link-dark" href="{{ url_for('view.view_parcours_page', event=event_data.name, parcours=parcours.name) }}">
+                        <div class="card-group card d-flex align-items-center justify-content-center">
+                            {{parcours.name}}
+                        </div>
+                    </a>
+                    {% if not loop.last %}
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -7,7 +7,7 @@ from sqlalchemy import Integer
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    creation_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     avatar = db.Column(db.String(80), nullable=False, default='icone.png')
     name= db.Column(db.String(20), nullable=False)
     lastname = db.Column(db.String(20), nullable=False)
@@ -21,7 +21,7 @@ class User(UserMixin, db.Model):
     creations=db.relationship('Event', backref='createur', lazy='dynamic')
 
     def __repr__(self) -> str:
-        return f'username : {self.username}, password: {self.password}'
+        return f'<username : {self.username}, password: {self.password}>'
 
 
 class Event(db.Model):
@@ -33,6 +33,14 @@ class Event(db.Model):
     inscrits=db.relationship('Inscription', backref='event', lazy='dynamic')
     createur_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    def get_unique_inscrits(self):
+        uniques =[]
+        ids =set()
+        for inscrit in self.inscrits.all():
+            if inscrit.inscrit.id not in ids:
+                ids.add(inscrit.inscrit.id)
+                uniques.append(inscrit)
+        return uniques
 
 class Parcours(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -41,15 +49,19 @@ class Parcours(db.Model):
     traces = db.relationship('Trace', backref='parcours', foreign_keys='Trace.parcours_id', lazy ='dynamic')
     start_stand = db.relationship('Stand', foreign_keys='Stand.start_stand', uselist=False)
     end_stand = db.relationship('Stand', foreign_keys='Stand.end_stand', uselist=False)
-    name= db.Column(db.String(20), nullable=False, unique=True)
+    name= db.Column(db.String(20), nullable=False)
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     inscriptions=db.relationship('Inscription', backref='parcours', lazy='dynamic')
 
+    def __repr__(self):
+        return f'<Parcours name:{self.name}, event:{self.event.name}>'
+
 class Stand(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name= db.Column(db.String(20), nullable=False, unique=True)
+    name= db.Column(db.String(20), nullable=False)
     lat = db.Column( db.Float, nullable=False)
     lng = db.Column( db.Float, nullable=False)
+    elevation = db.Column( db.Float)
     parcours_id = db.Column(db.Integer, db.ForeignKey('parcours.id'))
     # id du parcours dont il est le debut (le meme que parcours_id) ne rien mettre si pas le premier
     start_stand = db.Column(db.Integer, db.ForeignKey('parcours.id'))
@@ -68,7 +80,7 @@ class Stand(db.Model):
 
 class Trace(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name= db.Column(db.String(20), nullable=False, unique=True)
+    name= db.Column(db.String(20), nullable=False)
     parcours_id = db.Column(db.Integer, db.ForeignKey('parcours.id'))
     start_id=db.Column(db.Integer, db.ForeignKey('stand.id'), nullable=False)
     end_id=db.Column(db.Integer, db.ForeignKey('stand.id'), nullable=False)
@@ -80,8 +92,8 @@ class Trace(db.Model):
 
 class Edition(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    name= db.Column(db.String(20), nullable=False, unique=True)
+    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
+    name= db.Column(db.String(20), nullable=False)
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     inscriptions=db.relationship('Inscription', backref='edition', lazy='dynamic')
     edition_date = db.Column( db.DateTime, nullable=False)
