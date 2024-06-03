@@ -39,7 +39,6 @@
     <script>
         {{ folium_map.script | safe }}
     </script>
-    
     {% if modif_form.lat %}
     <script>
         var last_path_names = [{% for name in path_names.last %}{{ name }},{% endfor %}]
@@ -95,7 +94,7 @@
             var old_point = current_point
             current_point = names[lat.toString()+","+lng.toString()]
             if(current_point==old_point){
-                data = parent.get_form_path_data()
+                var data = parent.get_form_path_data()
                 var latlng = current_point.getLatLng()
                 var latlngid = data.findIndex(function(funclatlng){return latlng.lat == funclatlng.lat && latlng.lng == funclatlng.lng });
                 data.splice(latlngid, 1)
@@ -108,7 +107,8 @@
         };
         function trace_point_add(lat, lng, i) {
             console.log(i);
-            data = parent.get_form_path_data()
+            var data = parent.get_form_path_data()
+            console.log(data)
             data.splice(i, 0, {"lat":lat, "lng":lng})
             console.log(data)
             parent.set_form_path_data(data)

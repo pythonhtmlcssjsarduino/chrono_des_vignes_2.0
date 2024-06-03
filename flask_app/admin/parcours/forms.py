@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, DecimalField, BooleanField
-from flask_app.custum_validators import DataRequired, InputRequired
+from flask_app.custom_validators import DataRequired, InputRequired
 
 class Parcours_name_form(FlaskForm):
     name= StringField('nom du parcours', validators=[DataRequired()])
@@ -18,3 +18,10 @@ class Etape_modif_form(FlaskForm):
     name = StringField('nom de l\'etape', validators=[DataRequired()])
     path = StringField('path', validators=[DataRequired()])
     submit_btn = SubmitField('enregistrer')
+
+class New_parcours_form(FlaskForm):
+    name = StringField('nom du parcours', validators=[DataRequired()])
+    start_lat = DecimalField('latidude du depart', validators=[InputRequired()], places=None)
+    start_lng = DecimalField('longitude du depart', validators=[InputRequired()], places=None)
+    
+    submit_btn = SubmitField('créer')

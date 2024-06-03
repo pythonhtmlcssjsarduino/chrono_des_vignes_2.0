@@ -12,7 +12,7 @@ def coureurs_page(event_name):
     # * page to access the different runner that will or had participate to the event
     event_data = Event.query.filter_by(name=event_name).first()
     user = current_user
-    return render_template("coureurs.html", user_data=user, event_data=event_data)
+    return render_template("coureurs.html", user_data=user, event_data=event_data, event_modif=True)
 
 @coureurs.route('/event/<event_name>/coureurs/<coureur>')
 def view_coureur_page(event_name, coureur):
@@ -20,4 +20,4 @@ def view_coureur_page(event_name, coureur):
     coureur_data:User = User.query.get_or_404(coureur, f'le coureur ayans l\'id {coureur} n\'existe pas.')
     inscriptions = coureur_data.inscriptions.filter_by(event=event_data).all()
     user = current_user
-    return render_template("view_coureur.html", user_data=user, event_data=event_data, coureur_data = coureur_data, inscriptions=inscriptions)
+    return render_template("view_coureur.html", user_data=user, event_data=event_data, coureur_data = coureur_data, inscriptions=inscriptions, event_modif=True)

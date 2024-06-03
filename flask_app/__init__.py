@@ -4,6 +4,10 @@ from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
 from flask_colorpicker import colorpicker
+from icecream import ic, install
+install()
+
+DEFAULT_PROFIL_PIC = 'icone.png'
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret_key' #! change that for deployment
@@ -14,6 +18,8 @@ db.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
+login_manager.login_view = 'users.login'
+login_manager.login_message_category = 'info'
 
 colorpicker(app)
 
@@ -39,11 +45,11 @@ def admin_required(func):
         return func(*args, **kwargs)
     return decorated_view
 
-#* erreur 403 acces non autorisé
+'''#* erreur 403 acces non autorisé
 def error403():
     flash('tu doit etre connecté pour acceder a cette page.', 'danger')
     return redirect(url_for('home'))
-login_manager.unauthorized_handler(error403)
+login_manager.unauthorized_handler(error403)'''
 
 # defini les pages du site web
 from flask_app.users import users

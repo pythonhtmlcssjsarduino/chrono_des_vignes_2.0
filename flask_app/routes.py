@@ -1,7 +1,7 @@
-from flask import flash, redirect, url_for, render_template
-from flask_app import app, db
-from flask_login import login_user, logout_user, login_required, current_user
-from flask_app.models import Edition, User, Parcours, Inscription, Event
+from flask import render_template
+from flask_app import app
+from flask_login import current_user
+from flask_app.models import Edition, Inscription, Event
 from sqlalchemy import and_
 from datetime import datetime
 
@@ -14,7 +14,8 @@ def home():
     else:
         user = None
         inscriptions = None
-    next_events = Event.query.filter(Event.editions.any(and_(Edition.edition_date>datetime.now(),Edition.last_inscription<datetime.now()))).all()
-    return render_template("0-home.html", user_data=user, inscriptions=inscriptions, events = next_events, time = datetime.now())
+    date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+    next_events = Event.query.filter(Event.editions.any(and_(Edition.edition_date>=date,Edition.last_inscription>=date))).all()
+    return render_template("0-home.html", user_data=user, inscriptions=inscriptions, events = next_events, time = date)
 
 

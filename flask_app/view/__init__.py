@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for
+from flask_app import db
 from flask_app.models import Event, Inscription
 from flask_app.admin.parcours import create_map_and_alt_graph
 from flask_login import current_user, login_required
@@ -15,12 +16,23 @@ def deg_to_dms(deg):
     d, m = int(d), int(m)
     return d, m, s
 
+@view.route('/inscription/<inscription>/delete')
+@login_required
+def delete_inscription(inscription):
+    user = current_user
+    inscription = user.inscriptions.filter_by(id=inscription).first_or_404('ce n\'est pas votre inscription.')
+    db.session.delete(inscription)
+    db.session.commit()
+
+    return redirect(url_for('home'))
+
+
 @view.route('/inscription/<inscription>')
 @login_required
 def view_inscription_page(inscription):
     user = current_user
-    inscription = Inscription.query.get_or_404(inscription)
-    event =inscription.event
+    inscription = user.inscriptions.filter_by(id=inscription).first_or_404('ce n\'est pas votre inscription.')
+    event = inscription.event
     edition = inscription.edition
     parcours = inscription.parcours
     if inscription.inscrit != user:
@@ -54,9 +66,8 @@ def view_edition_page(event, edition):
     user = current_user if current_user.is_authenticated else None
     event = Event.query.filter_by(name=event).first_or_404(f'l\'evenement "{event}" n\'existe pas')
     edition = event.editions.filter_by(name=edition).first_or_404(f'l\'edition "{edition}" n\'existe pas')
-    
+
     rdv_url= "https://www.google.com/maps/place/{0}%C2%B0{1}'{2}".format(*deg_to_dms(edition.rdv_lat))+"%22N+{0}%C2%B0{1}'{2}".format(*deg_to_dms(edition.rdv_lng))+f"%22E/@{edition.rdv_lat},{edition.rdv_lng},15z"
-    
     return render_template('view_edition.html', user_data = user, event_data = event, edition_data=edition, rdv_url=rdv_url, time= datetime.now())
 
 @view.route('/<event>/parcours/<parcours>')
@@ -78,4 +89,4 @@ def view_parcours_page(event, parcours):
 
     folium_map={'header':header, 'body':body, 'script':script}
 
-    return render_template('view_parcours.html', user_data = user_data, parcours = parcours, event_data=event, folium_map=folium_map)
+    return render_template('view_parcours.html', user_data = user_data, parcours = parcours, event_data=event, program_list=program_list, graph=graph, folium_map=folium_map)

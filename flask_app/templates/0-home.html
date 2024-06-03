@@ -1,5 +1,26 @@
 {% extends 'layout.html' %}
 {% block content %}
+    {% if user_data.admin %}
+        <div class="pb-5">
+            <h3 class="w-100 h1 bg-light rounded rounded-3">vos evenements</h3>
+            <div class="d-flex justify-content-center flex-wrap">
+                {% for event in user_data.creations %}
+                    <div class="d-inline-flex card m-1">
+                        <div class="w-100 card-header d-flex justify-content-between align-items-center">
+                            <h5 class="px-2">{{event.name}}</h5>
+                            <div class="vr"></div>
+                            <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+                        </div>
+                        <div class="card-body">
+                            <a href="{{ url_for('admin.home_event', event_name=event.name) }}" class="text-decoration-none link-dark">
+                                <p>modifier</p>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
     {% if inscriptions %}
         <div class="pb-5">
             <h3 class="w-100 h1 bg-light rounded rounded-3">vos inscriptions</h3>

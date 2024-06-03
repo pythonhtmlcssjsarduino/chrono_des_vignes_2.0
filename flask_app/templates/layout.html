@@ -69,13 +69,6 @@
               <li class="nav-item">
                 <a href="#contact" class="nav-link">nous contacter</a>
               </li>
-              <li class="nav-item">
-                <a
-                  href="{{ url_for('admin.home_event', event_name='course des vignes') }}"
-                  class="nav-link"
-                  >view</a
-                >
-              </li>
             </ul>
             <ul class="nav navbar-nav d-flex">
               {% if user_data %}
@@ -113,7 +106,7 @@
 
     <center class="d-flex w-100" style="margin-top: 70px; min-height: 100vh">
       <div class="w-side bg-warning">
-        {% if event_data and event_data.name and event_data.createur == user_data %} {% include 'sidebar.html' %} {% endif %}
+        {% if event_data and event_data.name and event_data.createur == user_data and event_modif %} {% include 'sidebar.html' %} {% endif %}
       </div>
       <div class="w-content bg-body p-4">
         {% with messages = get_flashed_messages(with_categories=true) %}

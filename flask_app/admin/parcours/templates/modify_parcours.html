@@ -43,11 +43,18 @@
                 </div>
             </div>
         {% endif %}
+        {% if parcours_data.editions.count() == 0 %}
+            <div>
+                <a href="{{ url_for('admin.parcours.delete_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">supprimer</a>
+            </div>
+        {% else %}
+            <p>archiver</p>
+        {% endif %}
         </div>
         <hr>
         {% if modif_form %}
         {% if modif_form_type == "new" %}
-        <button type="button" onclick="my_modal.show()">show</button>
+        <p class="bg-info rounded">cliquer sur le point de la map ou vous voulez mettre le nouveau stand.</p>
         {% endif %}
         <div {% if modif_form_type == "new" %} class="modal" id="modal_window" {% endif %} > {# modif form #}
         <form action="" method="post" id="modif_form">
@@ -308,10 +315,12 @@
                     form.elements["path"].value = value +"]"
                 };
                 function get_form_path_data(){
-                    data = form.elements["path"].value.replace(" ", "").slice(0,-1);
+                    var data = form.elements["path"].value.replace(" ", "").slice(0,-1);
                     data = data.split("]").slice(0,-1);
-                    new_data = [];
-                    data.forEach(latlngs => {latlng = latlngs.slice(2).split(","); new_data.push({"lat":parseFloat(latlng[0]), "lng":parseFloat(latlng[1])})});
+                    var new_data = [];
+                    console.log(data, new_data)
+                    data.forEach(latlngs => {latlng = latlngs.slice(2).replace("[", "").split(","), console.log(latlng); new_data.push({"lat":parseFloat(latlng[0]), "lng":parseFloat(latlng[1])})});
+                    console.log(new_data)
                     return new_data
                 }
                 {% endif %}
@@ -333,11 +342,6 @@
         </div>
         <div class="col-1 p-0 w-25 h-100"> {# list #}
             <ul style="height: 450px;" class="w-100 overflow-auto list-group">
-                <li class="list-group-item list-group-item-action p-0">
-                    <button class="page-link w-100 h-100" onclick="add_etape(-1)">
-                        <i class="fa-solid fa-circle-plus"></i>
-                    </button>
-                </li>
                 {% for element in program_list %}
 
                     <li class="list-group-item list-group-item-action p-1">
@@ -371,7 +375,7 @@
         <script>
             var graph_data = {{ graph | safe }}
             // setup
-            const data = {
+            const data_points = {
                 datasets: [
                 {
                     showLine: true,
@@ -389,7 +393,7 @@
             // config
             const config = {
                 type: "scatter",
-                data,
+                data:data_points,
                 options: {
                     maintainAspectRatio:false,
                     plugins: {
@@ -399,7 +403,7 @@
                         tooltip: {
                             callbacks: {
                                 label: (content) => {
-                                    console.log('test');
+                                    //console.log('test');
                                     return `${content.raw.type} ${content.raw.label}`;
                                 },
                             },
@@ -423,7 +427,7 @@
                     }
                 },
             };
-            console.log(config)
+            //console.log(config)
             var ctx = document.getElementById("myChart");
             var myChart = new Chart(ctx, config);
         </script>

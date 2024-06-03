@@ -39,7 +39,7 @@
           <p class="mb-0">rendez-vous</p>
         </div>
         <div class="col-sm-9">
-          <a href="{{rdv_url}}" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-muted mb-0">ouvrire sur google maps</a>
+          <a href="{{rdv_url}}" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-muted mb-0">ouvrire sur google maps <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
         </div>
       </div>
       <hr />
@@ -50,7 +50,7 @@
         {% if time >= edition_data.first_inscription and edition_data.last_inscription >= time %}
         {# les inscriptions sont ouvertes #}
           <div class="col-sm-9">
-            <a href="{{ url_for('users.inscriptions_page', event=event_data.name, edition=edition_data.name) }}" class="text-decoration-none text-muted mb-0">s'inscrire</a>
+            <a href="{{ url_for('users.inscription_page', event=event_data.name, edition=edition_data.name) }}" class="text-decoration-none text-muted mb-0">s'inscrire</a>
           </div>
         {% else %}
           {% if time > edition_data.last_inscription %}

@@ -1,8 +1,8 @@
-from flask import Blueprint, flash, redirect, render_template, request
+from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_app import admin_required, db
-from flask_app.admin.parcours.forms import  Parcours_name_form, Etape_modif_form, Stand_modif_form
+from flask_app.admin.parcours.forms import  Parcours_name_form, Etape_modif_form, Stand_modif_form, New_parcours_form
 from flask_login import login_required, current_user
-from flask_app.models import Event, Stand, Trace
+from flask_app.models import Event, Stand, Trace, Parcours
 from folium import Map, Marker, Icon, PolyLine, Popup, LayerControl, TileLayer
 from jinja2 import Template
 from colour import Color
@@ -17,14 +17,67 @@ def midpoint(latlng1, latlng2):
     lng = (latlng1[1]+latlng2[1])/2
     return (lat, lng)
 
-@parcours.route('/event/<event_name>/parcours')
+@parcours.route('/event/<event_name>/parcours/<parcours_name>/delete')
+@login_required
+@admin_required
+def delete_parcours_page(event_name, parcours_name):
+    event = Event.query.filter_by(name=event_name).first()
+    parcours= event.parcours.filter_by(name=parcours_name).first()
+    user = current_user
+    if len(parcours.editions)>0:
+        flash('action impossible le parcours est déjà utilisé dans une edition.', 'danger')
+        return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
+
+    start = parcours.start_stand
+    n_tour=0
+    next_stand = start
+    while True:
+        current_stand = next_stand
+        if current_stand == start:
+            n_tour+=1
+        # trace
+        trace = current_stand.start_trace.filter_by(turn_nb=n_tour).first()
+        if not trace:
+            break
+        next_stand = trace.end
+
+        db.session.delete(current_stand)
+        db.session.delete(trace)
+
+    db.session.delete(current_stand)
+    db.session.delete(parcours)
+
+    db.session.commit()
+    flash('parcours supprimé!', 'success')
+
+    return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
+
+@parcours.route('/event/<event_name>/parcours', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def parcours_page(event_name):
     # * page to access the differents parcours of the event
-    event_data = Event.query.filter_by(name=event_name).first()
+    event = Event.query.filter_by(name=event_name).first()
     user = current_user
-    return render_template("parcours.html", user_data=user, event_data=event_data)
+
+    form = New_parcours_form()
+    if form.validate_on_submit():
+        if not event.parcours.filter_by(name=form.name.data).first():
+            #ok nom pas utilisé
+
+            p = Parcours(name=form.name.data, event=event)
+            db.session.add(p)
+            db.session.commit()
+            p=Parcours.query.filter_by(name=form.name.data).first()
+            s= Stand(name=f'debut-{form.name.data}', parcours_id=p.id, lat=form.start_lat.data, lng=form.start_lng.data, chrono=1, start_stand=p.id)
+            db.session.add(s)
+            db.session.commit()
+
+            return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=form.name.data))
+        else:
+            form.name.errors = list(form.name.errors)+['vous utiliser deja ce nom.']
+
+    return render_template("parcours.html", user_data=user, event_data=event, event_modif=True, form=form)
 
 def get_points_elevation(points:list[tuple[float]]):
     if len(points) == 0:
@@ -233,7 +286,7 @@ def create_map_and_alt_graph(parcours, modif= False, rdv=None):
         trace = Trace.query.filter_by(id=request.args.get('trace')).first()
         if not trace or trace.parcours != parcours:
             return redirect(request.path)
-        poly_points = [[trace.start.lat, trace.start.lng ],*eval(trace.trace),[trace.end.lat, trace.end.lng]]
+        poly_points = [[trace.start.lat, trace.start.lng ],*[[lat, lng] for lat, lng, _ in eval(trace.trace)],[trace.end.lat, trace.end.lng]]
         marker_coordonee += poly_points
         popup = Popup()
         popup._template = Template("""
@@ -304,8 +357,8 @@ def create_map_and_alt_graph(parcours, modif= False, rdv=None):
 @login_required
 @admin_required
 def modify_parcours(event_name, parcours_name):
-    event = Event.query.filter_by(name=event_name).first()
-    parcours= event.parcours.filter_by(name=parcours_name).first()
+    event = Event.query.filter_by(name=event_name).first_or_404()
+    parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
     user = current_user
     modif = request.args.get('modif', 'map')
 
@@ -314,11 +367,13 @@ def modify_parcours(event_name, parcours_name):
     if modif=='form' and name_form.validate_on_submit() :
         if name_form.name.data == parcours.name or not event.parcours.filter_by(name=name_form.name.data).first():
             # le nom peut etre utilisé
-            flash('name saved enfait non pas encore implementé')
-            return redirect(request.path)
+            parcours.name=name_form.name.data
+            db.session.commit()
+            flash('name saved', 'success')
+            return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
         else:
             name_form.name.errors = list(name_form.name.errors)+['vous utiliser deja ce nom.']
-    
+
 
     #? formulaire + actions modifications
     if request.args.get('marker'):#? modif d'un marker
@@ -417,7 +472,7 @@ def modify_parcours(event_name, parcours_name):
 
             return redirect(request.path)
         #! creation du formulaire de modification
-        modif_form = Etape_modif_form(data={'name':trace.name, 'path':trace.trace})
+        modif_form = Etape_modif_form(data={'name':trace.name, 'path':str([[lat, lng] for lat, lng, _ in eval(trace.trace)])})
         if modif_form.validate_on_submit():
             if trace.name == modif_form.name.data or not parcours.traces.filter_by(name=modif_form.name.data).first():
                 # name
@@ -438,7 +493,7 @@ def modify_parcours(event_name, parcours_name):
                 else:
                     trace.trace = new
                 db.session.commit()
-                return redirect(request.path)
+                #return redirect(request.path)
             else:
                 modif_form.name.errors = list(name_form.name.errors)+['vous utiliser deja ce nom.']
     elif request.args.get('new'): #? ajout de nouvelles trace et marker si besoin
@@ -567,4 +622,4 @@ def modify_parcours(event_name, parcours_name):
     folium_map={'header':header, 'body':body, 'script':script}
     return render_template('modify_parcours.html', user_data=user, event_data=event, parcours_data=parcours, name_form=name_form, folium_map=folium_map,
                            map_name=map.get_name(), element_name=element_name, path_names={'last':last_path_name, 'next':next_path_name} if last_path_name else markers_name,
-                           program_list=program_list, modif=modif, modif_form=modif_form, modif_form_type=modif_form_type, graph=graph)
+                           program_list=program_list, modif=modif, modif_form=modif_form, modif_form_type=modif_form_type, graph=graph, event_modif=True)

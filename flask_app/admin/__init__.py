@@ -19,5 +19,5 @@ def home_event(event_name):
     #* page to access and modify an event
     event_data = Event.query.filter_by(name=event_name).first()
     user = current_user
-    return render_template("home_event.html", user_data=user, event_data=event_data)
+    return render_template("home_event.html", user_data=user, event_data=event_data, event_modif=True)
 

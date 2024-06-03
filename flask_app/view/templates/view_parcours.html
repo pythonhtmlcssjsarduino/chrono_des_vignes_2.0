@@ -29,4 +29,70 @@
     frameborder="0"
   ></iframe>
 </div>
+<div>{# alt graph #}
+  <!--chart.js-->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+  <div class="chartBox pt-3">
+      <canvas id="myChart"></canvas>
+  </div>
+  <script>
+      var graph_data = {{ graph | safe }}
+      // setup
+      const data = {
+          datasets: [
+          {
+              showLine: true,
+              label: "altitude",
+              data: graph_data,
+              backgroundColor: ["rgba(0, 255, 0, 0.2)"],
+              borderColor: ["rgba(255, 0, 0, 1)"],
+              borderWidth: 1,
+              yAxisID:'elevation',
+              xAxisID:'distance',
+          },
+          ],
+      };
+
+      // config
+      const config = {
+          type: "scatter",
+          data,
+          options: {
+              maintainAspectRatio:false,
+              plugins: {
+                  legend:{
+                      display:false
+                  },
+                  tooltip: {
+                      callbacks: {
+                          label: (content) => {
+                              console.log('test');
+                              return `${content.raw.type} ${content.raw.label}`;
+                          },
+                      },
+                  },
+              },
+              scales: {
+                  distance: {
+                      type: 'linear',
+                      title:{
+                          display:true,
+                          text:'distance (km)'
+                      },
+                  },
+                  elevation: {
+                      type: 'linear',
+                      title:{
+                          display:true,
+                          text:'altitude (m)'
+                      },
+                  },
+              }
+          },
+      };
+      console.log(config)
+      var ctx = document.getElementById("myChart");
+      var myChart = new Chart(ctx, config);
+  </script>
+</div>
 {% endblock content %}

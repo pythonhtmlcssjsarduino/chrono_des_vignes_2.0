@@ -35,7 +35,9 @@ class DateTimeNotPast:
     def __call__(self,form, field):
         if field.render_kw.get('disabled') == "disabled":
             return
-        if field.data < datetime.now():
+        if field.data is None:
+            return
+        if field.data.date() < datetime.now().date():
             raise validators.ValidationError(self.message)
 
 class DateTimeBefore:
@@ -51,14 +53,16 @@ class DateTimeBefore:
 
         if field.render_kw.get('disabled') == "disabled":
             return
+        if field.data is None or other.data is None:
+            return
 
-        if field.data >= other.data:
+        if field.data.date() > other.data.date():
             message = self.message if self.message else f'The date must be before {self.other_field}!'
             raise validators.ValidationError(message)
 
 
 class DonTExist:
-    def __init__(self, table, filter:str, original_filter_data=None, id = None, message = None):
+    def __init__(self, table, filter:str, id = None, message = None):
         self.message = message
         self.table = table
         self.filter =filter

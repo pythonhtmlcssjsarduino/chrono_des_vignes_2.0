@@ -1,14 +1,19 @@
-from flask_app import db
+from flask_app import db, DEFAULT_PROFIL_PIC
 from sqlalchemy_utils import ColorType
 from colour import Color
 from flask_login import UserMixin
 from datetime import datetime
-from sqlalchemy import Integer
+
+editions_parcours = db.Table(
+    'editions_parcours',
+    db.Column('edition_id', db.Integer, db.ForeignKey('edition.id')),
+    db.Column('parcours_id', db.Integer, db.ForeignKey('parcours.id')),
+)
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
-    avatar = db.Column(db.String(80), nullable=False, default='icone.png')
+    avatar = db.Column(db.String(80), nullable=False, default=DEFAULT_PROFIL_PIC)
     name= db.Column(db.String(20), nullable=False)
     lastname = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(80), nullable=False)
@@ -21,12 +26,12 @@ class User(UserMixin, db.Model):
     creations=db.relationship('Event', backref='createur', lazy='dynamic')
 
     def __repr__(self) -> str:
-        return f'<username : {self.username}, password: {self.password}>'
+        return f'<username : {self.username}, password: {self.password}, {self.avatar}>'
 
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
     name= db.Column(db.String(20), nullable=False, unique=True)
     parcours=db.relationship('Parcours', backref='event', lazy='dynamic')
     editions=db.relationship('Edition', backref='event', lazy='dynamic')
@@ -44,14 +49,16 @@ class Event(db.Model):
 
 class Parcours(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
     stands = db.relationship('Stand', backref='parcours', foreign_keys='Stand.parcours_id', lazy ='dynamic')
     traces = db.relationship('Trace', backref='parcours', foreign_keys='Trace.parcours_id', lazy ='dynamic')
     start_stand = db.relationship('Stand', foreign_keys='Stand.start_stand', uselist=False)
     end_stand = db.relationship('Stand', foreign_keys='Stand.end_stand', uselist=False)
     name= db.Column(db.String(20), nullable=False)
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    editions = db.relationship('Edition', secondary=editions_parcours, back_populates='parcours', lazy ='dynamic')
     inscriptions=db.relationship('Inscription', backref='parcours', lazy='dynamic')
+    description = db.Column(db.Text)
 
     def __repr__(self):
         return f'<Parcours name:{self.name}, event:{self.event.name}>'
@@ -95,6 +102,7 @@ class Edition(db.Model):
     creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
     name= db.Column(db.String(20), nullable=False)
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    parcours = db.relationship('Parcours', secondary=editions_parcours, back_populates='editions', lazy ='dynamic')
     inscriptions=db.relationship('Inscription', backref='edition', lazy='dynamic')
     edition_date = db.Column( db.DateTime, nullable=False)
     first_inscription = db.Column( db.DateTime, nullable=False)
@@ -106,7 +114,7 @@ class Edition(db.Model):
 
 class Inscription(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     edition_id=db.Column(db.Integer, db.ForeignKey('edition.id'), nullable=False)
