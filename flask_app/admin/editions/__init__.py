@@ -4,23 +4,10 @@ from flask_app.admin.editions.forms import Edition_form
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Parcours, Edition
 from datetime import datetime
+from flask_app.admin.editions.dossard import dossard
 
 editions = Blueprint('editions', __name__, template_folder='templates')
-
-@editions.route('/event/<event_name>/editions/<edition_name>/delete', methods=['POST', 'GET'])
-@login_required
-@admin_required
-def delete_edition_page(event_name, edition_name):
-    event = Event.query.filter_by(name=event_name).first_or_404()
-    edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
-    if edition.first_inscription <= datetime.now():
-        flash('l\'edition ne peut pas être supprimée car les inscriptions sont déjà ouvertes', 'danger')
-        return redirect(url_for('admin.editions.modify_edition_page',event_name=event.name, edition_name=edition.name))
-
-    db.session.delete(edition)
-    db.session.commit()
-    flash('l\'edition a bien été supprimée', 'success')
-    return redirect(url_for('admin.editions.editions_page',event_name=event.name))
+editions.register_blueprint(dossard)
 
 @editions.route('/event/<event_name>/editions', methods=['POST', 'GET'])
 @login_required
@@ -30,7 +17,7 @@ def editions_page(event_name):
     event = Event.query.filter_by(name=event_name).first_or_404()
     user = current_user
     form = Edition_form()
-    form.parcours.choices=[e.name for e in event.parcours.all()]
+    form.parcours.choices=[e.name for e in event.parcours.filter_by(archived=False).all()]
     if form.validate_on_submit():
         if not event.editions.filter_by(name=form.name.data).first():
             #ok nom pas utilisé
@@ -48,7 +35,23 @@ def editions_page(event_name):
             return redirect(url_for('admin.editions.editions_page', event_name=event.name))
         else:
             form.name.errors = list(form.name.errors)+['vous utiliser deja ce nom.']
+
     return render_template("editions.html", user_data=user, event_data=event, form=form, event_modif=True)
+
+@editions.route('/event/<event_name>/editions/<edition_name>/delete', methods=['POST', 'GET'])
+@login_required
+@admin_required
+def delete_edition_page(event_name, edition_name):
+    event = Event.query.filter_by(name=event_name).first_or_404()
+    edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
+    if edition.first_inscription <= datetime.now():
+        flash('l\'edition ne peut pas être supprimée car les inscriptions sont déjà ouvertes', 'danger')
+        return redirect(url_for('admin.editions.modify_edition_page',event_name=event.name, edition_name=edition.name))
+
+    db.session.delete(edition)
+    db.session.commit()
+    flash('l\'edition a bien été supprimée', 'success')
+    return redirect(url_for('admin.editions.editions_page',event_name=event.name))
 
 @editions.route('/event/<event_name>/editions/<edition_name>', methods=['POST', 'GET'])
 @login_required

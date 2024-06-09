@@ -14,8 +14,14 @@
       integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
       crossorigin="anonymous"
     />
-  </head>
+    {% if pyscript %}
+      <!-- PyScript CSS -->
+      <link rel="stylesheet" href="https://pyscript.net/releases/2024.6.1/core.css">
 
+      <!-- This script tag bootstraps PyScript -->
+      <script type="module" src="https://pyscript.net/releases/2024.6.1/core.js"></script>
+    {% endif %}
+  </head>
   <body style="min-width: 305px; height: 100vh">
     <!-- FontAwesome 6.2.0 CSS -->
     <script src="https://kit.fontawesome.com/7383067e37.js" crossorigin="anonymous"></script>

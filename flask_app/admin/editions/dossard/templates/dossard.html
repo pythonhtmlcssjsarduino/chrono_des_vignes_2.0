@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+{% block content %}
+
+<div id="dossard_content" style=" aspect-ratio: 297/210" class="border border-1"><h1>loading...</h1></div>
+<div id="dossard_modif" style=" aspect-ratio: 4/1" class="border border-1"></div>
+<div id="output_content" style=" aspect-ratio: 297/210" class="border border-1"></div>
+
+<script type="py" env="dossard" src="{{ url_for('static', filename='/pyscript/main.py') }}" config="{{ url_for('static', filename='pyscript/pyscript.json') }}"></script>
+
+{% endblock content %}

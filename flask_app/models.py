@@ -58,7 +58,8 @@ class Parcours(db.Model):
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     editions = db.relationship('Edition', secondary=editions_parcours, back_populates='parcours', lazy ='dynamic')
     inscriptions=db.relationship('Inscription', backref='parcours', lazy='dynamic')
-    description = db.Column(db.Text)
+    description = db.Column(db.Text, nullable=False, default='')
+    archived = db.Column(db.Boolean, nullable=False, default=False)
 
     def __repr__(self):
         return f'<Parcours name:{self.name}, event:{self.event.name}>'

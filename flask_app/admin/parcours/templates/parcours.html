@@ -1,7 +1,7 @@
 {% extends 'layout.html' %} {% block content %}
 <h3>parcours</h3>
 <div class="d-flex justify-content-center flex-wrap">
-    {% for parcours in event_data.parcours %}
+    {% for parcours in active_parcours %}
         <div class="d-inline-flex card m-1">
             <div class="w-100 card-header d-flex justify-content-between align-items-center">
                 <h5 class="px-2">{{parcours.name}}</h5>
@@ -26,15 +26,34 @@
             </a>
         </div>
     </div>
-    
-      <!-- Modal -->
-    <div
-    class="modal fade show"
-    id="new_edition_modal"
-    tabindex="-1"
-    aria-labelledby="new_edition_label"
-    aria-hidden='true'
-    >
+</div>
+{% if archived_parcours %}
+<h3>parcours archivés</h3>
+<div class="d-flex justify-content-center flex-wrap">
+    {% for parcours in archived_parcours %}
+        <div class="d-inline-flex card m-1">
+            <div class="w-100 card-header d-flex justify-content-between align-items-center">
+                <h5 class="px-2">{{parcours.name}}</h5>
+                <div class="vr"></div>
+                <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('admin.parcours.modify_parcours', event_name=event_data.name, parcours_name=parcours.name) }}" class="text-decoration-none link-dark">
+                    modify
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
+<!-- Modal -->
+<div 
+class="modal fade show"
+id="new_edition_modal"
+tabindex="-1"
+aria-labelledby="new_edition_label"
+aria-hidden='true'
+>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -105,9 +124,9 @@
             </div>
         </div>
     </div>
-    <script>
-        modal = new bootstrap.Modal(document.getElementById('new_edition_modal'))
-        {% if form.errors|length %}modal.show(){% endif %}
-    </script>
+<script>
+    modal = new bootstrap.Modal(document.getElementById('new_edition_modal'))
+    {% if form.errors|length %}modal.show(){% endif %}
+</script>
 </div>
 {% endblock content %}

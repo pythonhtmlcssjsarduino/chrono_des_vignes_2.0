@@ -21,9 +21,8 @@ def midpoint(latlng1, latlng2):
 @login_required
 @admin_required
 def delete_parcours_page(event_name, parcours_name):
-    event = Event.query.filter_by(name=event_name).first()
-    parcours= event.parcours.filter_by(name=parcours_name).first()
-    user = current_user
+    event = Event.query.filter_by(name=event_name).first_or_404()
+    parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
     if len(parcours.editions)>0:
         flash('action impossible le parcours est déjà utilisé dans une edition.', 'danger')
         return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
@@ -52,6 +51,26 @@ def delete_parcours_page(event_name, parcours_name):
 
     return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
 
+@parcours.route('/event/<event_name>/parcours/<parcours_name>/archive')
+@login_required
+@admin_required
+def archive_parcours_page(event_name, parcours_name):
+    event = Event.query.filter_by(name=event_name).first_or_404()
+    parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
+    parcours.archived =True
+    db.session.commit()
+    return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
+
+@parcours.route('/event/<event_name>/parcours/<parcours_name>/unarchive')
+@login_required
+@admin_required
+def unarchive_parcours_page(event_name, parcours_name):
+    event = Event.query.filter_by(name=event_name).first_or_404()
+    parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
+    parcours.archived =False
+    db.session.commit()
+    return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
+
 @parcours.route('/event/<event_name>/parcours', methods=['POST', 'GET'])
 @login_required
 @admin_required
@@ -76,8 +95,10 @@ def parcours_page(event_name):
             return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=form.name.data))
         else:
             form.name.errors = list(form.name.errors)+['vous utiliser deja ce nom.']
-
-    return render_template("parcours.html", user_data=user, event_data=event, event_modif=True, form=form)
+    active_parcours = event.parcours.filter_by(archived=False).all()
+    archived_parcours = event.parcours.filter_by(archived=True).all()
+    
+    return render_template("parcours.html", user_data=user, event_data=event, archived_parcours=archived_parcours, active_parcours=active_parcours, event_modif=True, form=form)
 
 def get_points_elevation(points:list[tuple[float]]):
     if len(points) == 0:
@@ -363,11 +384,12 @@ def modify_parcours(event_name, parcours_name):
     modif = request.args.get('modif', 'map')
 
     #? formulaire pour le nom du parcours
-    name_form= Parcours_name_form(data={'name':parcours.name})
+    name_form= Parcours_name_form(data={'name':parcours.name, 'description':parcours.description})
     if modif=='form' and name_form.validate_on_submit() :
         if name_form.name.data == parcours.name or not event.parcours.filter_by(name=name_form.name.data).first():
             # le nom peut etre utilisé
             parcours.name=name_form.name.data
+            parcours.description=name_form.description.data
             db.session.commit()
             flash('name saved', 'success')
             return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))

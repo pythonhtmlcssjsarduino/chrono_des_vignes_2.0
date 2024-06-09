@@ -1,9 +1,10 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, DecimalField, BooleanField
+from wtforms import StringField, SubmitField, DecimalField, BooleanField, TextAreaField
 from flask_app.custom_validators import DataRequired, InputRequired
 
 class Parcours_name_form(FlaskForm):
     name= StringField('nom du parcours', validators=[DataRequired()])
+    description = TextAreaField('description', validators=[], default='')
     submit_btn=SubmitField('sauvegarder')
 
 class Stand_modif_form(FlaskForm):
@@ -23,5 +24,5 @@ class New_parcours_form(FlaskForm):
     name = StringField('nom du parcours', validators=[DataRequired()])
     start_lat = DecimalField('latidude du depart', validators=[InputRequired()], places=None)
     start_lng = DecimalField('longitude du depart', validators=[InputRequired()], places=None)
-    
+
     submit_btn = SubmitField('créer')
