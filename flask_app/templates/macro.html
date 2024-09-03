@@ -1,0 +1,21 @@
+{% macro form_field(field) %}
+    <div class="form-group">{# name #}
+        {{ field.label(class="form-control-label") }}
+        {% if field.errors %}
+            {{ field(class="form-control form-control-lg is-invalid") }}
+            <div class="invalid-feedback">
+                {% for error in field.errors %}
+                    <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+        {% else %}
+            {{ field(class="form-control form-control-lg") }}
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro submit(form) %}
+    <div class="form-group">
+        {{ form.submit_btn(class="btn btn-outline-info") }}
+    </div>
+{% endmacro %}

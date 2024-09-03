@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+{% from 'macro.html' import form_field, submit %}
+{% block content %}
+    <div>
+        {% if keys.0 %}
+            <h5>parcours: {{ (keys|sort(attribute='parcours.name')).0.parcours.name }}</h5>
+            <ul class="list-group list-group-light">
+                {% for key in keys|sort(attribute='parcours.name') %}
+                    {% if loop.previtem and loop.previtem.parcours != key.parcours %}
+                        </ul>
+                            <h5>parcours: {{ key.parcours.name }}</h5>
+                        <ul class="list-group list-group-light">
+                    {% endif %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">{{ key.name }}</div>
+                            <div class="text-muted">stand: {{ key.stand.name }}</div>
+                        </div>
+                        <span class="badge rounded-pill bg-info">{{ key.key }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if edition_data.edition_date > now %}
+            <hr>
+            <form action="" method="post">
+                <fieldset class="form-group">
+                    {{ form.hidden_tag() }}
+                    {{ form_field(form.name) }}
+                    {{ form_field(form.stands) }}
+                    {{ submit(form) }}
+                </fieldset>
+            </form>
+        {% endif %}
+    </div>
+
+    <br><br><hr><br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">time</th>
+                <th scope="col">user</th>
+                <th scope="col">key</th>
+                <th scope="col">stand</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider table-divider-color">
+            {% for passage in passages | sort(attribute='time_stamp', reverse=true) %}
+                <tr>
+                    <th scope="row">{{ passage.time_stamp }}</th>
+                    <td>{{ passage.inscrit.inscrit.username }} {% if passage.inscrit.dossard %}- {{ passage.inscrit.dossard }}{% endif %}</td>
+                    <td>{{ passage.key.name }}</td>
+                    <td>{{ passage.key.stand.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock content %}

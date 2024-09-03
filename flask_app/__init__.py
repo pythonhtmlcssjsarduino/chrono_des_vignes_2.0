@@ -1,11 +1,14 @@
 from flask import Flask, redirect, url_for, flash
-from datetime import datetime
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from functools import wraps
 from flask_colorpicker import colorpicker
-from icecream import ic, install
+from icecream import install
 install()
+
+# met la langue en francais pour le formatage des dates
+import locale
+locale.setlocale(locale.LC_TIME,'')
 
 DEFAULT_PROFIL_PIC = 'icone.png'
 

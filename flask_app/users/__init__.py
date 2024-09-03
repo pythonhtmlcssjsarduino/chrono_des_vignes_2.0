@@ -4,6 +4,7 @@ from flask_app.models import User, Event, Parcours, Inscription, Edition
 from flask_app.users.forms import Login_form, Signup_form, Inscription_connected_form, Inscription_form
 from flask_app import db
 from sqlalchemy import and_, not_
+from datetime import datetime
 import string, secrets
 alphabet = string.ascii_letters + string.digits
 
@@ -64,7 +65,16 @@ def logout():
 def inscription_page(event, edition):
     user = current_user if current_user.is_authenticated else None
     event = Event.query.filter_by(name=event).first_or_404()
-    edition = event.editions.filter_by(name=edition).first_or_404()
+    edition:Edition = event.editions.filter_by(name=edition).first_or_404()
+    if edition.first_inscription > datetime.now():
+        date = edition.first_inscription.strftime('%A %d %B %Y')
+        # pas encore ouvert
+        flash(f'Les inscriptions ne sont pas encore ouvertes! Elles ouvrent le {date}', 'warning')
+        return redirect(url_for("view.view_edition_page", event = event.name, edition=edition.name))
+    if edition.last_inscription < datetime.now():
+        # deja fermé
+        flash('les inscription sont déjà fermée!')
+        return redirect(url_for("view.view_edition_page", event = event.name, edition=edition.name))
 
     if user:
         form = Inscription_connected_form()

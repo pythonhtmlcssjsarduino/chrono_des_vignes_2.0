@@ -1,0 +1,86 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <div>
+        <p>clé: {{ key.name }} ({{ key.key }})</p>
+        <p>événement: {{ key.event.name }}</p>
+        <p>parcours: {{ key.parcours.name }}</p>
+    </div>
+    <div class="d-flex w-100">
+        <div class="w-50">
+            <input type="number" class="form-control form-control-lg" id="dossard_input">
+            <br>
+            <ul class="list-group" id="time_list"></ul>
+            <script>
+                const input = document.getElementById('dossard_input')
+                const list = document.getElementById('time_list')
+                const key = '{{ key.key }}'
+                const url = '{{ url_for("admin.editions.passages.set_passage") }}'
+                var time_list = []
+                async function send_request(dossard) {
+                    var time = get_last_time()
+                    if (time) {
+                        var data = new FormData()
+                        data.append('key', key)
+                        data.append('time', time.getTime())
+                        data.append('dossard', dossard)
+
+                        console.log(time, dossard)
+                        var xhttp = new XMLHttpRequest();
+                        xhttp.open('POST', url, true);
+                        xhttp.onload = function () {
+                            response = JSON.parse(this.responseText)
+                            console.log(response);
+                            if (response['success']) {
+                                console.log('ok')
+                            } else {
+                                console.log('ahhhhh')
+                            }
+                        }
+                        xhttp.send(data);
+                    }
+                };
+                function add_time() {
+                    var time = new Date()
+                    var node = document.createElement('li')
+                    var time_text = `${time.getDate()}.${time.getMonth()} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+                    node.innerText = time_text
+                    node.classList.add('list-group-item')
+                    if (list.children.length==0) {
+                        node.classList.add('bg-info')
+                    }
+                    list.appendChild(node)
+                    time_list.push(time)
+
+                }
+                function get_last_time() {
+                    if (list.children.length>0) {
+                        list.removeChild(list.firstChild)
+                        if (list.children.length>0) {
+                            list.firstChild.classList.add('bg-info')
+                        }
+                        return time_list.shift()
+                    }
+                }
+                document.addEventListener('keydown', (e) => {
+                    if (e.code === "Space") {
+                        add_time()
+                    } else if (e.code === "Escape") {
+                        get_last_time()
+                    }else if (e.code === 'Backspace'){
+                        input.value = ''
+                    } else if (e.code === 'Enter') {
+                        var data = parseInt(input.value);
+                        input.value = ''
+                        if ( !isNaN(data) ) {
+                            send_request(data)
+                        }
+                    }
+                });
+                input.focus()
+            </script>
+        </div>
+        <div class="w-50" id="test">
+            coucou
+        </div>
+    </div>
+{% endblock content %}

@@ -37,6 +37,7 @@ class Event(db.Model):
     editions=db.relationship('Edition', backref='event', lazy='dynamic')
     inscrits=db.relationship('Inscription', backref='event', lazy='dynamic')
     createur_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    passage_keys=db.relationship('PassageKey', backref='event', lazy='dynamic')
 
     def get_unique_inscrits(self):
         uniques =[]
@@ -58,6 +59,7 @@ class Parcours(db.Model):
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     editions = db.relationship('Edition', secondary=editions_parcours, back_populates='parcours', lazy ='dynamic')
     inscriptions=db.relationship('Inscription', backref='parcours', lazy='dynamic')
+    passage_keys=db.relationship('PassageKey', backref='parcours', lazy='dynamic')
     description = db.Column(db.Text, nullable=False, default='')
     archived = db.Column(db.Boolean, nullable=False, default=False)
 
@@ -81,6 +83,7 @@ class Stand(db.Model):
     start_trace=db.relationship('Trace', backref='start', foreign_keys='Trace.start_id', lazy='dynamic')
     # traces qui finissent a ce stand
     end_trace=db.relationship('Trace', backref='end', foreign_keys='Trace.end_id', lazy='dynamic')
+    passage_keys=db.relationship('PassageKey', backref='stand', lazy='dynamic')
 
     def __repr__(self):
         return f'<Stand id:{self.id}, name:{self.name}, parcours:{self.parcours_id}>'
@@ -94,7 +97,7 @@ class Trace(db.Model):
     end_id=db.Column(db.Integer, db.ForeignKey('stand.id'), nullable=False)
     trace = db.Column(db.Text, nullable=False, default='[]')
     turn_nb = db.Column(db.Integer, nullable=False)
-    
+
     def __str__(self):
         return f'<Trace id: {self.id} start: {self.start} end:{self.end}'
 
@@ -110,6 +113,7 @@ class Edition(db.Model):
     last_inscription =db.Column( db.DateTime, nullable=False)
     rdv_lat = db.Column( db.Float, nullable=False, default=46.58)
     rdv_lng = db.Column( db.Float, nullable=False, default=6.52)
+    passage_keys=db.relationship('PassageKey', backref='edition', lazy='dynamic')
 
 
 
@@ -120,3 +124,23 @@ class Inscription(db.Model):
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     edition_id=db.Column(db.Integer, db.ForeignKey('edition.id'), nullable=False)
     parcours_id=db.Column(db.Integer, db.ForeignKey('parcours.id'), nullable=False)
+    dossard=db.Column(db.Integer)
+    passages=db.relationship('Passage', backref='inscrit', lazy='dynamic')
+
+class PassageKey(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
+    event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
+    edition_id=db.Column(db.Integer, db.ForeignKey('edition.id'), nullable=False)
+    parcours_id=db.Column(db.Integer, db.ForeignKey('parcours.id'), nullable=False)
+    stand_id=db.Column(db.Integer, db.ForeignKey('stand.id'), nullable=False)
+    passages=db.relationship('Passage', backref='key', lazy='dynamic')
+    key=db.Column(db.String(20), nullable=False, unique=True)
+    name=db.Column(db.String(20), nullable=False)
+
+class Passage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
+    key_id=db.Column(db.Integer, db.ForeignKey('passage_key.id'), nullable=False)
+    time_stamp=db.Column(db.DateTime, nullable=False)
+    inscrit_id = db.Column(db.Integer, db.ForeignKey('inscription.id'), nullable=False)

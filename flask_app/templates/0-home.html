@@ -2,7 +2,7 @@
 {% block content %}
     {% if user_data.admin %}
         <div class="pb-5">
-            <h3 class="w-100 h1 bg-light rounded rounded-3">vos evenements</h3>
+            <h3 class="w-100 h1 bg-light rounded rounded-3">vos événements</h3>
             <div class="d-flex justify-content-center flex-wrap">
                 {% for event in user_data.creations %}
                     <div class="d-inline-flex card m-1">
@@ -45,7 +45,7 @@
     {% endif %}
     {% if events %}
         <div>
-            <h3 class="w-100 h1 bg-light rounded rounded-3">les prochains evenements</h3>
+            <h3 class="w-100 h1 bg-light rounded rounded-3">les prochains événements</h3>
             <div class="d-flex justify-content-center flex-wrap">
                 {% for event in events %}
                     <div class="d-inline-flex card m-1">

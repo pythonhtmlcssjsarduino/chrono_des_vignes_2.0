@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% from 'macro.html' import form_field, submit %}
+{% block content %}
+    <form action="" method="post">
+        <fieldset class="form-group">
+            {{ form.hidden_tag() }}
+            {{ form_field(form.key) }}
+            {{ submit(form) }}
+        </fieldset>
+    </form>
+{% endblock content %}

@@ -125,7 +125,11 @@
         {% endwith %}
         {% block content %} {% endblock content %}
       </div>
-      <div class="w-side bg-warning"></div>
+      <div class="w-side bg-warning">
+        {% if edition_sidebar %}
+          {% include 'edition-sidebar.html' %}
+        {% endif %}
+      </div>
     </center>
   </body>
 </html>

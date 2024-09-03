@@ -1,35 +1,12 @@
 {% extends 'layout.html' %}
+{% from 'macro.html' import form_field, submit %}
 {% block content %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
-        <div class="form-group">{# name #}
-            {{ form.name.label(class="form-control-label") }}
-            {% if form.name.errors %}
-                {{ form.name(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.name.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.name(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-group">{# edition date #}
-            {{ form.edition_date.label(class="form-control-label") }}
-            {% if form.edition_date.errors %}
-                {{ form.edition_date(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.edition_date.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.edition_date(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-group">{# parcours #}
+        {{ form_field(form.name) }}
+        {{ form_field(form.edition_date) }}
+        <div class="form-group">{# parcours ne pas remplacer par macro car style different!! #}
             {{ form.parcours.label(class="form-control-label") }}
             {% if form.parcours.errors %}
                 {{ form.parcours(class="form-control form-control-lg is-invalid list-group") }}
@@ -42,63 +19,13 @@
                 {{ form.parcours(class="form-control form-control-lg list-group") }}
             {% endif %}
         </div>
-        <div class="form-group">{# first inscription #}
-            {{ form.first_inscription.label(class="form-control-label") }}
-            {% if form.first_inscription.errors %}
-                {{ form.first_inscription(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.first_inscription.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.first_inscription(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-group">{# last inscription #}
-            {{ form.last_inscription.label(class="form-control-label") }}
-            {% if form.last_inscription.errors %}
-                {{ form.last_inscription(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.last_inscription.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.last_inscription(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-group">{# rdv lat #}
-            {{ form.rdv_lat.label(class="form-control-label") }}
-            {% if form.rdv_lat.errors %}
-                {{ form.rdv_lat(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.rdv_lat.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.rdv_lat(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-group">{# rdv lng #}
-            {{ form.rdv_lng.label(class="form-control-label") }}
-            {% if form.rdv_lng.errors %}
-                {{ form.rdv_lng(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.rdv_lng.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.rdv_lng(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.submit_btn(class="btn btn-outline-info") }}
-        </div>
+        {{ form_field(form.first_inscription) }}
+        {{ form_field(form.last_inscription) }}
+        {{ form_field(form.rdv_lat) }}
+        {{ form_field(form.rdv_lng) }}
+        {{ submit(form) }}
         {% if form.first_inscription.data > now %}
-            <div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="sedesinscrire" aria-hidden="true">
+            <div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="deleteediton" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
