@@ -72,7 +72,6 @@ def modify_edition_page(event_name, edition_name):
                               'parcours':[str((p.name, p.description)) for p in edition.parcours]})
     form.parcours.choices=[str((p.name, p.description)) for p in event.parcours.filter(or_(Parcours.archived==False, Parcours.editions.any(Edition.id==edition.id))).all()]
 
-
     #? desactiver le champs si dates deja passé
     form.edition_date.render_kw.pop("disabled", None)
     form.first_inscription.render_kw.pop("disabled", None)
@@ -81,14 +80,14 @@ def modify_edition_page(event_name, edition_name):
     form.rdv_lat.render_kw = {}
     form.rdv_lng.render_kw = {}
     form.parcours.render_kw = {}
-    if edition.first_inscription.date() <= datetime.now().date():
+    if edition.first_inscription <= datetime.now():
         form.edition_date.render_kw["disabled"]= "disabled" # si ils peuvent s'iscrire ne plus modifier la date de l'edition
         form.parcours.render_kw["disabled"]= "disabled"
         form.first_inscription.render_kw["disabled"]= "disabled"
         form.name.render_kw["disabled"]= "disabled"
         form.rdv_lat.render_kw["disabled"]= "disabled"
         form.rdv_lng.render_kw["disabled"]= "disabled"
-    if edition.last_inscription.date() <= datetime.now().date():
+    if edition.last_inscription <= datetime.now():
         form.last_inscription.render_kw["disabled"]= "disabled"
     #? fin desactivation des champs
 

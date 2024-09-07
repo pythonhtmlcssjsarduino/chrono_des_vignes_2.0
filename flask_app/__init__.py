@@ -11,10 +11,13 @@ import locale
 locale.setlocale(locale.LC_TIME,'')
 
 DEFAULT_PROFIL_PIC = 'icone.png'
+DEV_ENABLE = True
 
 app = Flask(__name__)
+app.config['SERVER_NAME'] = 'localhost:5000'
 app.config['SECRET_KEY'] = 'secret_key' #! change that for deployment
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
+app.url_map.default_subdomain = ''
 
 db = SQLAlchemy()
 db.init_app(app)
@@ -58,8 +61,10 @@ login_manager.unauthorized_handler(error403)'''
 from flask_app.users import users
 from flask_app.admin import admin
 from flask_app.view import view
+from flask_app.dev import dev
 app.register_blueprint(users)
 app.register_blueprint(admin)
 app.register_blueprint(view)
+app.register_blueprint(dev)
 from flask_app import routes
 

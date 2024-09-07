@@ -64,9 +64,10 @@ def chrono_home():
 def chrono_page(key_code):
     user = current_user if current_user.is_authenticated else None
     key = PassageKey.query.filter_by(key=key_code).first_or_404()
-    if key.edition.edition_date > datetime.now():
+    # TODO uncomment this part
+    """ if key.edition.edition_date > datetime.now():
         flash('l\'edition n\'est pas aujourd\'hui', 'warning')
-        return redirect(url_for("admin.editions.passages.chrono_home"))
+        return redirect(url_for("admin.editions.passages.chrono_home")) """
     return render_template('chrono.html', user_data=user, key=key)
 
 @passages.route('/chrono/set', methods=['post'])
@@ -74,10 +75,10 @@ def set_passage():
     form = SetPassageForm()
     user = User.query.filter(User.inscriptions.any(Inscription.dossard == form.dossard.data)).first()
     if not user:
-        return jsonify({"success": False, 'error':'not valide dossard'})
+        return jsonify({"success": False, 'error':'not valide dossard', 'request':{'dossard':form.dossard.data, 'time':form.time.data, 'key':form.key.data}})
     key = PassageKey.query.filter_by(key=form.key.data).first()
     if not key:
-        return jsonify({"success": False, 'error':'not valide key'})
+        return jsonify({"success": False, 'error':'not valide key', 'request':{'dossard':form.dossard.data, 'time':form.time.data, 'key':form.key.data}})
     pass_time = datetime.fromtimestamp(form.time.data/1000)
     ic(key)#type:ignore
     ic(pass_time) #type:ignore

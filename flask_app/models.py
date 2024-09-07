@@ -62,6 +62,7 @@ class Parcours(db.Model):
     passage_keys=db.relationship('PassageKey', backref='parcours', lazy='dynamic')
     description = db.Column(db.Text, nullable=False, default='')
     archived = db.Column(db.Boolean, nullable=False, default=False)
+    chronos_list = db.Column(db.Text, nullable=False, default='[]')
 
     def __repr__(self):
         return f'<Parcours name:{self.name}, event:{self.event.name}>'

@@ -75,6 +75,9 @@
               <li class="nav-item">
                 <a href="#contact" class="nav-link">nous contacter</a>
               </li>
+              <li class="nav-item">
+                <a href="{{ url_for('admin.editions.passages.chrono_home') }}" class="nav-link">chronometrer</a>
+              </li>
             </ul>
             <ul class="nav navbar-nav d-flex">
               {% if user_data %}

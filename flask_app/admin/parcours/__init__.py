@@ -9,7 +9,7 @@ from colour import Color
 import requests as web_requests
 from math import acos, sin, radians, cos
 
-parcours = Blueprint('parcours', __name__, template_folder='templates')
+parcours_bp = Blueprint('parcours', __name__, template_folder='templates')
 
 
 def midpoint(latlng1, latlng2):
@@ -17,7 +17,7 @@ def midpoint(latlng1, latlng2):
     lng = (latlng1[1]+latlng2[1])/2
     return (lat, lng)
 
-@parcours.route('/event/<event_name>/parcours/<parcours_name>/delete')
+@parcours_bp.route('/event/<event_name>/parcours/<parcours_name>/delete')
 @login_required
 @admin_required
 def delete_parcours_page(event_name, parcours_name):
@@ -51,7 +51,7 @@ def delete_parcours_page(event_name, parcours_name):
 
     return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
 
-@parcours.route('/event/<event_name>/parcours/<parcours_name>/archive')
+@parcours_bp.route('/event/<event_name>/parcours/<parcours_name>/archive')
 @login_required
 @admin_required
 def archive_parcours_page(event_name, parcours_name):
@@ -61,7 +61,7 @@ def archive_parcours_page(event_name, parcours_name):
     db.session.commit()
     return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
 
-@parcours.route('/event/<event_name>/parcours/<parcours_name>/unarchive')
+@parcours_bp.route('/event/<event_name>/parcours/<parcours_name>/unarchive')
 @login_required
 @admin_required
 def unarchive_parcours_page(event_name, parcours_name):
@@ -71,7 +71,7 @@ def unarchive_parcours_page(event_name, parcours_name):
     db.session.commit()
     return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
 
-@parcours.route('/event/<event_name>/parcours', methods=['POST', 'GET'])
+@parcours_bp.route('/event/<event_name>/parcours', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def parcours_page(event_name):
@@ -113,7 +113,7 @@ def calc_points_dist(lat1, lng1, lat2, lng2):
     'return the spherical dist of the two points in km'
     return acos((sin(radians(lat1)) * sin(radians(lat2))) + (cos(radians(lat1)) * cos(radians(lat2))) * (cos(radians(lng2) - radians(lng1)))) * 6371
 
-
+'''
 def get_graph_data(data):
     points = []
     to_request=[]
@@ -157,7 +157,7 @@ def get_graph_data(data):
         db.session.commit()
 
     return points
-
+'''
 def build_alt_graph(graph_data):
     points = []
     to_request=[]
@@ -203,7 +203,7 @@ def build_alt_graph(graph_data):
     return points
 
 
-def create_map_and_alt_graph(parcours, modif= False, rdv=None):
+def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
     #! create the map
     program_list=[]
     part_list = []
@@ -212,6 +212,7 @@ def create_map_and_alt_graph(parcours, modif= False, rdv=None):
     next_path_name =[]
     last_path_name = []
     markers_name = []
+    chrono_list = []
     map_style = 'satelite'
     map_styles={'satelite':{'tiles':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                             'attr':'Esri',
@@ -244,6 +245,7 @@ def create_map_and_alt_graph(parcours, modif= False, rdv=None):
         part_list.append(start)
         program_list.append({'type':'marker', 'lat':start.lat, 'lng':start.lng, 'name':start.name, 'id':start.id, 'color':start.color.hex, 'step':0})
         stands.add(start)
+        chrono_list.append(start.name)
         turn_nb = 0
         step =0
         while True:
@@ -255,6 +257,7 @@ def create_map_and_alt_graph(parcours, modif= False, rdv=None):
             trace = old_stand.start_trace.filter_by(turn_nb=turn_nb).first()
             if trace :
                 new_stand = trace.end
+                if new_stand.chrono : chrono_list.append(new_stand.name)
                 if new_stand not in stands:
                     if modif:
                         popup = Popup()
@@ -299,6 +302,9 @@ def create_map_and_alt_graph(parcours, modif= False, rdv=None):
                 break
     else:
         element_name=None
+
+    parcours.chronos_list = str(chrono_list)
+    db.session.commit()
     
     graph = build_alt_graph(part_list)
 
@@ -374,7 +380,7 @@ def create_map_and_alt_graph(parcours, modif= False, rdv=None):
     return element_name, last_path_name, next_path_name, markers_name, program_list, map, graph
 
 
-@parcours.route('/event/<event_name>/parcours/<parcours_name>', methods=['POST', 'GET'])
+@parcours_bp.route('/event/<event_name>/parcours/<parcours_name>', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def modify_parcours(event_name, parcours_name):
