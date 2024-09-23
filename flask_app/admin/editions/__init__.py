@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, render_template, redirect, url_for
+from flask import Blueprint, flash, render_template, redirect, url_for, request
 from flask_app import admin_required, db
 from flask_app.admin.editions.forms import Edition_form
 from flask_login import login_required, current_user
@@ -90,6 +90,9 @@ def modify_edition_page(event_name, edition_name):
     if edition.last_inscription <= datetime.now():
         form.last_inscription.render_kw["disabled"]= "disabled"
     #? fin desactivation des champs
+    ic(form.parcours.data)
+    ic([str((p.name, p.description)) for p in edition.parcours])
+    ic(request.form)
 
     if form.validate_on_submit():
         print(form.parcours.data)

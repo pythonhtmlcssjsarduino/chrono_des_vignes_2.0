@@ -30,7 +30,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <nav class="navbar fixed-bottom navbar-expand-sm navbar-dark bg-dark">
         <div class="container-fluid">
-          <a class="navbar-brand" href="{{ url_for('dev.dev_home' ) }}">Bottom navbar</a>
+          <a class="navbar-brand" href="{{ url_for('dev.dev_home' ) }}">Dev home</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -40,18 +40,20 @@
                 <a class="nav-link" href="{{ url_for('dev.languages' ) }}">languages</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="{{ url_for('dev.reload' ) }}">reload translations</a>
               </li>
-              <li class="nav-item">
+              <!-- <li class="nav-item">
                 <a class="nav-link" href="#">Disabled</a>
-              </li>
+              </li> -->
             </ul>
           </div>
         </div>
       </nav>
-    {% block content %}
+    <body style="margin-bottom: 50px;">
+      {% block content %}
         
-    {% endblock %}
+      {% endblock %}
+    </body>
     
 </body>
 </html>

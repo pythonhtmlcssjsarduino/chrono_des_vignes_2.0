@@ -6,6 +6,7 @@ from flask_app import db
 from sqlalchemy import and_, not_
 from datetime import datetime
 import string, secrets
+from flask_babel import _
 alphabet = string.ascii_letters + string.digits
 
 users = Blueprint('users', __name__, template_folder='templates')
@@ -19,15 +20,15 @@ def login():
         user= User.query.filter_by(username=form.username.data).first()
         if user and form.password.data == user.password:
             login_user(user)
-            flash(f'welcome {user.name} you are connected', 'success')
+            flash(_('flash.connected:name').format(name = user.name), 'success')
             if request.args.get('next'):
                 return redirect(request.args.get('next'))
             else:
-                if user.admin:
-                    return redirect(url_for('admin.home_event', event_name='course des vignes'))
+                #if user.admin:
+                #    return redirect(url_for('admin.home_event', event_name='course des vignes'))
                 return redirect(url_for('home'))
         else:
-            flash('le mot de passe ou nom d\'utilisateur n\'est pas valide', 'warning')
+            flash(_('flash.error.pwdnotvalid'), 'warning')
     return render_template('login.html', form=form)
 
 
@@ -47,7 +48,7 @@ def signup():
                     password=hash_pwd,)
         db.session.add(user)
         db.session.commit()
-        flash('votre compte a bien été crée', 'success')
+        flash(_('flash.accountcreated'), 'success')
         login_user(user)
         return redirect(url_for('home'))
     return render_template('signup.html', form=form)
@@ -57,7 +58,7 @@ def signup():
 @login_required
 def logout():
     logout_user()
-    flash('tu es bien déconnecté !', 'success')
+    flash(_('flash.deconected'), 'success')
     return redirect(url_for('home'))
 
 
@@ -69,16 +70,15 @@ def inscription_page(event, edition):
     if edition.first_inscription > datetime.now():
         date = edition.first_inscription.strftime('%A %d %B %Y')
         # pas encore ouvert
-        flash(f'Les inscriptions ne sont pas encore ouvertes! Elles ouvrent le {date}', 'warning')
+        flash(_('flash.warn.inscriptionsnotopen:date').format(date=date), 'warning')
         return redirect(url_for("view.view_edition_page", event = event.name, edition=edition.name))
     if edition.last_inscription < datetime.now():
         # deja fermé
-        flash('les inscription sont déjà fermée!')
+        flash(_('flash.warn.inscriptionclosed'), 'warning')
         return redirect(url_for("view.view_edition_page", event = event.name, edition=edition.name))
 
     if user:
         form = Inscription_connected_form()
-        #! ne foncionne pas pour le any tous les parcours sont affiché
         choices = edition.parcours.filter( not_(Parcours.inscriptions.any(and_(Inscription.inscrit==user, Inscription.edition==edition))), Parcours.event==event).all()
         form.parcours.choices = [str((p.name, p.description)) for p in choices]
 

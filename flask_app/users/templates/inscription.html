@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
-    <h3>inscription {{ event_data.name }} {{ edition_data.name }}</h3>
+    <h3>{{ _('inscription') }} {{ event_data.name }} {{ edition_data.name }}</h3>
     {% if user_data %}
     <form action="" method="post">
         {{ form.hidden_tag() }}

@@ -3,39 +3,40 @@ from flask_app.models import User
 from wtforms import StringField, PasswordField, SubmitField, EmailField, DateField
 from flask_app.custom_validators import DataRequired, Length, EqualTo, DonTExist
 from flask_app.custom_field import MultiCheckboxFieldWithDescription
+from flask_babel import lazy_gettext as _
 
 
 class Login_form(FlaskForm):
-    username = StringField('nom d\'utilisateur', validators=[
+    username = StringField(_('form.username'), validators=[
                            DataRequired(), Length(min=2, max=20)])
-    password = PasswordField('mot de passe', validators=[DataRequired()])
-    submit_btn = SubmitField('se connecter')
+    password = PasswordField(_('form.pwd'), validators=[DataRequired()])
+    submit_btn = SubmitField(_('form.connect'))
 
 
 class Signup_form(FlaskForm):
-    name = StringField('prénom', validators=[DataRequired(), Length(max=60)])
-    lastname = StringField('nom', validators=[DataRequired(), Length(max=26)])
-    username = StringField('nom d\'utilisateur', validators=[
+    name = StringField(_('form.name'), validators=[DataRequired(), Length(max=60)])
+    lastname = StringField(_('form.lastname'), validators=[DataRequired(), Length(max=26)])
+    username = StringField(_('form.username'), validators=[
                            DataRequired(), Length(min=2, max=20), DonTExist(User, 'username')])
-    email = EmailField('email')
-    phone = StringField('n de tel')
-    datenaiss = DateField('date de naissance', validators=[DataRequired()])
-    password = PasswordField('entrer un mot de passe', validators=[DataRequired(), Length(max=20)])
-    repeatpassword = PasswordField('repeter le mot de passe', validators=[EqualTo('password')])
-    submit_btn = SubmitField('se creer un compte')
+    email = EmailField(_('form.email'))
+    phone = StringField(_('form.tel'))
+    datenaiss = DateField(_('form.birth'), validators=[DataRequired()])
+    password = PasswordField(_('form.pwd'), validators=[DataRequired(), Length(max=20)])
+    repeatpassword = PasswordField(_('form.repetepwd'), validators=[EqualTo('password')])
+    submit_btn = SubmitField(_('form.createaccount'))
 
 class Inscription_connected_form(FlaskForm):
-    parcours = MultiCheckboxFieldWithDescription('parcours choisis', validators=[DataRequired()])
+    parcours = MultiCheckboxFieldWithDescription(_('form.choosedparcours'), validators=[DataRequired()])
 
-    submit_btn = SubmitField('s\'inscrire')
+    submit_btn = SubmitField(_('form.register'))
 
 class Inscription_form(FlaskForm):
-    name = StringField('prénom', validators=[DataRequired(), Length(max=60)])
-    lastname = StringField('nom', validators=[DataRequired(), Length(max=26)])
-    email = EmailField('email')
-    phone = StringField('n de tel')
-    datenaiss = DateField('date de naissance', validators=[DataRequired()])
+    name = StringField(_('form.name'), validators=[DataRequired(), Length(max=60)])
+    lastname = StringField(_('form.lastname'), validators=[DataRequired(), Length(max=26)])
+    email = EmailField(_('form.email'))
+    phone = StringField(_('form.tel'))
+    datenaiss = DateField(_('form.birth'), validators=[DataRequired()])
 
-    parcours = MultiCheckboxFieldWithDescription('parcours choisis', validators=[DataRequired()])
+    parcours = MultiCheckboxFieldWithDescription(_('form.choosedparcours'), validators=[DataRequired()])
 
-    submit_btn = SubmitField('s\'inscrire')
+    submit_btn = SubmitField(_('form.register'))    

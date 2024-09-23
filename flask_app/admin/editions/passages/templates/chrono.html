@@ -12,7 +12,14 @@
             <ul class="list-group" id="time_list"></ul>
         </div>
         <div class="w-50">
-           <ul class="list-group" id="event_list"></ul> 
+           <ul class="list-group" id="event_list">
+            {% for passage in passages %}
+            <li class="list-group-item bg-success">
+                <p>{{passage.inscription.dossard}}</p>
+                <p>{{ passage.time_stamp.strftime('%d.%m %H:%M:%S') }}</p>
+            </li>
+            {% endfor %}
+           </ul> 
         </div>
         <script>
             const input = document.getElementById('dossard_input')
@@ -23,24 +30,37 @@
             var time_list = []
             var event_list = []
 
-            
-            async function add_event_list(response) {
+            function create_event_element(dossard, time) {
                 var node = document.createElement('li')
-                var index = event_list.length
 
                 node.classList.add('list-group-item')
+                node.classList.add('bg-primary')
 
-                n1 = document.createElement('p')
-                n1.classList.add('')
-                n1.innerText = `${response.request.dossard}`
+                var n1 = document.createElement('p')
+                n1.innerText = `${dossard}`
                 node.appendChild(n1)
                 
-                time = new Date(response.request.time)
-                n2 = document.createElement('p')
+                var n2 = document.createElement('p')
                 n2.innerText = `${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
                 node.appendChild(n2)
 
-                event_list_elmt.appendChild(node)
+                if (event_list_elmt.children.length == 0) {
+                    event_list_elmt.appendChild(node)
+                } else {
+                    event_list_elmt.insertBefore(node, event_list_elmt.children[0])
+                }
+                return event_list_elmt.children.length
+            }
+            
+            async function update_event_list(response, index) {
+                elmt = event_list_elmt.children[event_list_elmt.children.length-index]
+                
+                elmt.classList.remove('bg-primary')
+                if (response.success) {
+                    elmt.classList.add('bg-success')
+                } else {
+                    elmt.classList.add('bg-danger')
+                }
             }
 
             async function send_request(dossard) {
@@ -51,17 +71,19 @@
                     data.append('time', time.getTime())
                     data.append('dossard', dossard)
 
+                    var index = create_event_element(dossard, time)
+                    
                     var xhttp = new XMLHttpRequest();
                     xhttp.open('POST', url, true);
                     xhttp.onload = function () {
-                        response = JSON.parse(this.responseText)
-                        if (response['success']) {
-                            console.log('ok')
+                        if (this.status == 200) {
+                            response = JSON.parse(this.responseText)
+                            update_event_list(response, index)
                         } else {
-                            console.log('ahhhhh')
+                            elmt = event_list_elmt.children[event_list_elmt.children.length-index]
+                            elmt.classList.remove('bg-primary')
+                            elmt.classList.add('bg-warning')
                         }
-                        console.log(response);
-                        add_event_list(response)
                     }
                     xhttp.send(data);
                 }
@@ -70,7 +92,6 @@
             function add_time() {
                 var time = new Date()
                 var node = document.createElement('li')
-                console.log(time)
                 var time_text = `${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
                 node.innerText = time_text
                 node.classList.add('list-group-item')

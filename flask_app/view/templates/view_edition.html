@@ -5,7 +5,7 @@
     <div class="card-body">
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">date</p>
+          <p class="mb-0">{{ _('view.date') }}</p>
         </div>
         <div class="col-sm-9">
           <p class="text-muted mb-0">
@@ -16,7 +16,7 @@
       <hr />
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">heure</p>
+          <p class="mb-0">{{ _('view.time') }}</p>
         </div>
         <div class="col-sm-9">
           <p class="text-muted mb-0">
@@ -27,7 +27,7 @@
       <hr />
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">evenement</p>
+          <p class="mb-0">{{ _('view.evenement') }}</p>
         </div>
         <div class="col-sm-9">
           <a class="text-decoration-none link-dark" href="{{ url_for('view.view_event_page', event=edition_data.event.name) }}"><p class="text-muted mb-0">{{edition_data.event.name}}</p></a>
@@ -36,7 +36,7 @@
       <hr />
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">rendez-vous</p>
+          <p class="mb-0">{{ _('view.rdv') }}</p>
         </div>
         <div class="col-sm-9">
           <a href="{{rdv_url}}" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-muted mb-0">ouvrire sur google maps <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
@@ -45,7 +45,7 @@
       <hr />
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">inscriptions</p>
+          <p class="mb-0">{{ _('view.inscriptions') }}</p>
         </div>
         {% if time >= edition_data.first_inscription and edition_data.last_inscription >= time %}
         {# les inscriptions sont ouvertes #}
@@ -56,12 +56,12 @@
           {% if time > edition_data.last_inscription %}
           {# il est trop tard #}
             <div class="col-sm-9">
-              <p class="text-decoration-none text-muted mb-0">les inscriptions sont déjà fermées</p>
+              <p class="text-decoration-none text-muted mb-0">{{ _('view.inscriptionsnotopen') }}</p>
             </div>
           {% else %}
           {# il est trop tôt #}
             <div class="col-sm-9">
-              <p class="text-decoration-none text-muted mb-0">les inscriptions ne sont pas encore ouvertes</p>
+              <p class="text-decoration-none text-muted mb-0">{{ _('view.inscriptionclosed') }}</p>
             </div>
           {% endif %}
         {% endif %}

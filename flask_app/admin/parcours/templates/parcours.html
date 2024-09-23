@@ -1,5 +1,5 @@
 {% extends 'layout.html' %} {% block content %}
-<h3>parcours</h3>
+<h3>{{ _('admin.parcours.parcours') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
     {% for parcours in active_parcours %}
         <div class="d-inline-flex card m-1">
@@ -10,7 +10,7 @@
             </div>
             <div class="card-body">
                 <a href="{{ url_for('admin.parcours.modify_parcours', event_name=event_data.name, parcours_name=parcours.name) }}" class="text-decoration-none link-dark">
-                    modify
+                    {{ _('admin.parcours.modify') }}
                 </a>
             </div>
         </div>
@@ -28,7 +28,7 @@
     </div>
 </div>
 {% if archived_parcours %}
-<h3>parcours archivés</h3>
+<h3>{{ _('admin.parcours.archivedparcours') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
     {% for parcours in archived_parcours %}
         <div class="d-inline-flex card m-1">
@@ -39,7 +39,7 @@
             </div>
             <div class="card-body">
                 <a href="{{ url_for('admin.parcours.modify_parcours', event_name=event_data.name, parcours_name=parcours.name) }}" class="text-decoration-none link-dark">
-                    modify
+                    {{ _('admin.parcours.modify') }}
                 </a>
             </div>
         </div>
@@ -57,7 +57,7 @@ aria-hidden='true'
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="new_edition_label">créer un nouveau Parcours</h5>
+                <h5 class="modal-title" id="new_edition_label">{{ _('admin.parcours.createnewparcours') }}</h5>
                 <button
                 type="button"
                 class="btn-close"
@@ -118,7 +118,7 @@ aria-hidden='true'
                 class="btn btn-secondary"
                 data-bs-dismiss="modal"
                 >
-                Close
+                {{ _('admin.parcours.close') }}
                 </button>
                 {{ form.submit_btn(class="btn btn-primary", type='submit', form='new_edition_form') }}
             </div>

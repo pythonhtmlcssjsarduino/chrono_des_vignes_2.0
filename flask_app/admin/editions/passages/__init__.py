@@ -1,11 +1,12 @@
 import time
-from flask import Blueprint, redirect, render_template, flash, url_for, jsonify
+from flask import Blueprint, redirect, render_template, flash, request, url_for, jsonify
 from flask_app import admin_required, db
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, User, Inscription
 from datetime import datetime
 from flask_app.admin.editions.passages.form import NewKeyForm, ChronoLoginForm, ChronoLoginForm, SetPassageForm
 import secrets
+from wtforms import SelectField
 
 passages = Blueprint('passages', __name__, template_folder='templates')
 @login_required
@@ -19,10 +20,16 @@ def dashboard(event_name, edition_name):
     if edition.edition_date > datetime.now():
         # formulaire d'ajout
         form:NewKeyForm = NewKeyForm()
-        form.stands.choices = [(f'{s.id}', f'{s.parcours.name} - {s.name}') for s in Stand.query.filter(Stand.parcours.has(Parcours.editions.any(Edition.id==edition.id)), Stand.chrono==True).all()]
+        for i, parcours in enumerate(edition.parcours):
+            choices =  [('', '')] + [(f'{s.id}', f'{s.parcours.name} - {s.name}') for s in Stand.query.filter(Stand.parcours.has(Parcours.id==parcours.id), Stand.chrono==True).all()]
+            if len(form.stands.entries)<=i:form.stands.append_entry()
+            field = form.stands.entries[i]
+            field.choices = choices
+            field.label.text = f'parcours {parcours.name}'
+
         if form.validate_on_submit():
             if not edition.passage_keys.filter_by(name=form.name.data).first():
-                stand = Stand.query.get(int(form.stands.data))
+                stands = [Stand.query.get(int(stand.data)) for stand in form.stands]
                 key_code=secrets.token_urlsafe(5)
                 while PassageKey.query.filter_by(key=key_code).first():
                     key_code=secrets.token_urlsafe(5)
@@ -33,7 +40,7 @@ def dashboard(event_name, edition_name):
                                 key=key_code,
                                 name=form.name.data)
                 db.session.add(key)
-                db.session.commit()
+                #db.session.commit()
 
                 return redirect(url_for("admin.editions.passages.dashboard", event_name=event.name, edition_name=edition.name))
             else:
@@ -68,23 +75,31 @@ def chrono_page(key_code):
     """ if key.edition.edition_date > datetime.now():
         flash('l\'edition n\'est pas aujourd\'hui', 'warning')
         return redirect(url_for("admin.editions.passages.chrono_home")) """
-    return render_template('chrono.html', user_data=user, key=key)
+    
+    key_passages = Passage.query.filter_by(key=key).order_by(Passage.time_stamp.desc()).all()
+    ic(key_passages)
+    return render_template('chrono.html', user_data=user, key=key, passages=key_passages)
 
 @passages.route('/chrono/set', methods=['post'])
 def set_passage():
     form = SetPassageForm()
-    user = User.query.filter(User.inscriptions.any(Inscription.dossard == form.dossard.data)).first()
-    if not user:
+    inscription = Inscription.query.filter(Inscription.dossard == form.dossard.data).first()
+    if not inscription:
         return jsonify({"success": False, 'error':'not valide dossard', 'request':{'dossard':form.dossard.data, 'time':form.time.data, 'key':form.key.data}})
     key = PassageKey.query.filter_by(key=form.key.data).first()
     if not key:
         return jsonify({"success": False, 'error':'not valide key', 'request':{'dossard':form.dossard.data, 'time':form.time.data, 'key':form.key.data}})
+    
     pass_time = datetime.fromtimestamp(form.time.data/1000)
     ic(key)#type:ignore
     ic(pass_time) #type:ignore
-    ic(user) #type:ignore
+    ic(inscription) #type:ignore
+    user_passages = Passage.query.filter_by(inscription=inscription).order_by(Passage.time_stamp).all()
+    ic(user_passages) #type:ignore
 
-    passage = Passage(key_id = key.id, time_stamp=pass_time, inscrit_id= user.id)
+    parcours = inscription.parcours
+
+    passage = Passage(key_id = key.id, time_stamp=pass_time, inscription_id= inscription.id)
 
 
-    return jsonify({"success": True})
+    return jsonify({"success": True, 'request':{'dossard':form.dossard.data, 'time':form.time.data, 'key':form.key.data}})

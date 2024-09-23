@@ -1,4 +1,50 @@
 {% extends 'dev_layout.html' %}
+{% from 'macro.html' import form_field, submit %}
 {% block content %}
-    
+<form action="" method="post" id="form">
+  {{ form.hidden_tag() }}
+  <div class="d-none">{{ form_field(form.data) }}</div>
+  {{ submit(form) }}
+</form>
+<style>
+  .nothing {
+    border: 0;
+    outline: none;
+}
+</style>
+<table class="table">
+    <thead>
+      <tr>
+        {% for word in langs.values() %}
+            <th scope="col">id</th>
+            {% for lang in word %}
+            <th scope="col">{{lang}}</th>
+            {% endfor %}
+            {% break %}
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      <script>
+        var data = {{langs|safe}} 
+        var input = document.getElementById("form")['data']
+        input.value = JSON.stringify(data)
+        function field_change(id, lang_name) {
+          var val = document.getElementById(`${id}.${lang_name}`).value
+          data[id][lang_name] = val
+          input.value = JSON.stringify(data)
+        }
+      </script>
+        {% for id, word in langs.items() %}
+        <tr>
+            <th scope="col">{{id}}</th>
+            {% for lang_name, lang in word.items() %}
+            <th scope="col">
+              <input class="nothing" type="text" id="{{id}}.{{lang_name}}" value="{{lang}}" oninput="field_change('{{id}}', '{{lang_name}}')">
+            </th>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}

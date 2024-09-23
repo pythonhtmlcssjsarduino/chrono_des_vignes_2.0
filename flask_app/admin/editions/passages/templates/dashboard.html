@@ -3,18 +3,18 @@
 {% block content %}
     <div>
         {% if keys.0 %}
-            <h5>parcours: {{ (keys|sort(attribute='parcours.name')).0.parcours.name }}</h5>
             <ul class="list-group list-group-light">
-                {% for key in keys|sort(attribute='parcours.name') %}
-                    {% if loop.previtem and loop.previtem.parcours != key.parcours %}
-                        </ul>
-                            <h5>parcours: {{ key.parcours.name }}</h5>
-                        <ul class="list-group list-group-light">
-                    {% endif %}
+                {% for key in keys %}
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <div>
                             <div class="fw-bold">{{ key.name }}</div>
-                            <div class="text-muted">stand: {{ key.stand.name }}</div>
+                            <ul class="text-muted list-group">
+                                {% for stand in key.stands.all() %}
+                                    <li class="list-group-item">
+                                        {{ stand.name }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
                         </div>
                         <span class="badge rounded-pill bg-info">{{ key.key }}</span>
                     </li>
@@ -27,7 +27,11 @@
                 <fieldset class="form-group">
                     {{ form.hidden_tag() }}
                     {{ form_field(form.name) }}
-                    {{ form_field(form.stands) }}
+                    <br>
+                    {% for stand in form.stands.entries %}
+                        {{ form_field(stand) }}
+                    {% endfor %}
+                    <br>
                     {{ submit(form) }}
                 </fieldset>
             </form>
@@ -48,9 +52,9 @@
             {% for passage in passages | sort(attribute='time_stamp', reverse=true) %}
                 <tr>
                     <th scope="row">{{ passage.time_stamp }}</th>
-                    <td>{{ passage.inscrit.inscrit.username }} {% if passage.inscrit.dossard %}- {{ passage.inscrit.dossard }}{% endif %}</td>
+                    <td>{{ passage.inscription.inscrit.username }} {% if passage.inscription.dossard %}- {{ passage.inscription.dossard }}{% endif %}</td>
                     <td>{{ passage.key.name }}</td>
-                    <td>{{ passage.key.stand.name }}</td>
+                    <td>{{ passage.key.stands.filter_by(parcours=passage.inscription.parcours).first().name }}</td>
                 </tr>
             {% endfor %}
         </tbody>

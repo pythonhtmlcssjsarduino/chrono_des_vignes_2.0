@@ -4,15 +4,15 @@
       class="navbar-toggler"
       type="button"
       data-bs-toggle="collapse"
-      data-bs-target="#sidebarSupportedContent"
-      aria-controls="sidebarSupportedContent"
+      data-bs-target="#sidebarCollapse"
+      aria-controls="sidebarCollapse"
       aria-expanded="false"
       aria-label="Toggle Navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse w-100" id="sidebarSupportedContent">
+    <div class="collapse navbar-collapse w-100" id="sidebarCollapse">
       <ul
         class="navbar-nav w-100 d-flex flex-md-column text-center text-md-end"
       >
@@ -27,7 +27,7 @@
           <a
             class="nav-link"
             href="{{ url_for('admin.editions.editions_page', event_name=event_data.name) }}"
-            >editions</a
+            >{{ _('side.editions') }}</a
           >
           <div class="btn-group w-100"> {# editions #}
             <a
@@ -56,7 +56,7 @@
           </div>
         </li>
         <li class="nav-item btn-group-justified bg-info my-2"> {# parcours #}
-          <a class="nav-link" href="{{ url_for('admin.parcours.parcours_page', event_name=event_data.name) }}">parcours</a>
+          <a class="nav-link" href="{{ url_for('admin.parcours.parcours_page', event_name=event_data.name) }}">{{ _('side.parcours') }}</a>
           <div class="btn-group w-100">
             <a
               type="button"
@@ -84,7 +84,7 @@
           </div>
         </li>
         <li class="nav-item btn-group-justified bg-info my-2"> {# inscrit #}
-          <a class="nav-link" href="{{ url_for('admin.coureurs.coureurs_page', event_name=event_data.name) }}">coureurs</a>
+          <a class="nav-link" href="{{ url_for('admin.coureurs.coureurs_page', event_name=event_data.name) }}">{{ _('side.runner') }}</a>
           <div class="btn-group w-100">
             <a
               type="button"

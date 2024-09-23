@@ -62,20 +62,20 @@
         {% endif %}
         {% if parcours_data.editions.count() == 0 %}
             <div>
-                <a href="{{ url_for('admin.parcours.delete_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">supprimer</a>
+                <a href="{{ url_for('admin.parcours.delete_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">{{ _('admin.parcours.supprimer') }}</a>
             </div>
         {% else %}
             {% if parcours_data.archived %}
-            <a href="{{ url_for('admin.parcours.unarchive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">desarchiver</a>
+            <a href="{{ url_for('admin.parcours.unarchive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">{{ _('admin.parcours.desarchiver') }}</a>
             {% else %}
-            <a href="{{ url_for('admin.parcours.archive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">archiver</a>
+            <a href="{{ url_for('admin.parcours.archive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">{{ _('admin.parcours.archiver') }}</a>
             {% endif %}
         {% endif %}
         </div>
         <hr>
         {% if modif_form %}
         {% if modif_form_type == "new" %}
-        <p class="bg-info rounded">cliquer sur le point de la map ou vous voulez mettre le nouveau stand.</p>
+        <p class="bg-info rounded">{{ _('admin.parcours.clicknewstand') }}</p>
         {% endif %}
         <div {% if modif_form_type == "new" %} class="modal" id="modal_window" {% endif %} > {# modif form #}
         <form action="" method="post" id="modif_form">
@@ -97,7 +97,7 @@
                 </div>
                 <div class="form-group">{# change position #}
                     <button class="btn btn-outline-info m-2" type="button" onclick="select_position()">
-                        <p id="latlngbtn" class="d-inline">changer la position</p> <i class="fa-solid fa-location-dot d-inline"></i>
+                        <p id="latlngbtn" class="d-inline">{{ _('admin.parcours.changepos') }}</p> <i class="fa-solid fa-location-dot d-inline"></i>
                     </button>
                 </div>
                 <div class="form-group d-none">{# lat #}
@@ -191,7 +191,7 @@
                 </div>
                 <div class="form-group">{# delete #}
                     <button class="btn btn-outline-danger m-2" type="button" onclick="delete_trace()">
-                        supprimer l'etape
+                        {{ _('admin.parcours.deletape') }}
                     </button>
                 </div>
                 <div class="form-group">{# submit #}
@@ -203,7 +203,7 @@
             <fieldset class="form-group modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">ajouter un stand</h4>
+                        <h4 class="modal-title">{{ _('admin.parcours.addstand') }}</h4>
                         <button type="button" class="btn-close" onclick="my_modal.hide()"></button>
                     </div>
                     <script>error = false</script>

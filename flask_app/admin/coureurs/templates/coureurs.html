@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h3>coureurs</h3>
+<h3>{{ _('admin.view.coureurs') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
     {% for inscrit in event_data.get_unique_inscrits() %}
         <div class="d-inline-flex card m-1">

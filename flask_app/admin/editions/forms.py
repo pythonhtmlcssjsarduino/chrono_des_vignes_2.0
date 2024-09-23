@@ -9,6 +9,6 @@ class Edition_form(FlaskForm):
     parcours = MultiCheckboxFieldWithDescription('parcours', validators=[DataRequired()])
     first_inscription = DateTimeLocalField('date d\'ouverture des inscriptions', format='%Y-%m-%dT%H:%M', render_kw={}, validators=[DataRequired(), DateTimeNotPast(), DateTimeBefore('last_inscription')])
     last_inscription = DateTimeLocalField('date de fermeture des inscriptions', format='%Y-%m-%dT%H:%M', render_kw={}, validators=[DataRequired(), DateTimeNotPast(), DateTimeBefore('edition_date')])
-    rdv_lat= FloatField('latitude du point de rendez vous', validators=[InputRequired()], default=46.58)
-    rdv_lng= FloatField('longitude du point de rendez vous', validators=[InputRequired()], default=6.52)
+    rdv_lat= FloatField('latitude du point de rendez vous', validators=[DataRequired()], default=46.58)
+    rdv_lng= FloatField('longitude du point de rendez vous', validators=[DataRequired()], default=6.52)
     submit_btn = SubmitField('sauvegarder')

@@ -5,7 +5,7 @@
     <div class="card-body">
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">Nom</p>
+          <p class="mb-0">{{ _('admin.view.name') }}</p>
         </div>
         <div class="col-sm-9">
           <p class="text-muted mb-0">
@@ -17,7 +17,7 @@
       {% if coureur_data.email %}
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">E-mail</p>
+          <p class="mb-0">{{ _('admin.view.email') }}</p>
         </div>
         <div class="col-sm-9">
           <p class="text-muted mb-0">{{coureur_data.email}}</p>
@@ -28,7 +28,7 @@
       {% if coureur_data.phone %}
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">telephone</p>
+          <p class="mb-0">{{ _('admin.view.phone') }}</p>
         </div>
         <div class="col-sm-9">
           <p class="text-muted mb-0">{{coureur_data.phone}}</p>
@@ -38,7 +38,7 @@
       {% endif %}
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">date de naissance</p>
+          <p class="mb-0">{{ _('admin.view.birth') }}</p>
         </div>
         <div class="col-sm-9">
           <p class="text-muted mb-0">{{coureur_data.datenaiss.strftime('%d.%m.%Y')}}</p>
@@ -47,7 +47,7 @@
       <hr />
       <div class="row">
         <div class="col-sm-3">
-          <p class="mb-0">username</p>
+          <p class="mb-0">{{ _('admin.view.username') }}</p>
         </div>
         <div class="col-sm-9">
           <p class="text-muted mb-0">{{coureur_data.username}}</p>
@@ -56,7 +56,7 @@
     </div>
   </div>
   <div>
-    <h3>participation</h3>
+    <h3>{{ _('admin.view.participation') }}</h3>
     <table class="table">
       <thead>
         <tr>

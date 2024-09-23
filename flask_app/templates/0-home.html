@@ -2,7 +2,7 @@
 {% block content %}
     {% if user_data.admin %}
         <div class="pb-5">
-            <h3 class="w-100 h1 bg-light rounded rounded-3">vos événements</h3>
+            <h3 class="w-100 h1 bg-light rounded rounded-3">{{ _('home.events') }}</h3>
             <div class="d-flex justify-content-center flex-wrap">
                 {% for event in user_data.creations %}
                     <div class="d-inline-flex card m-1">
@@ -13,7 +13,7 @@
                         </div>
                         <div class="card-body">
                             <a href="{{ url_for('admin.home_event', event_name=event.name) }}" class="text-decoration-none link-dark">
-                                <p>modifier</p>
+                                <p>{{ _('home.modify') }}</p>
                             </a>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
     {% endif %}
     {% if inscriptions %}
         <div class="pb-5">
-            <h3 class="w-100 h1 bg-light rounded rounded-3">vos inscriptions</h3>
+            <h3 class="w-100 h1 bg-light rounded rounded-3">{{ _('home.inscriptions') }}</h3>
             <div class="d-flex justify-content-center flex-wrap">
                 {% for inscription in inscriptions %}
                     <div class="d-inline-flex card m-1">
@@ -34,8 +34,8 @@
                         </div>
                         <div class="card-body">
                             <a href="{{ url_for('view.view_inscription_page', inscription=inscription.id) }}" class="text-decoration-none link-dark">
-                                <p>parcours {{inscription.parcours.name}}</p>
-                                <p>le {{inscription.edition.edition_date.strftime('%d.%m.%Y')}}</p>
+                                <p>{{ _('home.parcours') }} {{inscription.parcours.name}}</p>
+                                <p>{{ _('home.the') }} {{inscription.edition.edition_date.strftime('%d.%m.%Y')}}</p>
                             </a>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
     {% endif %}
     {% if events %}
         <div>
-            <h3 class="w-100 h1 bg-light rounded rounded-3">les prochains événements</h3>
+            <h3 class="w-100 h1 bg-light rounded rounded-3">{{ _('home.nextevent') }}</h3>
             <div class="d-flex justify-content-center flex-wrap">
                 {% for event in events %}
                     <div class="d-inline-flex card m-1">
