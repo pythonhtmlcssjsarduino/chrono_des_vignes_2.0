@@ -23,10 +23,15 @@ def home():
 
 @app.route('/lang/<lang>/<path:next>')
 def change_lang(lang, next:str):
-    ic(lang, next)
-    next=next.removeprefix('http://')
-    ic(lang, next)
-    ic('.'.join(next.split('.')[1:]), next.find(app.config['SERVER_NAME']))
-    next = '.'.join(next.split('.')[1:]) if next.find(app.config['SERVER_NAME'])!=0 else next
-    ic(lang, next)
-    return redirect('http://'+lang+'.'+next)
+    lang_index = next.find(app.config['SERVER_NAME']) + len(app.config['SERVER_NAME'])
+    first = next[lang_index+1:].split('/')[0]
+    if first in LANGAGES:
+        if lang == request.accept_languages.best_match(LANGAGES):
+            return redirect(f'{next[:lang_index]}{next[lang_index+len(lang)+1:]}')
+        else:
+            return redirect(f'{next[:lang_index]}/{lang}{next[lang_index+len(lang)+1::]}')
+    else:
+        if lang == request.accept_languages.best_match(LANGAGES):
+            return redirect(next)
+        else:
+            return redirect(f'{next[:lang_index]}/{lang}{next[lang_index:]}')

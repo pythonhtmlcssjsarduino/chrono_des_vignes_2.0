@@ -25,9 +25,6 @@ app.config['SERVER_NAME'] = 'localhost:5000'
 app.config['SECRET_KEY'] = 'secret_key' #! change that for deployment
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = f'{app.root_path}/translations'
-app.config['SESSION_COOKIE_PATH'] = '/'
-app.config['SESSION_COOKIE_DOMAIN'] = 'localhost'
-ic(app.config)
 app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 app.url_map.default_subdomain = ''
 
@@ -98,11 +95,11 @@ def admin_required(func):
     return decorated_view
 
 def lang_url_for(*args, **kwargs):
-    lang = kwargs.pop('lang', _('app.lang'))
-    if 'static' in args:
+    if 'static' in args or kwargs.get('lang'):
         return url_for(*args, **kwargs)
-    if lang == 'fr':
-        return url_for(*args, lang='', **kwargs)
+    lang = _('app.lang')
+    if lang == request.accept_languages.best_match(LANGAGES):
+        return url_for(*args, **kwargs)
     return url_for(*args, lang=lang, **kwargs)
 
 @app.context_processor
@@ -112,7 +109,7 @@ def inject_lang_url_for():
 def set_route(blueprint, path, **options):
     def decorator(func):
         @blueprint.route(path, **options)
-        @blueprint.route(path, subdomain=options.pop('subdomain', '<lang>'), **options)
+        @blueprint.route(f'/<lang>{path}', **options)
         @wraps(func)
         def wrap(*args, **kwargs):
             lang = kwargs.pop('lang', 'fr')

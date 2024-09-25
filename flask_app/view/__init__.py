@@ -6,7 +6,7 @@ from flask_login import current_user, login_required
 from datetime import datetime
 from flask_babel import _
 
-view = Blueprint('view', __name__, template_folder='templates', url_prefix='/view')
+view = Blueprint('view', __name__, template_folder='templates')
 
 def deg_to_dms(deg):
     """Convert from decimal degrees to degrees, minutes, seconds."""
@@ -17,7 +17,7 @@ def deg_to_dms(deg):
     d, m = int(d), int(m)
     return d, m, s
 
-@set_route(view, '/inscription/<inscription>/delete')
+@set_route(view, '/view/inscription/<inscription>/delete')
 @login_required
 def delete_inscription(inscription):
     user = current_user
@@ -28,7 +28,7 @@ def delete_inscription(inscription):
     return redirect(url_for('home'))
 
 
-@set_route(view, '/inscription/<inscription>')
+@set_route(view, '/view/inscription/<inscription>')
 @login_required
 def view_inscription_page(inscription):
     user = current_user
@@ -56,13 +56,13 @@ def view_inscription_page(inscription):
 
     return render_template('view_inscription.html', user_data=user, inscription=inscription, folium_map=folium_map, rdv_url=rdv_url)
 
-@set_route(view, '/<event>')
+@set_route(view, '/view/<event>')
 def view_event_page(event):
     user_data = current_user if current_user.is_authenticated else None
     event = Event.query.filter_by(name=event).first_or_404(_('view.error.eventdontexist:event').format(event=event))
     return render_template('view_event.html', user_data = user_data, event_data=event, time = datetime.now())
 
-@set_route(view, '/<event>/edition/<edition>')
+@set_route(view, '/view/<event>/edition/<edition>')
 def view_edition_page(event, edition):
     user = current_user if current_user.is_authenticated else None
     event = Event.query.filter_by(name=event).first_or_404(_('view.error.eventdontexist:event').format(event=event))
@@ -71,7 +71,7 @@ def view_edition_page(event, edition):
     rdv_url= "https://www.google.com/maps/place/{0}%C2%B0{1}'{2}".format(*deg_to_dms(edition.rdv_lat))+"%22N+{0}%C2%B0{1}'{2}".format(*deg_to_dms(edition.rdv_lng))+f"%22E/@{edition.rdv_lat},{edition.rdv_lng},15z"
     return render_template('view_edition.html', user_data = user, event_data = event, edition_data=edition, rdv_url=rdv_url, time= datetime.now())
 
-@set_route(view, '/<event>/parcours/<parcours>')
+@set_route(view, '/view/<event>/parcours/<parcours>')
 def view_parcours_page(event, parcours):
     user_data = current_user if current_user.is_authenticated else None
     event = Event.query.filter_by(name=event).first_or_404(_('view.error.eventdontexist:event').format(event=event))
