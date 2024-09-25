@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
-from flask_app import admin_required
+from flask_app import admin_required, set_route
 from flask_app.models import Event
 from flask_app.admin.editions import editions
 from flask_app.admin.parcours import parcours_bp
@@ -12,7 +12,7 @@ admin.register_blueprint(editions)
 admin.register_blueprint(coureurs)
 
 
-@admin.route('/event/<event_name>')
+@set_route(admin, '/event/<event_name>')
 @login_required
 @admin_required
 def home_event(event_name):

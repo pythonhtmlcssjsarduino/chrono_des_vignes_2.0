@@ -1,6 +1,6 @@
 import time
-from flask import Blueprint, redirect, render_template, flash, request, url_for, jsonify
-from flask_app import admin_required, db
+from flask import Blueprint, redirect, render_template, flash, request, jsonify
+from flask_app import admin_required, db, set_route, lang_url_for as url_for
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, User, Inscription
 from datetime import datetime
@@ -11,7 +11,7 @@ from wtforms import SelectField
 passages = Blueprint('passages', __name__, template_folder='templates')
 @login_required
 @admin_required
-@passages.route("/event/<event_name>/editions/<edition_name>/dashboard", methods=['get', 'post'])
+@set_route(passages, "/event/<event_name>/editions/<edition_name>/dashboard", methods=['get', 'post'])
 def dashboard(event_name, edition_name):
     user = current_user
     event = Event.query.filter_by(name= event_name).first_or_404()
@@ -53,7 +53,7 @@ def dashboard(event_name, edition_name):
 
     return render_template('dashboard.html', event_data=event, edition_data = edition, user_data=user, now = datetime.now(), keys=keys, passages=passages, form=form, event_modif=True, edition_sidebar=True)
 
-@passages.route('/chrono', methods=["GET", 'post'])
+@set_route(passages, '/chrono', methods=["GET", 'post'])
 def chrono_home():
     user = current_user if current_user.is_authenticated else None
 
@@ -67,7 +67,7 @@ def chrono_home():
 
     return render_template('chrono_home.html', user_data=user, form=form)
 
-@passages.route('/chrono/<key_code>')
+@set_route(passages, '/chrono/<key_code>')
 def chrono_page(key_code):
     user = current_user if current_user.is_authenticated else None
     key = PassageKey.query.filter_by(key=key_code).first_or_404()
@@ -80,7 +80,7 @@ def chrono_page(key_code):
     ic(key_passages)
     return render_template('chrono.html', user_data=user, key=key, passages=key_passages)
 
-@passages.route('/chrono/set', methods=['post'])
+@set_route(passages, '/chrono/set', methods=['post'])
 def set_passage():
     form = SetPassageForm()
     inscription = Inscription.query.filter(Inscription.dossard == form.dossard.data).first()

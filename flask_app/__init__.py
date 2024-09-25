@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, flash, request, session
+from flask import Flask, redirect, flash, request, session, url_for
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -8,6 +8,7 @@ from icecream import install
 from flask_babel import Babel, lazy_gettext, gettext, _
 import os
 install()
+
 
 # met la langue en francais pour le formatage des dates
 import locale
@@ -24,6 +25,9 @@ app.config['SERVER_NAME'] = 'localhost:5000'
 app.config['SECRET_KEY'] = 'secret_key' #! change that for deployment
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = f'{app.root_path}/translations'
+app.config['SESSION_COOKIE_PATH'] = '/'
+app.config['SESSION_COOKIE_DOMAIN'] = 'localhost'
+ic(app.config)
 app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 app.url_map.default_subdomain = ''
 
@@ -93,24 +97,31 @@ def admin_required(func):
         return func(*args, **kwargs)
     return decorated_view
 
-def lang(func):
-    """
-    Modified login_required decorator to restrict access to admin group.
-    """
+def lang_url_for(*args, **kwargs):
+    lang = kwargs.pop('lang', _('app.lang'))
+    if 'static' in args:
+        return url_for(*args, **kwargs)
+    if lang == 'fr':
+        return url_for(*args, lang='', **kwargs)
+    return url_for(*args, lang=lang, **kwargs)
 
-    @wraps(func)
-    def decorated_view(*args, **kwargs):
-        lang = kwargs.pop('lang', 'fr')
-        if lang in LANGAGES:
-            session['lang'] = lang
-        return func(*args, **kwargs)
-    return decorated_view
+@app.context_processor
+def inject_lang_url_for():
+    return dict(url_for=lang_url_for)
 
-'''#* erreur 403 acces non autorisé
-def error403():
-    flash('tu doit etre connecté pour acceder a cette page.', 'danger')
-    return redirect(url_for('home'))
-login_manager.unauthorized_handler(error403)'''
+def set_route(blueprint, path, **options):
+    def decorator(func):
+        @blueprint.route(path, **options)
+        @blueprint.route(path, subdomain=options.pop('subdomain', '<lang>'), **options)
+        @wraps(func)
+        def wrap(*args, **kwargs):
+            lang = kwargs.pop('lang', 'fr')
+            if lang in LANGAGES:
+                session['lang'] = lang
+            return func(*args, **kwargs)
+        return wrap
+    
+    return decorator
 
 # defini les pages du site web
 from flask_app.users import users

@@ -1,5 +1,5 @@
-from flask import Blueprint, flash, render_template, redirect, url_for, request
-from flask_app import admin_required, db
+from flask import Blueprint, flash, render_template, redirect, request
+from flask_app import admin_required, db, set_route, lang_url_for as url_for
 from flask_app.admin.editions.forms import Edition_form
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Parcours, Edition
@@ -12,7 +12,7 @@ editions = Blueprint('editions', __name__, template_folder='templates')
 editions.register_blueprint(dossard)
 editions.register_blueprint(passages)
 
-@editions.route('/event/<event_name>/editions', methods=['POST', 'GET'])
+@set_route(editions, '/event/<event_name>/editions', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def editions_page(event_name):
@@ -41,7 +41,7 @@ def editions_page(event_name):
 
     return render_template("editions.html", user_data=user, event_data=event, form=form, event_modif=True)
 
-@editions.route('/event/<event_name>/editions/<edition_name>/delete', methods=['POST', 'GET'])
+@set_route(editions, '/event/<event_name>/editions/<edition_name>/delete', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def delete_edition_page(event_name, edition_name):
@@ -56,7 +56,7 @@ def delete_edition_page(event_name, edition_name):
     flash('l\'edition a bien été supprimée', 'success')
     return redirect(url_for('admin.editions.editions_page',event_name=event.name))
 
-@editions.route('/event/<event_name>/editions/<edition_name>', methods=['POST', 'GET'])
+@set_route(editions, '/event/<event_name>/editions/<edition_name>', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def modify_edition_page(event_name, edition_name):
@@ -71,6 +71,7 @@ def modify_edition_page(event_name, edition_name):
                               'rdv_lng':edition.rdv_lng,
                               'parcours':[str((p.name, p.description)) for p in edition.parcours]})
     form.parcours.choices=[str((p.name, p.description)) for p in event.parcours.filter(or_(Parcours.archived==False, Parcours.editions.any(Edition.id==edition.id))).all()]
+    ic(dir(form.parcours)) # type: ignore
 
     #? desactiver le champs si dates deja passé
     form.edition_date.render_kw.pop("disabled", None)
@@ -92,7 +93,7 @@ def modify_edition_page(event_name, edition_name):
     #? fin desactivation des champs
     ic(form.parcours.data)
     ic([str((p.name, p.description)) for p in edition.parcours])
-    ic(request.form)
+    ic(request.form.to_dict())
 
     if form.validate_on_submit():
         print(form.parcours.data)
@@ -111,7 +112,7 @@ def modify_edition_page(event_name, edition_name):
             form.name.errors = list(form.name.errors)+['vous utiliser deja ce nom.']
     return render_template('modify_edition.html', user_data=user, event_data=event, edition_data=edition, form = form, now=datetime.now(), event_modif=True, edition_sidebar=True)
 
-@editions.route('/event/<event_name>/editions/<edition_name>/generate_dossard', methods=['POST', 'GET'])
+@set_route(editions, '/event/<event_name>/editions/<edition_name>/generate_dossard', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def generate_dossard(event_name, edition_name):
@@ -123,7 +124,7 @@ def generate_dossard(event_name, edition_name):
     return render_template('generate_dossard.html', user_data=user, event_data=event, edition_data=edition, now=datetime.now(), inscriptions=edition.inscriptions, event_modif=True, edition_sidebar=True)
 
 
-@editions.route('/event/<event_name>/editions/<edition_name>/generate_dossard/generate', methods=['POST', 'GET'])
+@set_route(editions, '/event/<event_name>/editions/<edition_name>/generate_dossard/generate', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def generate_all_dossard(event_name, edition_name):

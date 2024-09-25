@@ -144,7 +144,7 @@ msgstr ""
 
 #: flask_app/templates/layout.html:85
 msgid "app.lang"
-msgstr ""
+msgstr "de"
 
 #: flask_app/templates/layout.html:93
 msgid "app.about"

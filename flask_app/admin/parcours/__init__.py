@@ -1,5 +1,5 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
-from flask_app import admin_required, db
+from flask import Blueprint, flash, redirect, render_template, request
+from flask_app import admin_required, db, set_route, lang_url_for as url_for
 from flask_app.admin.parcours.forms import  Parcours_name_form, Etape_modif_form, Stand_modif_form, New_parcours_form
 from flask_login import login_required, current_user
 from flask_app.models import Event, Stand, Trace, Parcours
@@ -17,7 +17,7 @@ def midpoint(latlng1, latlng2):
     lng = (latlng1[1]+latlng2[1])/2
     return (lat, lng)
 
-@parcours_bp.route('/event/<event_name>/parcours/<parcours_name>/delete')
+@set_route(parcours_bp, '/event/<event_name>/parcours/<parcours_name>/delete')
 @login_required
 @admin_required
 def delete_parcours_page(event_name, parcours_name):
@@ -51,7 +51,7 @@ def delete_parcours_page(event_name, parcours_name):
 
     return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
 
-@parcours_bp.route('/event/<event_name>/parcours/<parcours_name>/archive')
+@set_route(parcours_bp, '/event/<event_name>/parcours/<parcours_name>/archive')
 @login_required
 @admin_required
 def archive_parcours_page(event_name, parcours_name):
@@ -61,7 +61,7 @@ def archive_parcours_page(event_name, parcours_name):
     db.session.commit()
     return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
 
-@parcours_bp.route('/event/<event_name>/parcours/<parcours_name>/unarchive')
+@set_route(parcours_bp, '/event/<event_name>/parcours/<parcours_name>/unarchive')
 @login_required
 @admin_required
 def unarchive_parcours_page(event_name, parcours_name):
@@ -71,7 +71,7 @@ def unarchive_parcours_page(event_name, parcours_name):
     db.session.commit()
     return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
 
-@parcours_bp.route('/event/<event_name>/parcours', methods=['POST', 'GET'])
+@set_route(parcours_bp, '/event/<event_name>/parcours', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def parcours_page(event_name):
@@ -380,7 +380,7 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
     return element_name, last_path_name, next_path_name, markers_name, program_list, map, graph
 
 
-@parcours_bp.route('/event/<event_name>/parcours/<parcours_name>', methods=['POST', 'GET'])
+@set_route(parcours_bp, '/event/<event_name>/parcours/<parcours_name>', methods=['POST', 'GET'])
 @login_required
 @admin_required
 def modify_parcours(event_name, parcours_name):

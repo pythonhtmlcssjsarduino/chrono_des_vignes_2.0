@@ -1,5 +1,5 @@
-from flask import Blueprint, redirect, render_template, flash, url_for, jsonify, request
-from flask_app import admin_required, db, DEV_ENABLE, app, LANGAGES
+from flask import Blueprint, redirect, render_template, flash, jsonify, request
+from flask_app import admin_required, db, DEV_ENABLE, app, LANGAGES, lang_url_for as url_for
 from functools import wraps
 import glob, os
 from babel.messages.pofile import read_po, write_po
