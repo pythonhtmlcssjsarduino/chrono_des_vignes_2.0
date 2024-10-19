@@ -3,8 +3,13 @@
     <div>
         <p>clé: {{ key.name }} ({{ key.key }})</p>
         <p>événement: {{ key.event.name }}</p>
-        <p>parcours: {{ key.parcours.name }}</p>
+        <ul class="list-group">
+            {% for stand in key.stands.all() %}
+                <li class="list-group-item">stand: {{ stand.name }}, parcours: {{ stand.parcours.name }}</li>
+            {% endfor %}
+        </ul>
     </div>
+    <br>
     <input type="number" class="form-control form-control-lg" id="dossard_input" placeholder="enter dossard number">
     <br>
     <div class="d-flex w-100">
@@ -12,11 +17,47 @@
             <ul class="list-group" id="time_list"></ul>
         </div>
         <div class="w-50">
-           <ul class="list-group" id="event_list">
-            {% for passage in passages %}
-            <li class="list-group-item bg-success">
-                <p>{{passage.inscription.dossard}}</p>
-                <p>{{ passage.time_stamp.strftime('%d.%m %H:%M:%S') }}</p>
+           <ul class="list-group mt-4" id="event_list">
+            {% set r1000 = range(0, 1000) %}
+            {% for (passage, chronos_list, trajet, delta, dist) in passages %}
+            {% set id = (r1000 | random | string) + '-' + (passage.time_stamp.timestamp() | string) %}
+            <li class="card mt-2 bg-success" id="event_list_{{ id }}">
+                <div class="card-header">
+                    <p class="mb-0">
+                        {{passage.inscription.dossard}} {{ passage.inscription.inscrit.name }}
+                        <br>
+                        {{ passage.time_stamp.strftime('%d.%m %H:%M:%S') }}
+                        <br>
+                        <button class="btn" onclick="toggleDetails('{{ id }}', this)">
+                            <span class="icon" id="icon-{{ id }}"><i class="fas fa-chevron-right"></i></span>
+                        </button>
+                    </p>
+                </div>
+                <div id="detail-{{ id }}" class="collapse">
+                    <div class="card-body">
+
+                        <table>
+                            <tbody>
+                                {% for stand in chronos_list %}
+                                    <tr>
+                                        <th class="text-center pe-1"><i class="{% if trajet|length == loop.index %}fa-solid fa-circle fa-l{% else %}fa-regular fa-circle fa-xs{% endif %}" {#{% if trajet|length == loop.index %}style="color: #00ff00"{% endif %}#}></i></th>
+                                        <td class="pe-3">{{ stand.name }}</td>
+                                        <td class="pe-3">
+                                            {% if trajet[loop.index0]==True %}
+                                                {{ delta[loop.index0] }}
+                                            {% elif trajet[loop.index0]==None %}
+                                                <i class="fa-solid fa-xmark"></i>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {{ dist[loop.index0] }} km
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                          </table>
+                    </div>
+                </div>
             </li>
             {% endfor %}
            </ul> 
@@ -28,38 +69,94 @@
             const key = '{{ key.key }}'
             const url = '{{ url_for("admin.editions.passages.set_passage") }}'
             var time_list = []
-            var event_list = []
+            var event_list = {}
+
+            function toggleDetails(detailId, button) {
+                const detailDiv = document.getElementById(`detail-${detailId}`);
+                const icon = document.getElementById(`icon-${detailId}`);
+
+                detailDiv.classList.toggle('show'); // Toggle the 'show' class for smooth transition
+                icon.innerHTML = detailDiv.classList.contains('show') ? 
+                    '<i class="fas fa-chevron-down"></i>' : 
+                    '<i class="fas fa-chevron-right"></i>'; // Change icon based on state
+            }
 
             function create_event_element(dossard, time) {
+                var id = Math.floor(Math.random() * 1000)+'-'+time.getTime()
                 var node = document.createElement('li')
 
-                node.classList.add('list-group-item')
+                node.classList.add('mt-2')
+                node.classList.add('card')
                 node.classList.add('bg-primary')
+                node.id ='event_list_' + id
 
-                var n1 = document.createElement('p')
-                n1.innerText = `${dossard}`
-                node.appendChild(n1)
-                
-                var n2 = document.createElement('p')
-                n2.innerText = `${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
-                node.appendChild(n2)
+                var html = `<p>${dossard}</p>
+                            <p>${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}</p>`
+                var html = `
+                            <div class="card-header">
+                                <h5 class="mb-0">
+                                    <p>
+                                        ${dossard} { passage.inscription.inscrit.name }
+                                        <br>
+                                        ${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}
+                                    </p>
+                                    <button class="btn btn-link" onclick="toggleDetails('${id}', this)">
+                                        Details <span class="icon" id="icon-${id}"><i class="fas fa-chevron-right"></i></span>
+                                    </button>
+                                </h5>
+                            </div>
+                            <div id="detail-${id}" class="collapse">
+                                <div class="card-body">
+                                    ${id}
+                                </div>
+                            </div>
+                            `
+                var html = `
+                <div class="card-header">
+                    <p class="mb-0">
+                        ${dossard}
+                        <br>
+                        ${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}
+                    </p>
+                </div>
+                    `
+                node.innerHTML = html
 
                 if (event_list_elmt.children.length == 0) {
                     event_list_elmt.appendChild(node)
                 } else {
                     event_list_elmt.insertBefore(node, event_list_elmt.children[0])
                 }
-                return event_list_elmt.children.length
+                event_list[id] = {'dossard':dossard, 'time':time}
+                return id
             }
-            
-            async function update_event_list(response, index) {
-                elmt = event_list_elmt.children[event_list_elmt.children.length-index]
+
+            async function get_request_response(response, id) {
+                elmt = document.getElementById('event_list_' + id)
                 
-                elmt.classList.remove('bg-primary')
-                if (response.success) {
-                    elmt.classList.add('bg-success')
+                if (response.status == 200) {
+                    response = JSON.parse(response.responseText)
+                
+                    elmt.classList.remove('bg-primary')
+                    if (response.success) {
+                        elmt.classList.add('bg-success')
+                    } else {
+                        var err_node = document.createElement('p')
+                        err_node.innerText = response.error
+                        elmt.appendChild(err_node)
+                        if (response.saved) {
+                            elmt.classList.add('bg-warning')
+                        } else {
+                            elmt.classList.add('bg-danger')
+                        }
+                    }
                 } else {
+                    elmt.classList.remove('bg-primary')
                     elmt.classList.add('bg-danger')
+                    
+                    var err_node = document.createElement('p')
+                    err_node.innerText = 'erreur interne au server'
+                    elmt.appendChild(err_node)
                 }
             }
 
@@ -71,20 +168,11 @@
                     data.append('time', time.getTime())
                     data.append('dossard', dossard)
 
-                    var index = create_event_element(dossard, time)
+                    var id = create_event_element(dossard, time) // indique que la request a été efectuée
                     
                     var xhttp = new XMLHttpRequest();
                     xhttp.open('POST', url, true);
-                    xhttp.onload = function () {
-                        if (this.status == 200) {
-                            response = JSON.parse(this.responseText)
-                            update_event_list(response, index)
-                        } else {
-                            elmt = event_list_elmt.children[event_list_elmt.children.length-index]
-                            elmt.classList.remove('bg-primary')
-                            elmt.classList.add('bg-warning')
-                        }
-                    }
+                    xhttp.onload = function() {get_request_response(this, id)}
                     xhttp.send(data);
                 }
             };
@@ -114,19 +202,19 @@
             }
             document.addEventListener('keydown', (e) => {
                 if (e.code === "Space") {
-                    add_time()
+                    add_time() //crer le time stamp et l'ajoute a la list
                 } else if (e.code === "Escape") {
-                    get_last_time()
+                    get_last_time() // suprimer le premier element
                 }else if (e.code === 'Backspace'){
-                    input.value = ''
+                    input.value = '' // reset le champ
                 } else if (e.code === 'Enter') {
                     var data = parseInt(input.value);
                     input.value = ''
                     if ( !isNaN(data) ) {
-                        send_request(data)
+                        send_request(data) // send la request au serveur si c'est bien un nombre
                     }
                 } else {
-                    input.focus()
+                    input.focus() // focus le champ de text
                 }
             });
             input.focus()

@@ -6,46 +6,22 @@ from flask_app.models import Event, Stand, Trace, Parcours
 from folium import Map, Marker, Icon, PolyLine, Popup, LayerControl, TileLayer
 from jinja2 import Template
 from colour import Color
-import requests as web_requests
-from math import acos, sin, radians, cos
+from flask_app.lib import get_points_elevation, calc_points_dist, midpoint
 
 parcours_bp = Blueprint('parcours', __name__, template_folder='templates')
-
-
-def midpoint(latlng1, latlng2):
-    lat = (latlng1[0]+latlng2[0])/2
-    lng = (latlng1[1]+latlng2[1])/2
-    return (lat, lng)
 
 @set_route(parcours_bp, '/event/<event_name>/parcours/<parcours_name>/delete')
 @login_required
 @admin_required
 def delete_parcours_page(event_name, parcours_name):
     event = Event.query.filter_by(name=event_name).first_or_404()
-    parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
-    if len(parcours.editions)>0:
+    parcours:Parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
+    if parcours.editions.count()>0:
         flash('action impossible le parcours est déjà utilisé dans une edition.', 'danger')
         return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
-
-    start = parcours.start_stand
-    n_tour=0
-    next_stand = start
-    while True:
-        current_stand = next_stand
-        if current_stand == start:
-            n_tour+=1
-        # trace
-        trace = current_stand.start_trace.filter_by(turn_nb=n_tour).first()
-        if not trace:
-            break
-        next_stand = trace.end
-
-        db.session.delete(current_stand)
-        db.session.delete(trace)
-
-    db.session.delete(current_stand)
+    for e in tuple(parcours):
+        db.session.delete(e)
     db.session.delete(parcours)
-
     db.session.commit()
     flash('parcours supprimé!', 'success')
 
@@ -100,19 +76,6 @@ def parcours_page(event_name):
     
     return render_template("parcours.html", user_data=user, event_data=event, archived_parcours=archived_parcours, active_parcours=active_parcours, event_modif=True, form=form)
 
-def get_points_elevation(points:list[tuple[float]]):
-    if len(points) == 0:
-        return []
-    data = {'locations':[{'latitude':float(lat), 'longitude':float(lng)} for lat, lng in points]}
-    url = 'https://api.open-elevation.com/api/v1/lookup'
-    response = web_requests.post(url, json=data)
-    if response.status_code == 200:
-        return response.json()['results']
-
-def calc_points_dist(lat1, lng1, lat2, lng2):
-    'return the spherical dist of the two points in km'
-    return acos((sin(radians(lat1)) * sin(radians(lat2))) + (cos(radians(lat1)) * cos(radians(lat2))) * (cos(radians(lng2) - radians(lng1)))) * 6371
-
 '''
 def get_graph_data(data):
     points = []
@@ -162,10 +125,10 @@ def build_alt_graph(graph_data):
     points = []
     to_request=[]
     last_point=None
-    tot_dist = 0
+    dist = 0
     for e in graph_data:
         if isinstance(e, Stand):
-            tot_dist = dist = tot_dist + (calc_points_dist(e.lat, e.lng, last_point[0], last_point[1]) if last_point else 0)
+            dist += calc_points_dist(e.lat, e.lng, last_point[0], last_point[1]) if last_point else 0
             last_point = e.lat, e.lng
             if e.elevation:
                 points.append({'x':dist, 'y':e.elevation, 'label':e.name, 'type':'stand'})
@@ -173,22 +136,21 @@ def build_alt_graph(graph_data):
                 to_request.append(e)
                 points.append({'x':dist, 'y':None, 'label':e.name, 'type':'stand'})
         elif isinstance(e, Trace):
-            trace = eval(e.trace)
+            trace = e
             if len(trace):
-                if trace[0][2]: # si il y a l'altitude
-                    for t in trace:
-                        tot_dist = dist = tot_dist + calc_points_dist(t[0], t[1], last_point[0], last_point[1])
-                        last_point = t[0], t[1]
-                        points.append({'x':dist, 'y':t[2], 'label':e.name, 'type':'trace'})
+                if trace.has_alt(): # si il y a l'altitude
+                    for point in trace:
+                        dist += calc_points_dist(point.lat, point.lng, last_point[0], last_point[1])
+                        last_point = point.lat, point.lng
+                        points.append({'x':dist, 'y':point.alt, 'label':e.name, 'type':'trace'})
                 else:
                     response = get_points_elevation([(lat, lng) for lat, lng, _ in trace] )
-                    trace = [(p['latitude'], p['longitude'], p['elevation']) for p in response]
-                    e.trace = str(trace)
+                    e.set_trace([(p['latitude'], p['longitude'], p['elevation']) for p in response])
                     db.session.commit()
-                    for t in trace:
-                        tot_dist = dist = tot_dist + calc_points_dist(t[0], t[1], last_point[0], last_point[1])
-                        last_point = t[0], t[1]
-                        points.append({'x':dist, 'y':t[2], 'label':e.name, 'type':'trace'})
+                    for point in trace:
+                        dist += calc_points_dist(point.lat, point.lng, last_point[0], last_point[1])
+                        last_point = point.lat, point.lng
+                        points.append({'x':dist, 'y':point.alt, 'label':e.name, 'type':'trace'})
 
     response = get_points_elevation([(req.lat, req.lng) for req in to_request])
 
@@ -204,7 +166,21 @@ def build_alt_graph(graph_data):
 
 
 def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
-    #! create the map
+     #! create the map
+    map_style = 'satelite'
+    map_styles={'satelite':{'tiles':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                            'attr':'Esri',
+                            'name':'Satellite',
+                            'max_zoom':20},
+                'map':{'tiles':'OpenStreetMap',
+                        'attr':None,
+                        'name':None,
+                        'max_zoom':20},
+                'topographie':{'tiles':'https://tile.opentopomap.org/{z}/{x}/{y}.png',
+                        'attr':'opentopomap',
+                        'name':'topographie',
+                        'max_zoom':17}}
+
     program_list=[]
     part_list = []
     marker_coordonee = []
@@ -213,14 +189,6 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
     last_path_name = []
     markers_name = []
     chrono_list = []
-    map_style = 'satelite'
-    map_styles={'satelite':{'tiles':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                            'attr':'Esri',
-                            'name':'Esri Satellite'},
-                'map':{'tiles':'OpenStreetMap',
-                        'attr':'',
-                        'name':''}}
-
     start = parcours.start_stand
     map = Map(max_zoom=22,
             location=(0,0),
@@ -245,7 +213,7 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
         part_list.append(start)
         program_list.append({'type':'marker', 'lat':start.lat, 'lng':start.lng, 'name':start.name, 'id':start.id, 'color':start.color.hex, 'step':0})
         stands.add(start)
-        chrono_list.append(start.name)
+        chrono_list.append(start.id)
         turn_nb = 0
         step =0
         while True:
@@ -253,11 +221,11 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
                 turn_nb +=1
             step += 1
             old_stand = new_stand
-            # si l'ancien stand a une trace qui part d lui
+            # si l'ancien stand a une trace qui part de lui
             trace = old_stand.start_trace.filter_by(turn_nb=turn_nb).first()
-            if trace :
+            if trace is not None :
                 new_stand = trace.end
-                if new_stand.chrono : chrono_list.append(new_stand.name)
+                if new_stand.chrono : chrono_list.append(new_stand.id)
                 if new_stand not in stands:
                     if modif:
                         popup = Popup()
@@ -366,8 +334,10 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
     if len(lats)!=0 or len(lngs)!=0:
         map.fit_bounds([min(marker_coordonee), max(marker_coordonee)])
     #? ajout different layer
-    TileLayer('OpenStreetMap', max_zoom=20).add_to(map)
-    TileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr='Esri', name='satelite', max_zoom=20).add_to(map)
+    #TileLayer('OpenStreetMap', max_zoom=20).add_to(map)
+    #TileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr='Esri', name='satelite', max_zoom=20).add_to(map)
+    for name, data in map_styles.items():
+        TileLayer(**data).add_to(map)
     LayerControl().add_to(map)
 
     if rdv:
@@ -385,10 +355,12 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
 @admin_required
 def modify_parcours(event_name, parcours_name):
     event = Event.query.filter_by(name=event_name).first_or_404()
-    parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
+    parcours:Parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
     user = current_user
-    modif = request.args.get('modif', 'map')
-
+    already_use = bool(parcours.editions.count())
+    if already_use and len(request.args):
+        return redirect(url_for('admin.parcours.modify_parcours', event_name=event_name, parcours_name=parcours_name))
+    modif = request.args.get('modif', 'map') if not already_use else None
     #? formulaire pour le nom du parcours
     name_form= Parcours_name_form(data={'name':parcours.name, 'description':parcours.description})
     if modif=='form' and name_form.validate_on_submit() :
@@ -404,7 +376,7 @@ def modify_parcours(event_name, parcours_name):
 
 
     #? formulaire + actions modifications
-    if request.args.get('marker'):#? modif d'un marker
+    if request.args.get('marker') and not already_use:#? modif d'un marker
         modif_form_type='marker'
         stand= Stand.query.filter_by(id=request.args.get('marker')).first()
         if not stand or stand.parcours != parcours:
@@ -434,7 +406,7 @@ def modify_parcours(event_name, parcours_name):
                 return redirect(request.path)
             else:
                 modif_form.name.errors = list(name_form.name.errors)+['vous utiliser deja ce nom.']
-    elif request.args.get('trace'):#? modif d'une trace
+    elif request.args.get('trace') and not already_use:#? modif d'une trace
         modif_form_type = 'trace'
         trace = Trace.query.filter_by(id=request.args.get('trace')).first()
         if not trace or trace.parcours != parcours:
@@ -524,7 +496,7 @@ def modify_parcours(event_name, parcours_name):
                 #return redirect(request.path)
             else:
                 modif_form.name.errors = list(name_form.name.errors)+['vous utiliser deja ce nom.']
-    elif request.args.get('new'): #? ajout de nouvelles trace et marker si besoin
+    elif request.args.get('new') and not already_use: #? ajout de nouvelles trace et marker si besoin
         modif_form_type = 'new'
 
         try:
@@ -635,7 +607,7 @@ def modify_parcours(event_name, parcours_name):
         modif_form_type = None
         modif_form=None
 
-    element_name, last_path_name, next_path_name, markers_name, program_list, map, graph = create_map_and_alt_graph(parcours, modif=True)
+    element_name, last_path_name, next_path_name, markers_name, program_list, map, graph = create_map_and_alt_graph(parcours, modif=not already_use)
 
 
     #? render the map
@@ -647,6 +619,7 @@ def modify_parcours(event_name, parcours_name):
     body= map.get_root().html.render()
     script= map.get_root().script.render()
 
+    ic(request.args)
     folium_map={'header':header, 'body':body, 'script':script}
     return render_template('modify_parcours.html', user_data=user, event_data=event, parcours_data=parcours, name_form=name_form, folium_map=folium_map,
                            map_name=map.get_name(), element_name=element_name, path_names={'last':last_path_name, 'next':next_path_name} if last_path_name else markers_name,

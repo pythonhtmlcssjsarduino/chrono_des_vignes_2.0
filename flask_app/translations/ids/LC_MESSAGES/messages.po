@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-21 16:09+0200\n"
+"POT-Creation-Date: 2024-10-19 11:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: flask_app/__init__.py:87
+#: flask_app/__init__.py:89
 msgid "flash.error.mustadmin"
 msgstr "flash.error.mustadmin"
 
-#: flask_app/__init__.py:90
+#: flask_app/__init__.py:92
 msgid "flash.error.wrongadminevent"
 msgstr "flash.error.wrongadminevent"
+
+#: flask_app/__init__.py:100 flask_app/templates/layout.html:98
+msgid "app.lang"
+msgstr "app.lang"
 
 #: flask_app/admin/coureurs/__init__.py:21
 msgid "admin.view.error.coureurdontexist:coureur"
@@ -57,42 +61,47 @@ msgstr "admin.view.username"
 msgid "admin.view.participation"
 msgstr "admin.view.participation"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:65
+#: flask_app/admin/parcours/templates/modify_parcours.html:60
+#: flask_app/admin/parcours/templates/parcours.html:13
+#: flask_app/admin/parcours/templates/parcours.html:42
+msgid "admin.parcours.modify"
+msgstr "admin.parcours.modify"
+
+#: flask_app/admin/parcours/templates/modify_parcours.html:62
+msgid "admin.parcours.parcoursunmodifyablealreadyused"
+msgstr "admin.parcours.parcoursunmodifyablealreadyused"
+
+#: flask_app/admin/parcours/templates/modify_parcours.html:69
 msgid "admin.parcours.supprimer"
 msgstr "admin.parcours.supprimer"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:69
+#: flask_app/admin/parcours/templates/modify_parcours.html:73
 msgid "admin.parcours.desarchiver"
 msgstr "admin.parcours.desarchiver"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:71
+#: flask_app/admin/parcours/templates/modify_parcours.html:75
 msgid "admin.parcours.archiver"
 msgstr "admin.parcours.archiver"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:78
+#: flask_app/admin/parcours/templates/modify_parcours.html:82
 msgid "admin.parcours.clicknewstand"
 msgstr "admin.parcours.clicknewstand"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:100
+#: flask_app/admin/parcours/templates/modify_parcours.html:104
 msgid "admin.parcours.changepos"
 msgstr "admin.parcours.changepos"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:194
+#: flask_app/admin/parcours/templates/modify_parcours.html:198
 msgid "admin.parcours.deletape"
 msgstr "admin.parcours.deletape"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:206
+#: flask_app/admin/parcours/templates/modify_parcours.html:210
 msgid "admin.parcours.addstand"
 msgstr "admin.parcours.addstand"
 
 #: flask_app/admin/parcours/templates/parcours.html:2
 msgid "admin.parcours.parcours"
 msgstr "admin.parcours.parcours"
-
-#: flask_app/admin/parcours/templates/parcours.html:13
-#: flask_app/admin/parcours/templates/parcours.html:42
-msgid "admin.parcours.modify"
-msgstr "admin.parcours.modify"
 
 #: flask_app/admin/parcours/templates/parcours.html:31
 msgid "admin.parcours.archivedparcours"
@@ -139,24 +148,20 @@ msgid "app.name.short"
 msgstr "app.name.short"
 
 #: flask_app/templates/layout.html:85
-msgid "app.languages"
-msgstr "app.languages"
-
-#: flask_app/templates/layout.html:85
-msgid "app.lang"
-msgstr "app.lang"
-
-#: flask_app/templates/layout.html:93
 msgid "app.about"
 msgstr "app.about"
 
-#: flask_app/templates/layout.html:96
+#: flask_app/templates/layout.html:88
 msgid "app.contact"
 msgstr "app.contact"
 
-#: flask_app/templates/layout.html:102
+#: flask_app/templates/layout.html:94
 msgid "app.chrono"
 msgstr "app.chrono"
+
+#: flask_app/templates/layout.html:98
+msgid "app.languages"
+msgstr "app.languages"
 
 #: flask_app/templates/layout.html:111
 msgid "app.logout"
@@ -186,27 +191,27 @@ msgstr "side.parcours"
 msgid "side.runner"
 msgstr "side.runner"
 
-#: flask_app/users/__init__.py:23
+#: flask_app/users/__init__.py:24
 msgid "flash.connected:name"
 msgstr "flash.connected:name"
 
-#: flask_app/users/__init__.py:31
+#: flask_app/users/__init__.py:32
 msgid "flash.error.pwdnotvalid"
 msgstr "flash.error.pwdnotvalid"
 
-#: flask_app/users/__init__.py:51
+#: flask_app/users/__init__.py:52
 msgid "flash.accountcreated"
 msgstr "flash.accountcreated"
 
-#: flask_app/users/__init__.py:61
+#: flask_app/users/__init__.py:62
 msgid "flash.deconected"
 msgstr "flash.deconected"
 
-#: flask_app/users/__init__.py:73
+#: flask_app/users/__init__.py:74
 msgid "flash.warn.inscriptionsnotopen:date"
 msgstr "flash.warn.inscriptionsnotopen:date"
 
-#: flask_app/users/__init__.py:77
+#: flask_app/users/__init__.py:78
 msgid "flash.warn.inscriptionclosed"
 msgstr "flash.warn.inscriptionclosed"
 

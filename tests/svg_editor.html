@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Éditeur SVG - Obtenir l'Objet sous la Souris</title>
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <!-- FontAwesome 6.2.0 CSS -->
+    <script
+      src="https://kit.fontawesome.com/7383067e37.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- bootstrap -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+      crossorigin="anonymous"
+    ></script>
+    <style>
+        #svgCanvas {
+            border: 1px solid #ccc;
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>svg editor</h1>
+<svg id="svgCanvas" xmlns="http://www.w3.org/2000/svg" onload="makeDraggable(evt)" width="500" height="500">
+    <!-- Les formes SVG seront ajoutées ici -->
+</svg>
+<br>
+<br>
+<div>
+    <button id="addCircle" class="btn btn-primary btn-sm mt-2">Ajouter un Cercle</button>
+    <button id="addRectangle" class="btn btn-primary btn-sm mt-2">Ajouter un Rectangle</button>
+    <button id="addEllipse" class="btn btn-primary btn-sm mt-2">Ajouter une Ellipse</button>
+    <button id="addLine" class="btn btn-primary btn-sm mt-2">Ajouter une Ligne</button>
+    <button id="addPolyline" class="btn btn-primary btn-sm mt-2">Ajouter une Polyline</button>
+    <button id="addPolygon" class="btn btn-primary btn-sm mt-2">Ajouter un Polygone</button>
+</div>
+<br>
+<div>
+    <form id="form">
+        <fieldset class="form-group">
+            <label for="test" class="form-control-label">label</label>
+            <input id="test" type="text" class="form-control form-control-lg">
+        </fieldset>
+        <fieldset class="form-group">
+            <label for="test2" class="form-control-label">label 2</label>
+            <input id="test2" type="text" class="form-control form-control-lg" value="coucou">
+        </fieldset>
+        <button type="submit" class="btn btn-info" id="form_submit"></button>
+    </form>
+</div>
+<script>
+    function getAttr(attr, elmt) {
+        var val = elmt.getAttribute(attr)
+        if (isNaN(parseFloat(val))){
+            return val
+        } else {
+            return parseFloat(val)
+        }
+    }
+    class circleController {
+            constructor(sizeMargin, form_control) {
+                this.sizeMargin = sizeMargin
+                this.form_control = form_control
+                this.toChange = undefined
+                this.offset = undefined
+            }
+
+            startDrag(evt, elmt, mouse){
+                var dist = Math.sqrt((getAttr('cx', elmt)-mouse.x)**2 + (getAttr('cy', elmt)-mouse.y)**2)
+                this.offset = {'x':getAttr('cx', elmt)-mouse.x, 'y':getAttr('cy', elmt)-mouse.y}
+                if (dist >= getAttr('r', elmt)-this.sizeMargin){
+                    this.toChange = 'r'
+                } else {
+                    this.toChange = 'move'
+                    elmt.style.cursor = 'grabbing'
+                }
+                this.set_form(elmt)
+            }
+
+            endDrag(evt, elmt, mouse){
+                this.toChange = undefined
+                this.offset = undefined
+            }
+
+            drag(evt, elmt, mouse){
+                if (this.toChange == 'r'){
+                    elmt.setAttribute('r', Math.floor(Math.sqrt((getAttr('cx', elmt)-mouse.x)**2 + (getAttr('cy', elmt)-mouse.y)**2)))
+                }else{
+                    elmt.setAttribute('cx', mouse.x + this.offset.x)
+                    elmt.setAttribute('cy', mouse.y + this.offset.y)
+                }
+                this.set_form(elmt)
+            }
+
+            hover(evt, elmt, mouse){
+                if (this.toChange){return}
+                var dist = Math.sqrt((getAttr('cx', elmt)-mouse.x)**2 + (getAttr('cy', elmt)-mouse.y)**2)
+                if (dist >= getAttr('r', elmt)-this.sizeMargin){
+                    elmt.style.cursor = 'ew-resize'
+                } else {
+                    elmt.style.cursor = 'grab'
+                }
+            }
+        
+            set_form(elmt){
+                let data = {'cx':{'value':getAttr('cx',elmt), 'type':'number'},
+                            'cy':{'value':getAttr('cy',elmt), 'type':'number'},
+                            'r':{'value':getAttr('r',elmt), 'type':'number'},
+                            'fill':{'value':getAttr('fill',elmt), 'type':'color'},
+                            'stroke':{'value':getAttr('stroke',elmt), 'type':'color'},
+                            'stroke-width':{'value':getAttr('stroke-width', elmt), 'type':'number'}}
+                this.form_control.setDisplay(data, this.valid_form, elmt)
+            }
+
+            valid_form(data, elmt){
+                elmt.setAttribute('cx', data['cx'])
+                elmt.setAttribute('cy', data['cy'])
+                elmt.setAttribute('r', data['r'])
+                elmt.setAttribute('fill', data['fill'])    
+                elmt.setAttribute('stroke', data['stroke'])    
+                elmt.setAttribute('stroke-width', data['stroke-width'])
+                
+            }
+        }
+
+    class rectController{
+        constructor(sizeMargin, form_control) {
+                this.sizeMargin = sizeMargin
+                this.form_control = form_control
+                this.toChange = undefined
+                this.offset = undefined
+            }
+
+        startDrag(evt, elmt, mouse){
+            this.offset = {'x':getAttr('x', elmt)-mouse.x, 'y':getAttr('y', elmt)-mouse.y}
+            
+            if (getAttr('x', elmt)+this.sizeMargin < mouse.x && mouse.x < getAttr('x', elmt)+getAttr('width', elmt)-this.sizeMargin &&
+                getAttr('y', elmt)+this.sizeMargin < mouse.y && mouse.y < getAttr('y', elmt)+getAttr('height', elmt)-this.sizeMargin){
+                this.toChange = 'move'
+                elmt.style.cursor = 'grabbing'
+                this.set_form(elmt)
+                return
+            }
+            this.toChange = ''
+            if (getAttr('x', elmt)+this.sizeMargin >= mouse.x) {
+                this.toChange += 'left'
+            } else if (getAttr('x', elmt)+getAttr('width', elmt)-this.sizeMargin <= mouse.x) {
+                this.toChange += 'right'
+            }
+
+            if (getAttr('y', elmt)+this.sizeMargin >= mouse.y) {
+                this.toChange += 'up'
+            } else if (getAttr('y', elmt)+getAttr('height', elmt)-this.sizeMargin <= mouse.y) {
+                this.toChange += 'down'
+            }
+            this.set_form(elmt)
+            
+        }
+
+        endDrag(evt, elmt, mouse){
+            this.toChange = undefined
+            this.offset = undefined
+        }
+
+        drag(evt, elmt, mouse){
+            if (this.toChange == 'move'){
+                elmt.setAttribute('x', mouse.x + this.offset.x)
+                elmt.setAttribute('y', mouse.y + this.offset.y)
+                this.set_form(elmt)
+                return
+            }
+            if (this.toChange.includes('left')) {
+                var width = getAttr('width', elmt)
+                var x = getAttr('x', elmt)
+                
+                elmt.setAttribute('width', Math.max(x-mouse.x+width, 1))
+                elmt.setAttribute('x', Math.min(x+width-1, mouse.x))
+            } else if (this.toChange.includes('right')) {
+                elmt.setAttribute('width', Math.max(mouse.x-getAttr('x',elmt), 1))
+            }
+
+            if (this.toChange.includes('up')) {
+                var height = getAttr('height', elmt)
+                var y = getAttr('y', elmt)
+                
+                elmt.setAttribute('height', Math.max(y-mouse.y+height, 1))
+                elmt.setAttribute('y', Math.min(y+height-1, mouse.y))
+            } else if (this.toChange.includes('down')) {
+                elmt.setAttribute('height', Math.max(mouse.y-getAttr('y',elmt), 1))
+            }
+            this.set_form(elmt)
+        }
+
+        hover(evt, elmt, mouse){
+            if (this.toChange){return}
+            if (getAttr('x', elmt)+this.sizeMargin >= mouse.x && mouse.y >= getAttr('y', elmt)+getAttr('height', elmt)-this.sizeMargin) {
+                elmt.style.cursor = 'nesw-resize'
+            } else if (getAttr('y', elmt)+this.sizeMargin >= mouse.y && mouse.x >= getAttr('x', elmt)+getAttr('width', elmt)-this.sizeMargin){
+                elmt.style.cursor = 'nesw-resize'
+            } else if (getAttr('y', elmt)+this.sizeMargin >= mouse.y && getAttr('x', elmt)+this.sizeMargin >= mouse.x) {
+                elmt.style.cursor = 'nwse-resize'
+            } else if (mouse.y >= getAttr('y', elmt)+getAttr('height', elmt)-this.sizeMargin && mouse.x >= getAttr('x', elmt)+getAttr('width', elmt)-this.sizeMargin){
+                elmt.style.cursor = 'nwse-resize'
+            } else if (getAttr('x', elmt)+this.sizeMargin >= mouse.x || mouse.x >= getAttr('x', elmt)+getAttr('width', elmt)-this.sizeMargin){
+                elmt.style.cursor = 'ew-resize'
+            } else if (getAttr('y', elmt)+this.sizeMargin >= mouse.y || mouse.y >= getAttr('y', elmt)+getAttr('height', elmt)-this.sizeMargin) {
+                elmt.style.cursor = 'ns-resize'
+            } else {
+                elmt.style.cursor = 'grab'
+            }
+        }
+        
+        set_form(elmt){
+            let data = {'x':{'value':getAttr('x',elmt), 'type':'number'},
+                        'y':{'value':getAttr('y',elmt), 'type':'number'},
+                        'width':{'value':getAttr('width',elmt), 'type':'number'},
+                        'height':{'value':getAttr('height',elmt), 'type':'number'},
+                        'fill':{'value':getAttr('fill',elmt), 'type':'color'},
+                        'stroke':{'value':getAttr('stroke',elmt), 'type':'color'},
+                        'stroke-width':{'value':getAttr('stroke-width', elmt), 'type':'number'}}
+            this.form_control.setDisplay(data, this.valid_form, elmt)
+        }
+
+        valid_form(data, elmt){
+            elmt.setAttribute('x', data['x'])
+            elmt.setAttribute('y', data['y'])
+            elmt.setAttribute('width', data['width'])
+            elmt.setAttribute('height', data['height'])
+            elmt.setAttribute('fill', data['fill'])
+            elmt.setAttribute('stroke', data['stroke'])
+            elmt.setAttribute('stroke-width', data['stroke-width'])
+            
+        }
+    }
+
+    class ellipseController{
+        constructor(sizeMargin, form_control) {
+                this.sizeMargin = sizeMargin
+                this.form_control = form_control
+                this.toChange = undefined
+                this.offset = undefined
+            }
+
+        startDrag(evt, elmt, mouse){
+            this.offset = {'x':getAttr('cx', elmt)-mouse.x, 'y':getAttr('cy', elmt)-mouse.y}
+            
+            var steigung = (mouse.x-getAttr('cx', elmt))/(mouse.y-getAttr('cy', elmt))
+            
+            if (((mouse.x-getAttr('cx', elmt))**2/(getAttr('rx', elmt)-this.sizeMargin)**2)+((mouse.y-getAttr('cy', elmt))**2/(getAttr('ry', elmt)-this.sizeMargin)**2)<=1){
+                this.toChange = 'move'
+                elmt.style.cursor = 'grabbing'
+            } else {
+                if (steigung<=0&&steigung<=-1||steigung>0&&steigung>=1){
+                    this.toChange = 'left/right'
+                } else if (steigung<=0&&steigung>-1||steigung>0&&steigung<1) {
+                    this.toChange = 'up/down'
+                }
+            }
+            this.set_form(elmt)
+        }
+
+        endDrag(evt, elmt, mouse){
+            this.toChange = undefined
+            this.offset = undefined
+        }
+
+        drag(evt, elmt, mouse){
+            if (this.toChange == 'move'){
+                elmt.setAttribute('cx', mouse.x + this.offset.x)
+                elmt.setAttribute('cy', mouse.y + this.offset.y)
+            } else if (this.toChange=='up/down'){
+                let ry = Math.floor(Math.sqrt(((mouse.y-getAttr('cy', elmt))**2 * getAttr('rx', elmt)**2)/(getAttr('rx', elmt)**2 - (mouse.x-getAttr('cx', elmt))**2)))
+                if (!isNaN(ry) && isFinite(ry)){elmt.setAttribute('ry', ry)}
+            } else if (this.toChange=='left/right'){
+                let rx = Math.floor(Math.sqrt(((mouse.x-getAttr('cx', elmt))**2 * getAttr('ry', elmt)**2)/(getAttr('ry', elmt)**2 - (mouse.y-getAttr('cy', elmt))**2)))
+                if (!isNaN(rx) && isFinite(rx)){elmt.setAttribute('rx', rx)}
+            }
+            this.set_form(elmt)
+        }
+
+        hover(evt, elmt, mouse){
+            if (this.toChange){return}
+            var steigung = (mouse.x-getAttr('cx', elmt))/(mouse.y-getAttr('cy', elmt))
+            
+            if (((mouse.x-getAttr('cx', elmt))**2/(getAttr('rx', elmt)-this.sizeMargin)**2)+((mouse.y-getAttr('cy', elmt))**2/(getAttr('ry', elmt)-this.sizeMargin)**2)<=1){
+                elmt.style.cursor = 'grab'
+            } else {
+                if (steigung<=0&&steigung<=-1||steigung>0&&steigung>=1){
+                    elmt.style.cursor = 'ew-resize'
+                } else if (steigung<=0&&steigung>-1||steigung>0&&steigung<1) {
+                    elmt.style.cursor = 'ns-resize'
+                }
+            }
+        }
+            
+        set_form(elmt){
+            let data = {'cx':{'value':getAttr('cx',elmt), 'type':'number'},
+                        'cy':{'value':getAttr('cy',elmt), 'type':'number'},
+                        'rx':{'value':getAttr('rx',elmt), 'type':'number'},
+                        'ry':{'value':getAttr('ry',elmt), 'type':'number'},
+                        'fill':{'value':getAttr('fill',elmt), 'type':'color'},
+                        'stroke':{'value':getAttr('stroke',elmt), 'type':'color'},
+                        'stroke-width':{'value':getAttr('stroke-width', elmt), 'type':'number'}}
+            this.form_control.setDisplay(data, this.valid_form, elmt)
+        }
+
+        valid_form(data, elmt){
+            elmt.setAttribute('cx', data['cx'])
+            elmt.setAttribute('cy', data['cy'])
+            elmt.setAttribute('rx', data['rx'])
+            elmt.setAttribute('ry', data['ry'])
+            elmt.setAttribute('fill', data['fill'])
+            elmt.setAttribute('stroke', data['stroke'])
+            elmt.setAttribute('stroke-width', data['stroke-width'])
+            
+        }
+
+    }
+
+    class lineController{
+        constructor(sizeMargin, form_control) {
+                this.sizeMargin = sizeMargin
+                this.form_control = form_control
+                this.toChange = undefined
+                this.offset1 = undefined
+                this.offset2 = undefined
+            }
+
+        startDrag(evt, elmt, mouse){
+            this.offset1 = {'x':getAttr('x1', elmt)-mouse.x, 'y':getAttr('y1', elmt)-mouse.y}
+            this.offset2 = {'x':getAttr('x2', elmt)-mouse.x, 'y':getAttr('y2', elmt)-mouse.y}
+            let dist1 = Math.sqrt((getAttr('x1', elmt)-mouse.x)**2 + (getAttr('y1', elmt)-mouse.y)**2)
+            let dist2 = Math.sqrt((getAttr('x2', elmt)-mouse.x)**2 + (getAttr('y2', elmt)-mouse.y)**2)
+
+            if (dist1>this.sizeMargin && dist2>this.sizeMargin){
+                this.toChange = 'move'
+                elmt.style.cursor = 'grabbing'
+            } else {
+                if (dist1<=this.sizeMargin){
+                    this.toChange = '1'
+                } else if (dist2<=this.sizeMargin) {
+                    this.toChange = '2'
+                }
+            }
+            this.set_form(elmt)
+        }
+
+        endDrag(evt, elmt, mouse){
+            this.toChange = undefined
+            this.offset1 = undefined
+            this.offset2 = undefined
+        }
+
+        drag(evt, elmt, mouse){
+            if (this.toChange == 'move'){
+                elmt.setAttribute('x1', mouse.x + this.offset1.x)
+                elmt.setAttribute('y1', mouse.y + this.offset1.y)
+                elmt.setAttribute('x2', mouse.x + this.offset2.x)
+                elmt.setAttribute('y2', mouse.y + this.offset2.y)
+            } else if (this.toChange=='1'){
+                elmt.setAttribute('x1', mouse.x)
+                elmt.setAttribute('y1', mouse.y)
+            } else if (this.toChange=='2'){
+                elmt.setAttribute('x2', mouse.x)
+                elmt.setAttribute('y2', mouse.y)
+            }
+            this.set_form(elmt)
+        }
+
+        hover(evt, elmt, mouse){
+            if (this.toChange){return}
+            let dist1 = Math.sqrt((getAttr('x1', elmt)-mouse.x)**2 + (getAttr('y1', elmt)-mouse.y)**2)
+            let dist2 = Math.sqrt((getAttr('x2', elmt)-mouse.x)**2 + (getAttr('y2', elmt)-mouse.y)**2)
+
+            if (dist1>this.sizeMargin && dist2>this.sizeMargin){
+                elmt.style.cursor = 'grab'
+            } else {
+                elmt.style.cursor = 'move'
+            }
+        }
+            
+        set_form(elmt){
+            let data = {'x1':{'value':getAttr('x1',elmt), 'type':'number'},
+                        'y1':{'value':getAttr('y1',elmt), 'type':'number'},
+                        'x2':{'value':getAttr('x2',elmt), 'type':'number'},
+                        'y2':{'value':getAttr('y2',elmt), 'type':'number'},
+                        'stroke':{'value':getAttr('stroke',elmt), 'type':'color'},
+                        'stroke-width':{'value':getAttr('stroke-width', elmt), 'type':'number'}}
+            this.form_control.setDisplay(data, this.valid_form, elmt)
+        }
+
+        valid_form(data, elmt){
+            elmt.setAttribute('x1', data['x1'])
+            elmt.setAttribute('y1', data['y1'])
+            elmt.setAttribute('x2', data['x2'])
+            elmt.setAttribute('y2', data['y2'])
+            elmt.setAttribute('stroke', data['stroke'])
+            elmt.setAttribute('stroke-width', data['stroke-width'])
+            
+        }
+
+    }
+
+    class infoDisplay{
+        constructor(frame){
+            this.frame = frame
+            this.reset()
+        }
+
+        reset(){
+            this.frame.innerHTML = ''
+            this.html = ''
+            this.callBackFunction = null
+            this.elmt=null
+        }
+
+        callBack(evt){
+            let data = {}
+            let formData = new FormData(this.frame).forEach((value, key, parent)=>{
+                data[key] = value
+            })
+            this.callBackFunction(data, this.elmt)
+        }
+
+        /*
+        data = {'x':{'value':34, name:"x", 'type':'number'}}
+        types = number, text, color, file
+        */
+        setDisplay(form_data, valid_func, elmt){
+            this.reset()
+            this.callBackFunction = valid_func
+            this.elmt = elmt
+
+            for (const [name, data] of Object.entries(form_data)) {
+                this.html +=`<label for="form-${name}" class="form-control-label">${data['name']?data['name']:name}</label>\
+                            <input id="form-${name}" name="${name}" type="${data.type}" value="${data.value}" class="form-control form-control-lg">`
+                
+            //                `<fieldset class="form-group">\
+            //                    <label for="form-${name}" class="form-control-label">${name}</label>\
+            //                    <input id="form-${name}" type="${data.type}" value="${data.value}" class="form-control form-control-lg">\
+            //                </fieldset>`
+            }
+            this.html += '<button type="button" class="btn btn-info" id="form_submit">valider</button>'
+            this.frame.innerHTML = this.html
+
+            this.frame.addEventListener('click', this.callBack.bind(this))
+        }
+    }
+    var display = new infoDisplay(document.getElementById('form'))
+
+
+    function makeDraggable(evt) {
+        var svg = evt.target;
+
+        svg.addEventListener('mousedown', startDrag);
+        svg.addEventListener('mousemove', drag);
+        svg.addEventListener('mouseup', endDrag);
+        svg.addEventListener('mouseleave', endDrag);
+        svg.addEventListener('touchstart', startDrag);
+        svg.addEventListener('touchmove', drag);
+        svg.addEventListener('touchend', endDrag);
+        svg.addEventListener('touchleave', endDrag);
+        svg.addEventListener('touchcancel', endDrag);
+
+        var selectedElement, dragging
+
+        var circle = new circleController(10, display)
+        var rect = new rectController(10, display)
+        var ellipse = new ellipseController(10, display)
+        var line = new lineController(10, display)
+
+        function getMousePosition(evt) {
+            var CTM = svg.getScreenCTM();
+            if (evt.touches) { evt = evt.touches[0]; }
+                return {
+                x: Math.floor((evt.clientX - CTM.e) / CTM.a),
+                y: Math.floor((evt.clientY - CTM.f) / CTM.d)
+            };
+        }
+
+        function startDrag(evt) {
+            if (evt.target.classList.contains('draggable')) {
+                selectedElement = evt.target;
+
+                switch (selectedElement.tagName) {
+                    case 'circle':
+                        circle.startDrag(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'rect':
+                        rect.startDrag(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'ellipse':
+                        ellipse.startDrag(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'line':
+                        line.startDrag(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'polyline':
+                        
+                        break;
+                    
+                    case 'polygon':
+                        
+                        break;
+                    
+                
+                    default:
+                        break;
+                }
+            }
+        }
+
+        function drag(evt) {
+            if (selectedElement) {
+                switch (selectedElement.tagName) {
+                    case 'circle':
+                        circle.drag(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'rect':
+                        rect.drag(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'ellipse':
+                        ellipse.drag(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'line':
+                        line.drag(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'polyline':
+                        
+                        break;
+                    
+                    case 'polygon':
+                        
+                        break;
+                    
+                
+                    default:
+                        break;
+                }
+            }else{
+                switch (evt.target.tagName) {
+                    case 'circle':
+                        circle.hover(evt, evt.target, getMousePosition(evt))
+                        break;
+                
+                    case 'rect':
+                        rect.hover(evt, evt.target, getMousePosition(evt))
+                        break;
+                
+                    case 'ellipse':
+                        ellipse.hover(evt, evt.target, getMousePosition(evt))
+                        break;
+                
+                    case 'line':
+                        line.hover(evt, evt.target, getMousePosition(evt))
+                        break;
+                
+                    case 'polyline':
+                        
+                        break;
+                    
+                    case 'polygon':
+                        
+                        break;
+                    
+                
+                    default:
+                        break;
+                }
+            }
+        }
+
+        function endDrag(evt) {
+            if (selectedElement){
+                switch (selectedElement.tagName) {
+                    case 'circle':
+                        circle.endDrag(evt, selectedElement, getMousePosition(evt))
+                        circle.hover(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'rect':
+                        rect.endDrag(evt, selectedElement, getMousePosition(evt))
+                        rect.hover(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'ellipse':
+                        ellipse.endDrag(evt, selectedElement, getMousePosition(evt))
+                        ellipse.hover(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'line':
+                        line.endDrag(evt, selectedElement, getMousePosition(evt))
+                        line.hover(evt, selectedElement, getMousePosition(evt))
+                        break;
+                
+                    case 'polyline':
+                        
+                        break;
+                    
+                    case 'polygon':
+                        
+                        break;
+                    
+                
+                    default:
+                        break;
+                }
+           }
+            selectedElement = undefined
+        }
+    }
+
+    const svgCanvas = document.getElementById('svgCanvas');
+    const shapes_attributes = { 'circle':['cx', 'cy', 'r'],
+                                'rect':['x', 'y', 'height', 'width'],
+                                'ellipse':['cx', 'cy', 'rx', 'ry'],
+                                'line':['x1', 'y1', 'x2', 'y2'],
+                                'polyline':['points'],
+                                'polygon':[]
+    }
+    var last_id = 0
+
+    function newSvgElmt(shape_name, attributes) {
+        const shape = document.createElementNS("http://www.w3.org/2000/svg", shape_name)
+        for (const [attribute, value] of Object.entries(attributes)) {
+            shape.setAttribute(attribute, value);
+        }
+        last_id ++
+        shape.classList.add('draggable')
+        shape.id ='' + last_id
+
+        svgCanvas.appendChild(shape);
+    }
+
+    function getSvgElmt(evt){
+        var elmt = evt.target
+        var type = elmt.tagName
+        
+    }
+    //svgCanvas.addEventListener('click', getSvgElmt)
+
+    document.getElementById('addCircle').addEventListener('click', () => {
+        newSvgElmt('circle', {'cx':250, 'cy':250, 'r':20, 'fill':'#0000ff', 'stroke':'#ff0000', 'stroke-width':'0'})
+    });
+    document.getElementById('addRectangle').addEventListener('click', () => {
+        //newSvgElmt('rect', {'x':0, 'y':0, 'height':100, 'width':100, 'fill':'#0000ff'})
+        newSvgElmt('rect', {'x':250, 'y':250, 'height':100, 'width':100, 'fill':'#0000ff', 'stroke':'#ff0000', 'stroke-width':'0'})
+    });
+    document.getElementById('addEllipse').addEventListener('click', () => {
+        newSvgElmt('ellipse', {'cx':250, 'cy':250, 'rx':20, 'ry':40, 'fill':'#0000ff', 'stroke':'#ff0000', 'stroke-width':'0'})
+    });
+    document.getElementById('addLine').addEventListener('click', () => {
+        newSvgElmt('line', {'x1':200, 'y1':200, 'x2':300, 'y2':300, 'stroke':'#ff0000', 'stroke-width':'5'})
+    });
+    document.getElementById('addPolyline').addEventListener('click', () => {
+        newSvgElmt('polyline', {'points':'20,40 40,20 100,100', 'fill':'#0000ff', 'stroke':'black', 'stroke-width':'5', 'fill':'none'})
+    });
+    document.getElementById('addPolygon').addEventListener('click', () => {
+        newSvgElmt('polygon', {'cx':Math.random() * 500, 'cy':Math.random() * 500, 'r':20, 'fill':'#0000ff'})
+    });
+</script>
+
+</body>
+</html>

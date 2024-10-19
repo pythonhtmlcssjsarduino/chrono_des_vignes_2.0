@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-09-21 16:09+0200\n"
+"POT-Creation-Date: 2024-10-19 11:51+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,13 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: flask_app/__init__.py:87
+#: flask_app/__init__.py:89
 msgid "flash.error.mustadmin"
 msgstr ""
 
-#: flask_app/__init__.py:90
+#: flask_app/__init__.py:92
 msgid "flash.error.wrongadminevent"
 msgstr ""
+
+#: flask_app/__init__.py:100 flask_app/templates/layout.html:98
+msgid "app.lang"
+msgstr "en"
 
 #: flask_app/admin/coureurs/__init__.py:21
 msgid "admin.view.error.coureurdontexist:coureur"
@@ -57,41 +61,46 @@ msgstr ""
 msgid "admin.view.participation"
 msgstr ""
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:65
-msgid "admin.parcours.supprimer"
+#: flask_app/admin/parcours/templates/modify_parcours.html:60
+#: flask_app/admin/parcours/templates/parcours.html:13
+#: flask_app/admin/parcours/templates/parcours.html:42
+msgid "admin.parcours.modify"
+msgstr ""
+
+#: flask_app/admin/parcours/templates/modify_parcours.html:62
+msgid "admin.parcours.parcoursunmodifyablealreadyused"
 msgstr ""
 
 #: flask_app/admin/parcours/templates/modify_parcours.html:69
+msgid "admin.parcours.supprimer"
+msgstr ""
+
+#: flask_app/admin/parcours/templates/modify_parcours.html:73
 msgid "admin.parcours.desarchiver"
 msgstr ""
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:71
+#: flask_app/admin/parcours/templates/modify_parcours.html:75
 msgid "admin.parcours.archiver"
 msgstr ""
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:78
+#: flask_app/admin/parcours/templates/modify_parcours.html:82
 msgid "admin.parcours.clicknewstand"
 msgstr ""
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:100
+#: flask_app/admin/parcours/templates/modify_parcours.html:104
 msgid "admin.parcours.changepos"
 msgstr ""
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:194
+#: flask_app/admin/parcours/templates/modify_parcours.html:198
 msgid "admin.parcours.deletape"
 msgstr ""
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:206
+#: flask_app/admin/parcours/templates/modify_parcours.html:210
 msgid "admin.parcours.addstand"
 msgstr ""
 
 #: flask_app/admin/parcours/templates/parcours.html:2
 msgid "admin.parcours.parcours"
-msgstr ""
-
-#: flask_app/admin/parcours/templates/parcours.html:13
-#: flask_app/admin/parcours/templates/parcours.html:42
-msgid "admin.parcours.modify"
 msgstr ""
 
 #: flask_app/admin/parcours/templates/parcours.html:31
@@ -139,23 +148,19 @@ msgid "app.name.short"
 msgstr ""
 
 #: flask_app/templates/layout.html:85
-msgid "app.languages"
-msgstr ""
-
-#: flask_app/templates/layout.html:85
-msgid "app.lang"
-msgstr "en"
-
-#: flask_app/templates/layout.html:93
 msgid "app.about"
 msgstr ""
 
-#: flask_app/templates/layout.html:96
+#: flask_app/templates/layout.html:88
 msgid "app.contact"
 msgstr ""
 
-#: flask_app/templates/layout.html:102
+#: flask_app/templates/layout.html:94
 msgid "app.chrono"
+msgstr ""
+
+#: flask_app/templates/layout.html:98
+msgid "app.languages"
 msgstr ""
 
 #: flask_app/templates/layout.html:111
@@ -186,27 +191,27 @@ msgstr ""
 msgid "side.runner"
 msgstr ""
 
-#: flask_app/users/__init__.py:23
+#: flask_app/users/__init__.py:24
 msgid "flash.connected:name"
 msgstr ""
 
-#: flask_app/users/__init__.py:31
+#: flask_app/users/__init__.py:32
 msgid "flash.error.pwdnotvalid"
 msgstr ""
 
-#: flask_app/users/__init__.py:51
+#: flask_app/users/__init__.py:52
 msgid "flash.accountcreated"
 msgstr ""
 
-#: flask_app/users/__init__.py:61
+#: flask_app/users/__init__.py:62
 msgid "flash.deconected"
 msgstr ""
 
-#: flask_app/users/__init__.py:73
+#: flask_app/users/__init__.py:74
 msgid "flash.warn.inscriptionsnotopen:date"
 msgstr ""
 
-#: flask_app/users/__init__.py:77
+#: flask_app/users/__init__.py:78
 msgid "flash.warn.inscriptionclosed"
 msgstr ""
 

@@ -97,7 +97,6 @@
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">{{ _('app.languages') }} : {{ _('app.lang') }}</a>
                 <ul class="dropdown-menu">
-                  {{ request.url }}
                   <li><a class="dropdown-item" href="{{ url_for('change_lang', lang='fr', next=request.url ) }}">Francais</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('change_lang', lang='en', next=request.url ) }}">English</a></li>
                   <li><a class="dropdown-item" href="{{ url_for('change_lang', lang='de', next=request.url ) }}">Deutsch</a></li>

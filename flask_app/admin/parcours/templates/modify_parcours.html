@@ -56,8 +56,12 @@
                             window.parent.location.href = url;
                         }
                     </script>
-                    <button class="btn btn-outline-info" onclick="name_form_modif()">Modifier <i class="fa-solid fa-pen"></i></button>
-                </div>
+                    {% if parcours_data.editions.count() == 0 %}
+                        <button class="btn btn-outline-info" onclick="name_form_modif()">{{ _('admin.parcours.modify') }} <i class="fa-solid fa-pen"></i></button>
+                    {% else %}
+                        <p>{{ _('admin.parcours.parcoursunmodifyablealreadyused') }}</p>
+                    {% endif %}
+                    </div>
             </div>
         {% endif %}
         {% if parcours_data.editions.count() == 0 %}

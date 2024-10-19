@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Éditeur SVG - Obtenir l'Objet sous la Souris</title>
+    <style>
+        #svgCanvas {
+            border: 1px solid #ccc;
+            width: 500px;
+            height: 500px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>svg editor</h1>
+<svg id="svgCanvas" xmlns="http://www.w3.org/2000/svg" onload="makeDraggable(evt)" width="500" height="500">
+    <!-- Les formes SVG seront ajoutées ici -->
+</svg>
+<div>
+    <button id="addCircle">Ajouter un Cercle</button>
+    <button id="addRectangle">Ajouter un Rectangle</button>
+    <button id="addEllipse">Ajouter un Ellipse</button>
+    <button id="addLine">Ajouter un Line</button>
+    <button id="addPolyline">Ajouter un Polyline</button>
+    <button id="addPolygon">Ajouter un Polygon</button>
+</div>
+
+<style>
+    .static {
+        cursor: not-allowed;
+    }
+    .draggable {
+        cursor: move;
+    }
+</style>
+
+<script>
+
+    function makeDraggable(evt) {
+        var svg = evt.target;
+
+        svg.addEventListener('mousedown', startDrag);
+        svg.addEventListener('mousemove', drag);
+        svg.addEventListener('mouseup', endDrag);
+        svg.addEventListener('mouseleave', endDrag);
+        svg.addEventListener('touchstart', startDrag);
+        svg.addEventListener('touchmove', drag);
+        svg.addEventListener('touchend', endDrag);
+        svg.addEventListener('touchleave', endDrag);
+        svg.addEventListener('touchcancel', endDrag);
+
+        var selectedElement, offset, transform,
+            bbox, minX, maxX, minY, maxY, confined;
+
+        var boundaryX1 = 10.5;
+        var boundaryX2 = 30;
+        var boundaryY1 = 2.2;
+        var boundaryY2 = 19.2;
+
+        function getMousePosition(evt) {
+            var CTM = svg.getScreenCTM();
+            if (evt.touches) { evt = evt.touches[0]; }
+                return {
+                x: (evt.clientX - CTM.e) / CTM.a,
+                y: (evt.clientY - CTM.f) / CTM.d
+            };
+        }
+
+        function startDrag(evt) {
+            if (evt.target.classList.contains('draggable')) {
+                selectedElement = evt.target;
+                offset = getMousePosition(evt);
+
+                // Make sure the first transform on the element is a translate transform
+                var transforms = selectedElement.transform.baseVal;
+
+                if (transforms.length === 0 || transforms.getItem(0).type !== SVGTransform.SVG_TRANSFORM_TRANSLATE) {
+                    // Create an transform that translates by (0, 0)
+                    var translate = svg.createSVGTransform();
+                    translate.setTranslate(0, 0);
+                    selectedElement.transform.baseVal.insertItemBefore(translate, 0);
+                }
+
+                // Get initial translation
+                transform = transforms.getItem(0);
+                offset.x -= transform.matrix.e;
+                offset.y -= transform.matrix.f;
+
+                confined = evt.target.classList.contains('confine');
+                if (confined) {
+                    bbox = selectedElement.getBBox();
+                    minX = boundaryX1 - bbox.x;
+                    maxX = boundaryX2 - bbox.x - bbox.width;
+                    minY = boundaryY1 - bbox.y;
+                    maxY = boundaryY2 - bbox.y - bbox.height;
+                }
+            }
+        }
+
+        function drag(evt) {
+            if (selectedElement) {
+                evt.preventDefault();
+
+                var coord = getMousePosition(evt);
+                var dx = coord.x - offset.x;
+                var dy = coord.y - offset.y;
+
+                if (confined) {
+                    if (dx < minX) { dx = minX; }
+                    else if (dx > maxX) { dx = maxX; }
+                    if (dy < minY) { dy = minY; }
+                    else if (dy > maxY) { dy = maxY; }
+                }
+
+                transform.setTranslate(dx, dy);
+            }
+        }
+
+        function endDrag(evt) {
+            selectedElement = false;
+        }
+    }
+
+    const svgCanvas = document.getElementById('svgCanvas');
+    const shapes_attributes = { 'circle':['cx', 'cy', 'r'],
+                                'rect':['x', 'y', 'height', 'width'],
+                                'ellipse':['cx', 'cy', 'rx', 'ry'],
+                                'line':['x1', 'y1', 'x2', 'y2'],
+                                'polyline':['points'],
+                                'polygon':[]
+    }
+    var last_id = 0
+
+    function newSvgElmt(shape_name, attributes) {
+        console.log(shape_name, attributes);
+        
+        const shape = document.createElementNS("http://www.w3.org/2000/svg", shape_name)
+        for (const [attribute, value] of Object.entries(attributes)) {
+            shape.setAttribute(attribute, value);
+        }
+        last_id ++
+        shape.classList.add('draggable')
+        shape.id ='' + last_id
+        console.log(shape);
+        
+
+        svgCanvas.appendChild(shape);
+    }
+
+    function getSvgElmt(evt){
+        var elmt = evt.target
+        var type = elmt.tagName
+
+        console.log(elmt.transform);
+        
+
+        console.log(type);
+        
+    }
+    svgCanvas.addEventListener('click', getSvgElmt)
+
+    document.getElementById('addCircle').addEventListener('click', () => {
+        newSvgElmt('circle', {'cx':Math.random() * 500, 'cy':Math.random() * 500, 'r':20, 'fill':'blue'})
+    });
+    document.getElementById('addRectangle').addEventListener('click', () => {
+        newSvgElmt('rect', {'x':Math.random() * 500, 'y':Math.random() * 500, 'height':100, 'width':100, 'fill':'blue'})
+    });
+    document.getElementById('addEllipse').addEventListener('click', () => {
+        newSvgElmt('ellipse', {'cx':Math.random() * 500, 'cy':Math.random() * 500, 'rx':20, 'ry':40, 'fill':'blue'})
+    });
+    document.getElementById('addLine').addEventListener('click', () => {
+        newSvgElmt('line', {'x1':Math.random() * 500, 'y1':Math.random() * 500, 'x2':Math.random() * 500, 'y2':Math.random() * 500, 'stroke':'black', 'stroke-width':'5'})
+    });
+    document.getElementById('addPolyline').addEventListener('click', () => {
+        newSvgElmt('polyline', {'points':'20,40 40,20', 'fill':'blue', 'stroke':'black', 'stroke-width':'5', 'fill':'none'})
+    });
+    document.getElementById('addPolygon').addEventListener('click', () => {
+        newSvgElmt('polygon', {'cx':Math.random() * 500, 'cy':Math.random() * 500, 'r':20, 'fill':'blue'})
+    });
+</script>
+
+</body>
+</html>

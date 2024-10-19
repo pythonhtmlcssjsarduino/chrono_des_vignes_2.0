@@ -11,7 +11,7 @@
                             <ul class="text-muted list-group">
                                 {% for stand in key.stands.all() %}
                                     <li class="list-group-item">
-                                        {{ stand.name }}
+                                        parcours: {{ stand.parcours.name }} stand: {{ stand.name }}
                                     </li>
                                 {% endfor %}
                             </ul>
