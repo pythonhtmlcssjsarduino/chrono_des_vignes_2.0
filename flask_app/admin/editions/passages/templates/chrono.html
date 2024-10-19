@@ -1,4 +1,7 @@
 {% extends 'layout.html' %}
+{% block import %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+{% endblock %}
 {% block content %}
     <div>
         <p>clé: {{ key.name }} ({{ key.key }})</p>
@@ -19,14 +22,14 @@
         <div class="w-50">
            <ul class="list-group mt-4" id="event_list">
             {% set r1000 = range(0, 1000) %}
-            {% for (passage, chronos_list, trajet, delta, dist) in passages %}
-            {% set id = (r1000 | random | string) + '-' + (passage.time_stamp.timestamp() | string) %}
+            {% for data in passages %}
+            {% set id = (r1000 | random | string) + '-' + (data.time_stamp.timestamp() | string) %}
             <li class="card mt-2 bg-success" id="event_list_{{ id }}">
                 <div class="card-header">
                     <p class="mb-0">
-                        {{passage.inscription.dossard}} {{ passage.inscription.inscrit.name }}
+                        {{data.dossard}} {{ data.name }}
                         <br>
-                        {{ passage.time_stamp.strftime('%d.%m %H:%M:%S') }}
+                        {{ data.time_stamp.strftime('%d.%m %H:%M:%S') }}
                         <br>
                         <button class="btn" onclick="toggleDetails('{{ id }}', this)">
                             <span class="icon" id="icon-{{ id }}"><i class="fas fa-chevron-right"></i></span>
@@ -38,19 +41,19 @@
 
                         <table>
                             <tbody>
-                                {% for stand in chronos_list %}
+                                {% for passage in data.parcours %}
                                     <tr>
-                                        <th class="text-center pe-1"><i class="{% if trajet|length == loop.index %}fa-solid fa-circle fa-l{% else %}fa-regular fa-circle fa-xs{% endif %}" {#{% if trajet|length == loop.index %}style="color: #00ff00"{% endif %}#}></i></th>
-                                        <td class="pe-3">{{ stand.name }}</td>
+                                        <th class="text-center pe-1"><i class="{% if data.current %}fa-solid fa-circle fa-l{% else %}fa-regular fa-circle fa-xs{% endif %}" {#{% if trajet|length == loop.index %}style="color: #00ff00"{% endif %}#}></i></th>
+                                        <td class="pe-3">{{ passage.stand.name }} {{ data.current }}</td>
                                         <td class="pe-3">
-                                            {% if trajet[loop.index0]==True %}
-                                                {{ delta[loop.index0] }}
-                                            {% elif trajet[loop.index0]==None %}
+                                            {% if passage.succes==True %}
+                                                {{ passage.delta }}
+                                            {% elif passage.succes==False %}
                                                 <i class="fa-solid fa-xmark"></i>
                                             {% endif %}
                                         </td>
                                         <td>
-                                            {{ dist[loop.index0] }} km
+                                            {{ passage.dist }} km
                                         </td>
                                     </tr>
                                 {% endfor %}

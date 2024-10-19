@@ -106,6 +106,17 @@ class Parcours(db.Model):
         for id in eval(self.chronos_list):
             yield Stand.query.get(id)
 
+    def get_chrono_dists(self)->list[float]:
+        dist=0
+        dist_list=[]
+        for e in self:
+            if isinstance(e, Stand):
+                if e.chrono:
+                    dist_list.append(dist)
+            else:
+                dist+=e.get_dist()
+        return dist_list
+
 class Stand(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)
@@ -228,10 +239,13 @@ class Passage(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)
     creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
-    time_stamp=db.Column(db.DateTime, nullable=False)
+    time_stamp:datetime=db.Column(db.DateTime, nullable=False)
     key_id=db.Column(db.Integer, db.ForeignKey('passage_key.id'), nullable=False)
     inscription_id = db.Column(db.Integer, db.ForeignKey('inscription.id'), nullable=False)
     inscription:Inscription
 
     def __repr__(self) -> str:
         return f'<Passage time={self.time_stamp} key={self.key.name} inscription={self.inscription.inscrit.username} >'
+    
+    def get_stand(self)->Stand:
+        return self.key.stands.filter_by(parcours=self.inscription.parcours).first()

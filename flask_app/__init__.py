@@ -6,6 +6,7 @@ from functools import wraps
 from flask_colorpicker import colorpicker
 from icecream import install
 from flask_babel import Babel, lazy_gettext, gettext, _
+from flask_socketio import SocketIO
 import os
 install()
 
@@ -32,6 +33,8 @@ db = SQLAlchemy()
 db.init_app(app)
 
 migrate = Migrate(app, db)
+
+socketio = SocketIO(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)

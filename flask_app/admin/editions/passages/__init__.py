@@ -101,6 +101,76 @@ def parcours_chrono_list_dist(parcours:Parcours, dist_stand:list[int]):
             else:
                 break
 
+def get_passage_data(passage:Passage)->dict:
+    data={'dossard':passage.inscription.dossard,
+          'name':passage.inscription.inscrit.name,
+          'time_stamp':passage.time_stamp,
+          'parcours':[]}
+    
+    user_passages:list[Passage] = Passage.query.filter(Passage.inscription==passage.inscription, Passage.time_stamp<=passage.time_stamp).all()
+    if len(user_passages)>0:
+        first_passage = user_passages[0]
+        for stand, dist in zip(passage.inscription.parcours.iter_chrono_list(), passage.inscription.parcours.get_chrono_dists()):
+            if len(user_passages)>0 and stand == user_passages[0].get_stand():
+                delta=user_passages[0].time_stamp-first_passage.time_stamp
+                days = delta.days
+                hours, remainder = divmod(delta.seconds, 3600)
+                minutes, seconds = divmod(remainder, 60)
+                delta= f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"
+                user_passages.pop(0)
+                succes=True
+            elif len(user_passages)>0:
+                delta=None
+                succes=False
+            else:
+                succes=None
+                delta=None
+            
+            data['parcours'].append({'stand':stand, 'dist':round(dist, 3), 'delta':delta, 'succes':succes})
+        for p in user_passages:
+            succes=None
+            delta = p.time_stamp-first_passage.time_stamp
+            days = delta.days
+            hours, remainder = divmod(delta.seconds, 3600)
+            minutes, seconds = divmod(remainder, 60)
+            delta= f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"
+            data['parcours'].append({'stand':p.get_stand(), 'dist':None, 'delta':delta, 'succes':succes})
+
+    return data
+
+def get_key_passage_data(key:PassageKey):
+    passage:Passage
+    data = []
+    for passage in Passage.query.filter_by(key=key).order_by(Passage.time_stamp.asc()).all():
+        data.append(get_passage_data(passage))
+        
+        '''passage_user = passage.inscription.inscrit
+        passage_stand = passage.key.stands.filter_by(parcours=passage.inscription.parcours).first()
+        passage_chronos_list = list(passage.inscription.parcours.iter_chrono_list())
+
+        user_passages = Passage.query.filter(Passage.inscription==passage.inscrit, Passage.time_stamp<=passage.time_stamp).all()
+        passage_data = [{'stand':stand, 'dist':dist} for stand, dist in zip(passage.inscription.parcours.iter_chrono_list(), passage.inscription.parcours.get_chrono_dists())]
+        offset = 0
+        for index, passed_passage in enumerate(user_passages):
+            index+=offset
+            if index +1 >= len(passage_chronos_list):
+                passage_data.append({'user':False})
+            for stand in passage_chronos_list[index:]:
+                if passed_stand_id == stand:
+                    ic(user_passages_passage[passage_user.id], Passage.query.get(user_passages_passage[passage_user.id][0]), Passage.query.get(user_passages_passage[passage_user.id][index]))
+                    return_list.append(True)
+                    delta = Passage.query.get(user_passages_passage[passage_user.id][index]).time_stamp-Passage.query.get(user_passages_passage[passage_user.id][0]).time_stamp
+                    days = delta.days
+                    hours, remainder = divmod(delta.seconds, 3600)
+                    minutes, seconds = divmod(remainder, 60)
+                    delta_list.append(f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}")
+                    break
+                else:
+                    return_list.append(None)
+                    delta_list.append(None)
+                    offset+=1'''
+        
+    return data
 
 @set_route(passages, '/chrono/<key_code>')
 def chrono_page(key_code):
@@ -111,7 +181,8 @@ def chrono_page(key_code):
         flash('l\'edition n\'est pas aujourd\'hui', 'warning')
         return redirect(url_for("admin.editions.passages.chrono_home")) """
     
-    key_passages = []
+    key_passages = get_key_passage_data(key)
+    '''key_passages = []
     user_passages_stand = {}
     user_passages_passage = {}
     passage:Passage
@@ -161,7 +232,7 @@ def chrono_page(key_code):
                 dist += element.get_dist()
             
         key_passages.append((passage, passage_chronos_list, return_list, delta_list, dist_list))
-
+'''
     ic(key_passages)
     return render_template('chrono.html', user_data=user, key=key, passages=reversed(key_passages))
 
