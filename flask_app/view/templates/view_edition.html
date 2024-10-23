@@ -56,12 +56,12 @@
           {% if time > edition_data.last_inscription %}
           {# il est trop tard #}
             <div class="col-sm-9">
-              <p class="text-decoration-none text-muted mb-0">{{ _('view.inscriptionsnotopen') }}</p>
+              <p class="text-decoration-none text-muted mb-0">{{ _('view.inscriptionclosed') }}</p>
             </div>
           {% else %}
           {# il est trop tôt #}
             <div class="col-sm-9">
-              <p class="text-decoration-none text-muted mb-0">{{ _('view.inscriptionclosed') }}</p>
+              <p class="text-decoration-none text-muted mb-0">{{ _('view.inscriptionsnotopen') }}</p>
             </div>
           {% endif %}
         {% endif %}

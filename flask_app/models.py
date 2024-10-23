@@ -221,6 +221,9 @@ class Inscription(db.Model):
     dossard=db.Column(db.Integer)
     passages=db.relationship('Passage', backref='inscription', lazy='dynamic')
 
+    def __repr__(self) -> str:
+        return f'<Inscription id:{self.id} dossard:{self.dossard} >'
+
 class PassageKey(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)

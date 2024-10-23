@@ -193,7 +193,7 @@ msgstr "coureurs"
 
 #: flask_app/users/__init__.py:24
 msgid "flash.connected:name"
-msgstr "welcome {name} you are connected"
+msgstr "bienvenue {name} tu est bien connecté"
 
 #: flask_app/users/__init__.py:32
 msgid "flash.error.pwdnotvalid"

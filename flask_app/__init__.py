@@ -10,7 +10,6 @@ from flask_socketio import SocketIO
 import os
 install()
 
-
 # met la langue en francais pour le formatage des dates
 import locale
 locale.setlocale(locale.LC_TIME,'')

@@ -1,0 +1,48 @@
+{% extends 'layout.html' %} 
+{% block import %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+{% endblock %}
+{% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">coureur</th>
+      <th scope="col">dossard</th>
+      <th scope="col">parcours</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for inscription in inscriptions | sort(attribute="inscrit.name") %}
+    <tr>
+      <td>{{inscription.inscrit.name}}</td>
+      <td id="inscription_{{inscription.id}}"><a href="javascript:change_dossard({{inscription.id}})"><i class="fa-solid fa-pen-to-square"></i></a> {% if inscription.dossard %}{{inscription.dossard}}{% endif %}</td>
+      <td>{{inscription.parcours.name}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<a class="btn bg-info" href="{{ url_for('admin.editions.dossard.generate_all_dossard', event_name=event_data.name, edition_name=edition_data.name) }}">generer</a>
+
+<script>
+  var socket = io('/dossard', {auth:{'event_id': {{ event_data.id }}, 'edition_id': {{ edition_data.id }} } })
+  function change_dossard(inscription_id){
+    console.log(inscription_id)
+    let new_dossard = parseInt(window.prompt('enter the new dossard number'))
+    if (new_dossard){
+      socket.emit('change_dossard', {'inscription_id':inscription_id, 'new_dossard':new_dossard},
+      function(response){
+        if (response == true){
+          let node = document.getElementById(`inscription_${inscription_id}`)
+          let html = `<a href="javascript:change_dossard(${inscription_id})"><i class="fa-solid fa-pen-to-square"></i></a> ${new_dossard}`
+          node.innerHTML = html
+        } else if (response != false) {
+          window.alert(response.erreur)
+        }
+      })
+    }
+  }
+
+</script>
+
+{% endblock content %}

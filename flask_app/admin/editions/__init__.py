@@ -6,11 +6,13 @@ from flask_app.models import  Event, Parcours, Edition
 from datetime import datetime
 from flask_app.admin.editions.dossard import dossard
 from flask_app.admin.editions.passages import passages
+from flask_app.admin.editions.parcours import parcours
 from sqlalchemy import or_
 
 editions = Blueprint('editions', __name__, template_folder='templates')
 editions.register_blueprint(dossard)
 editions.register_blueprint(passages)
+editions.register_blueprint(parcours)
 
 @set_route(editions, '/event/<event_name>/editions', methods=['POST', 'GET'])
 @login_required
@@ -112,25 +114,3 @@ def modify_edition_page(event_name, edition_name):
         else:
             form.name.errors = list(form.name.errors)+['vous utiliser deja ce nom.']
     return render_template('modify_edition.html', user_data=user, event_data=event, edition_data=edition, form = form, now=datetime.now(), event_modif=True, edition_sidebar=True)
-
-@set_route(editions, '/event/<event_name>/editions/<edition_name>/generate_dossard', methods=['POST', 'GET'])
-@login_required
-@admin_required
-def generate_dossard(event_name, edition_name):
-    event : Event = Event.query.filter_by(name=event_name).first_or_404()
-    edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
-    user = current_user
-
-
-    return render_template('generate_dossard.html', user_data=user, event_data=event, edition_data=edition, now=datetime.now(), inscriptions=edition.inscriptions, event_modif=True, edition_sidebar=True)
-
-
-@set_route(editions, '/event/<event_name>/editions/<edition_name>/generate_dossard/generate', methods=['POST', 'GET'])
-@login_required
-@admin_required
-def generate_all_dossard(event_name, edition_name):
-    event : Event = Event.query.filter_by(name=event_name).first_or_404()
-    edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
-    user = current_user
-
-    return redirect(url_for("admin.editions.generate_dossard", event_name=event.name, edition_name=edition.name))

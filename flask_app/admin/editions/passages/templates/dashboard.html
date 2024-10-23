@@ -1,5 +1,8 @@
 {% extends 'layout.html' %}
 {% from 'macro.html' import form_field, submit %}
+{% block import %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+{% endblock %}
 {% block content %}
     <div>
         {% if keys.0 %}
@@ -48,7 +51,7 @@
                 <th scope="col">stand</th>
             </tr>
         </thead>
-        <tbody class="table-group-divider table-divider-color">
+        <tbody id="passage_table" class="table-group-divider table-divider-color">
             {% for passage in passages | sort(attribute='time_stamp', reverse=true) %}
                 <tr>
                     <th scope="row">{{ passage.time_stamp }}</th>
@@ -59,4 +62,25 @@
             {% endfor %}
         </tbody>
     </table>
+    <script>
+        var socket = io('/dashboard', {auth: {'event_id': {{ event_data.id }}, 'edition_id': {{ edition_data.id }}} });
+        var passage_table = document.getElementById('passage_table')
+
+        socket.on('new_passage', function(data){
+            let html = `<tr>
+                <th scope="row">${data.time}</th>
+                <td>${data.user} ${data.dossard?'- '+data.dossard:''}</td>
+                <td>${data.key}</td>
+                <td>${data.stand}</td>
+            </tr>`
+            let node = document.createElement('tr')
+            node.innerHTML = html
+
+            if (passage_table.children.length == 0) {
+                passage_table.appendChild(node)
+            } else {
+                passage_table.insertBefore(node, passage_table.children[0])
+            }
+        })
+    </script>
 {% endblock content %}

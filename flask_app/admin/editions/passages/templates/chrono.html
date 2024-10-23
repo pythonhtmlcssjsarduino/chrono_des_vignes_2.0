@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block import %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
 {% endblock %}
 {% block content %}
     <div>
@@ -20,59 +20,15 @@
             <ul class="list-group" id="time_list"></ul>
         </div>
         <div class="w-50">
-           <ul class="list-group mt-4" id="event_list">
-            {% set r1000 = range(0, 1000) %}
-            {% for data in passages %}
-            {% set id = (r1000 | random | string) + '-' + (data.time_stamp.timestamp() | string) %}
-            <li class="card mt-2 bg-success" id="event_list_{{ id }}">
-                <div class="card-header">
-                    <p class="mb-0">
-                        {{data.dossard}} {{ data.name }}
-                        <br>
-                        {{ data.time_stamp.strftime('%d.%m %H:%M:%S') }}
-                        <br>
-                        <button class="btn" onclick="toggleDetails('{{ id }}', this)">
-                            <span class="icon" id="icon-{{ id }}"><i class="fas fa-chevron-right"></i></span>
-                        </button>
-                    </p>
-                </div>
-                <div id="detail-{{ id }}" class="collapse">
-                    <div class="card-body">
-
-                        <table>
-                            <tbody>
-                                {% for passage in data.parcours %}
-                                    <tr>
-                                        <th class="text-center pe-1"><i class="{% if data.current %}fa-solid fa-circle fa-l{% else %}fa-regular fa-circle fa-xs{% endif %}" {#{% if trajet|length == loop.index %}style="color: #00ff00"{% endif %}#}></i></th>
-                                        <td class="pe-3">{{ passage.stand.name }} {{ data.current }}</td>
-                                        <td class="pe-3">
-                                            {% if passage.succes==True %}
-                                                {{ passage.delta }}
-                                            {% elif passage.succes==False %}
-                                                <i class="fa-solid fa-xmark"></i>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {{ passage.dist }} km
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                          </table>
-                    </div>
-                </div>
-            </li>
-            {% endfor %}
-           </ul> 
+           <ul class="list-group" id="event_list"></ul> 
         </div>
         <script>
             const input = document.getElementById('dossard_input')
             const list = document.getElementById('time_list')
             const event_list_elmt = document.getElementById('event_list')
             const key = '{{ key.key }}'
-            const url = '{{ url_for("admin.editions.passages.set_passage") }}'
+            var socket = io('/key', {auth: {'key': key}});
             var time_list = []
-            var event_list = {}
 
             function toggleDetails(detailId, button) {
                 const detailDiv = document.getElementById(`detail-${detailId}`);
@@ -85,36 +41,14 @@
             }
 
             function create_event_element(dossard, time) {
-                var id = Math.floor(Math.random() * 1000)+'-'+time.getTime()
-                var node = document.createElement('li')
+                let node = document.createElement('li')
 
-                node.classList.add('mt-2')
+                node.classList.add('mb-2')
                 node.classList.add('card')
                 node.classList.add('bg-primary')
-                node.id ='event_list_' + id
+                node.id ='event_list_' + dossard+'-'+time.getTime()
 
-                var html = `<p>${dossard}</p>
-                            <p>${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}</p>`
-                var html = `
-                            <div class="card-header">
-                                <h5 class="mb-0">
-                                    <p>
-                                        ${dossard} { passage.inscription.inscrit.name }
-                                        <br>
-                                        ${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}
-                                    </p>
-                                    <button class="btn btn-link" onclick="toggleDetails('${id}', this)">
-                                        Details <span class="icon" id="icon-${id}"><i class="fas fa-chevron-right"></i></span>
-                                    </button>
-                                </h5>
-                            </div>
-                            <div id="detail-${id}" class="collapse">
-                                <div class="card-body">
-                                    ${id}
-                                </div>
-                            </div>
-                            `
-                var html = `
+                let html = `
                 <div class="card-header">
                     <p class="mb-0">
                         ${dossard}
@@ -130,8 +64,6 @@
                 } else {
                     event_list_elmt.insertBefore(node, event_list_elmt.children[0])
                 }
-                event_list[id] = {'dossard':dossard, 'time':time}
-                return id
             }
 
             async function get_request_response(response, id) {
@@ -166,19 +98,125 @@
             async function send_request(dossard) {
                 var time = get_last_time()
                 if (time) {
-                    var data = new FormData()
-                    data.append('key', key)
-                    data.append('time', time.getTime())
-                    data.append('dossard', dossard)
-
-                    var id = create_event_element(dossard, time) // indique que la request a été efectuée
-                    
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.open('POST', url, true);
-                    xhttp.onload = function() {get_request_response(this, id)}
-                    xhttp.send(data);
+                    socket.emit('set_passage', {'time':time.getTime(), 'dossard':dossard})
+                    create_event_element(dossard, time) // indique que la request a été efectuée
                 }
             };
+
+            function modify_passage(dossard, time) {
+                console.log(dossard, time);
+                let node = document.getElementById(`event_list_${dossard}-${time}`)
+                let new_dossard = window.prompt('enter new dossard')
+                console.log(node, new_dossard);
+                node.id = `event_list_${new_dossard}-${time}`
+                socket.emit('set_passage', {'time':time, 'dossard':new_dossard})
+            }
+
+            socket.on('passage_response', function(data){
+                let node = document.getElementById(`event_list_${data.request.dossard}-${data.request.time}`) 
+                if (data.success){
+                    create_passage(data['passage'], node)
+                } else {
+                    create_error(data, node)
+                }
+            })
+
+            function create_error(data, node) {
+                let time = new Date(data.request.time * 1000)
+                let html = `
+                <div class="card-header">
+                    <div class="dropdown" style="position: absolute;top: 10px;right: 10px;width:5px">
+                        <i class="fa-solid fa-ellipsis-vertical" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer; font-size: 24px;"></i>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <li><a class="dropdown-item" href="javascript:modify_passage(${data.request.dossard}, ${data.request.time})">Change dossard</a></li>
+                        </ul>
+                    </div>  
+                    <p class="mb-0">
+                        ${data.request.dossard}
+                        <br>
+                        ${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}
+                    </p>
+                </div>
+                <p>${data.error}</p>
+                    `
+                node.innerHTML = html
+                node.classList.remove('bg-primary')
+                if (data.saved) {
+                    node.classList.add('bg-warning')
+                } else {
+                    node.classList.add('bg-danger')
+                }
+            }
+
+            function create_passage(data, node=null) {
+                console.log(data);
+                let id = data.dossard+'-'+data.time_stamp
+                let time = new Date(data.time_stamp * 1000)
+                
+                data.time_stamp = `${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+                let html = 
+                `<div class="card-header">
+                    <p class="mb-0">
+                        ${data.dossard} ${ data.name }
+                        <br>
+                        ${data.time_stamp}
+                    </p>
+                    <button class="btn" onclick="toggleDetails('${ id }', this)">
+                        <span class="icon" id="icon-${ id }"><i class="fas fa-chevron-right"></i></span>
+                    </button>
+                </div>
+                <div id="detail-${ id }" class="collapse">
+                    <div class="card-body">
+                        <table>
+                            <tbody>`
+                                data.parcours.forEach(passage => {
+                                    html+=
+                                    `<tr>
+                                        <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
+                                        <td class="pe-3">${passage.stand.name}</td>
+                                        <td class="pe-3">`+
+                                            (passage.succes==true?passage.delta:(passage.succes==false?'<i class="fa-solid fa-xmark"></i>':''))+
+                                        `</td>
+                                        <td>
+                                            ${ passage.dist !=null?passage.dist+' km':'' }
+                                        </td>
+                                    </tr>`
+                                });
+                html+=          `</tbody>
+                        </table>
+                    </div>
+                </div>`
+
+                if (!node){
+                    let node = document.createElement('li')
+                    node.innerHTML = html
+
+                    
+                    node.classList.add('mb-2')
+                    node.classList.add('card')
+                    node.classList.add('bg-success')
+
+                    if (event_list_elmt.children.length == 0) {
+                        event_list_elmt.appendChild(node)
+                    } else {
+                        event_list_elmt.insertBefore(node, event_list_elmt.children[0])
+                    }
+                }else{
+                    node.classList.remove('bg-primary')
+                    node.classList.remove('bg-danger')
+                    node.classList.remove('bg-warning')
+                    node.classList.add('bg-success')
+                    node.innerHTML = html
+                }
+            }
+
+            function add_all_passages(data) {
+                data.forEach(passage => {
+                    create_passage(passage)
+                });
+            }
+
+            socket.emit('get_passages', add_all_passages)
 
             function add_time() {
                 var time = new Date()
@@ -191,8 +229,8 @@
                 }
                 list.appendChild(node)
                 time_list.push(time)
-
             }
+
             function get_last_time() {
                 if (list.children.length>0) {
                     list.removeChild(list.firstChild)
@@ -214,7 +252,7 @@
                     var data = parseInt(input.value);
                     input.value = ''
                     if ( !isNaN(data) ) {
-                        send_request(data) // send la request au serveur si c'est bien un nombre
+                        send_request(data) // send the request to the server if it is a number
                     }
                 } else {
                     input.focus() // focus le champ de text

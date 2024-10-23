@@ -1,0 +1,17 @@
+{% extends 'layout.html' %}
+{% block content %}
+<ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+    {% for parcours in parcours_data %}
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if loop.index0==0 %}active{% endif %}" id="{{ parcours.id }}-tab" data-bs-toggle="pill" data-bs-target="#pills-{{ parcours.id }}" type="button" role="tab" aria-controls="pills-{{ parcours.id }}" aria-selected="{% if loop.index0==0 %}true{% else %}false{% endif %}">{{ parcours.name }}</button>
+        </li>
+    {% endfor %}
+</ul>
+<div class="tab-content" id="pills-tabContent">
+    {% for parcours in parcours_data %}
+    <div class="tab-pane fade {% if loop.index0==0 %}show active{% endif %}" id="pills-{{ parcours.id }}" role="tabpanel" aria-labelledby="pills-{{ parcours.id }}-tab">
+        ...
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

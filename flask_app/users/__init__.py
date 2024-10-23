@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, flash, render_template, request
 from flask_login import login_required, current_user, login_user, logout_user
 from flask_app.models import User, Event, Parcours, Inscription, Edition
-from flask_app.users.forms import Login_form, Signup_form, Inscription_connected_form, Inscription_form
+from flask_app.users.forms import Login_form, Signup_form, Inscription_connected_form, Inscription_form, ModifyForm
 from flask_app import db, set_route, lang_url_for as url_for
 from sqlalchemy import and_, not_
 from datetime import datetime
@@ -32,7 +32,6 @@ def login():
             flash(_('flash.error.pwdnotvalid'), 'warning')
     return render_template('login.html', form=form)
 
-
 @set_route(users, '/signup', methods=['POST', 'GET'])
 def signup():
     if current_user.is_authenticated:
@@ -46,7 +45,7 @@ def signup():
                     email=form.email.data if form.email.data else None,
                     phone=form.phone.data if form.phone.data else None,
                     datenaiss= form.datenaiss.data,
-                    password=hash_pwd,)
+                    password=hash_pwd)
         db.session.add(user)
         db.session.commit()
         flash(_('flash.accountcreated'), 'success')
@@ -54,14 +53,12 @@ def signup():
         return redirect(url_for('home'))
     return render_template('signup.html', form=form)
 
-
 @set_route(users, '/logout')
 @login_required
 def logout():
     logout_user()
     flash(_('flash.deconected'), 'success')
     return redirect(url_for('home'))
-
 
 @set_route(users, '/<event>/edition/<edition>/inscription', methods=['POST', 'GET'])
 def inscription_page(event, edition):
@@ -133,3 +130,36 @@ def inscription_page(event, edition):
             return redirect(url_for('home'))
 
     return render_template('inscription.html', user_data=user, event_data=event, edition_data=edition, form=form)
+
+@set_route(users, '/profil')
+@login_required
+def profil():
+    user = current_user
+    return render_template('profil.html', user_data=user)
+
+@set_route(users, '/profil/update', methods=['get', 'post'])
+@login_required
+def modify_profil():
+    user = current_user
+    form:ModifyForm = ModifyForm(data={'name':user.name,
+                            'lastname':user.lastname,
+                            'username':user.username,
+                            'email':user.email,
+                            'phone':user.phone,
+                            'datenaiss':user.datenaiss})
+    if form.validate_on_submit():
+        if form.username.data == user.name or not User.query.filter_by(name=form.username.data).first():
+            # le nom peut etre utilisé
+            user.name=form.name.data
+            user.lastname=form.lastname.data
+            user.username=form.username.data
+            user.email=form.email.data if form.email.data else None
+            user.phone=form.phone.data if form.phone.data else None
+            user.datenaiss= form.datenaiss.data
+            db.session.commit()
+            flash('name saved', 'success')
+            return redirect(url_for('users.profil'))
+        else:
+            form.username.errors = list(form.username.errors)+['ce nom d\'utilisateur est déjà utilisé.']
+
+    return render_template('modify_profil.html', user_data=user, form=form)

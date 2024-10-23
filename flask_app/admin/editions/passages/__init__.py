@@ -1,13 +1,13 @@
 import time
-from flask import Blueprint, redirect, render_template, flash, request, jsonify
-from flask_app import admin_required, db, set_route, lang_url_for as url_for
+from flask import Blueprint, redirect, render_template, flash, request, jsonify, session
+from flask_app import admin_required, db, set_route, lang_url_for as url_for, socketio
 from flask_app.admin.parcours import calc_points_dist
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, User, Inscription, Trace
 from datetime import datetime
 from flask_app.admin.editions.passages.form import NewKeyForm, ChronoLoginForm, ChronoLoginForm, SetPassageForm
 import secrets
-from wtforms import SelectField
+from flask_socketio import join_room, leave_room, emit
 
 passages = Blueprint('passages', __name__, template_folder='templates')
 @login_required
@@ -101,15 +101,16 @@ def parcours_chrono_list_dist(parcours:Parcours, dist_stand:list[int]):
             else:
                 break
 
-def get_passage_data(passage:Passage)->dict:
+def get_passage_data(passage:Passage, json=False)->dict:
     data={'dossard':passage.inscription.dossard,
           'name':passage.inscription.inscrit.name,
-          'time_stamp':passage.time_stamp,
+          'time_stamp':passage.time_stamp if not json else passage.time_stamp.timestamp(),
           'parcours':[]}
     
     user_passages:list[Passage] = Passage.query.filter(Passage.inscription==passage.inscription, Passage.time_stamp<=passage.time_stamp).all()
     if len(user_passages)>0:
         first_passage = user_passages[0]
+        current=False
         for stand, dist in zip(passage.inscription.parcours.iter_chrono_list(), passage.inscription.parcours.get_chrono_dists()):
             if len(user_passages)>0 and stand == user_passages[0].get_stand():
                 delta=user_passages[0].time_stamp-first_passage.time_stamp
@@ -123,10 +124,13 @@ def get_passage_data(passage:Passage)->dict:
                 delta=None
                 succes=False
             else:
+                if not current:
+                    current=True
+                    data['parcours'][-1]['current']=True
                 succes=None
                 delta=None
-            
-            data['parcours'].append({'stand':stand, 'dist':round(dist, 3), 'delta':delta, 'succes':succes})
+
+            data['parcours'].append({'stand':stand if not json else {'name':stand.name}, 'dist':round(dist, 3), 'delta':delta, 'succes':succes})
         for p in user_passages:
             succes=None
             delta = p.time_stamp-first_passage.time_stamp
@@ -134,42 +138,16 @@ def get_passage_data(passage:Passage)->dict:
             hours, remainder = divmod(delta.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             delta= f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"
-            data['parcours'].append({'stand':p.get_stand(), 'dist':None, 'delta':delta, 'succes':succes})
-
+            data['parcours'].append({'stand':p.get_stand() if not json else {'name':p.get_stand().name}, 'dist':None, 'delta':delta, 'succes':succes})
+        if not current:
+            data['parcours'][-1]['current']=True
     return data
 
-def get_key_passage_data(key:PassageKey):
-    passage:Passage
+def get_key_passage_data(key:PassageKey, json=False):
     data = []
+    passage:Passage
     for passage in Passage.query.filter_by(key=key).order_by(Passage.time_stamp.asc()).all():
-        data.append(get_passage_data(passage))
-        
-        '''passage_user = passage.inscription.inscrit
-        passage_stand = passage.key.stands.filter_by(parcours=passage.inscription.parcours).first()
-        passage_chronos_list = list(passage.inscription.parcours.iter_chrono_list())
-
-        user_passages = Passage.query.filter(Passage.inscription==passage.inscrit, Passage.time_stamp<=passage.time_stamp).all()
-        passage_data = [{'stand':stand, 'dist':dist} for stand, dist in zip(passage.inscription.parcours.iter_chrono_list(), passage.inscription.parcours.get_chrono_dists())]
-        offset = 0
-        for index, passed_passage in enumerate(user_passages):
-            index+=offset
-            if index +1 >= len(passage_chronos_list):
-                passage_data.append({'user':False})
-            for stand in passage_chronos_list[index:]:
-                if passed_stand_id == stand:
-                    ic(user_passages_passage[passage_user.id], Passage.query.get(user_passages_passage[passage_user.id][0]), Passage.query.get(user_passages_passage[passage_user.id][index]))
-                    return_list.append(True)
-                    delta = Passage.query.get(user_passages_passage[passage_user.id][index]).time_stamp-Passage.query.get(user_passages_passage[passage_user.id][0]).time_stamp
-                    days = delta.days
-                    hours, remainder = divmod(delta.seconds, 3600)
-                    minutes, seconds = divmod(remainder, 60)
-                    delta_list.append(f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}")
-                    break
-                else:
-                    return_list.append(None)
-                    delta_list.append(None)
-                    offset+=1'''
-        
+        data.append(get_passage_data(passage, json=json))
     return data
 
 @set_route(passages, '/chrono/<key_code>')
@@ -180,84 +158,75 @@ def chrono_page(key_code):
     """ if key.edition.edition_date > datetime.now():
         flash('l\'edition n\'est pas aujourd\'hui', 'warning')
         return redirect(url_for("admin.editions.passages.chrono_home")) """
-    
-    key_passages = get_key_passage_data(key)
-    '''key_passages = []
-    user_passages_stand = {}
-    user_passages_passage = {}
-    passage:Passage
-    for passage in Passage.query.filter_by(key=key).order_by(Passage.time_stamp.asc()).all():
-        ic(passage)
-        passage_user = passage.inscription.inscrit
-        passage_stand = passage.key.stands.filter_by(parcours=passage.inscription.parcours).first()
-        passage_chronos_list = list(passage.inscription.parcours.iter_chrono_list())
-        if passage_user.id not in user_passages_stand.keys():
-            user_passages_stand[passage_user.id] = []
-        user_passages_stand[passage_user.id].append(passage_stand.id)
-        if passage_user.id not in user_passages_passage.keys():
-            user_passages_passage[passage_user.id] = []
-        user_passages_passage[passage_user.id].append(passage.id)
 
-        return_list = []
-        delta_list = []
-        offset = 0
-        for index, passed_stand_id in enumerate(user_passages_stand[passage_user.id]):
-            index += offset
-            if index +1 >= len(passage_chronos_list):
-                return_list.append(False)
-                delta_list.append(None)
+    return render_template('chrono.html', user_data=user, key=key)
 
-            for stand in passage_chronos_list[index:]:
-                if passed_stand_id == stand.id:
-                    ic(user_passages_passage[passage_user.id], Passage.query.get(user_passages_passage[passage_user.id][0]), Passage.query.get(user_passages_passage[passage_user.id][index]))
-                    return_list.append(True)
-                    delta = Passage.query.get(user_passages_passage[passage_user.id][index]).time_stamp-Passage.query.get(user_passages_passage[passage_user.id][0]).time_stamp
-                    days = delta.days
-                    hours, remainder = divmod(delta.seconds, 3600)
-                    minutes, seconds = divmod(remainder, 60)
-                    delta_list.append(f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}")
-                    break
-                else:
-                    return_list.append(None)
-                    delta_list.append(None)
-                    offset+=1
+@socketio.on('connect', namespace='/dashboard')
+def dashboard_connect(auth):
+    ic(current_user, auth, request.sid)
+    if current_user.is_authenticated and auth.get('event_id') and auth.get('edition_id'):
+        event:Event = Event.query.get(auth['event_id'])
+        if not event or event.createur != current_user:
+            return False # connection not allowed
+        edition = event.editions.filter_by(id=auth['edition_id']).first()
+        if not edition:
+            return False # connection not allowed
+        
+        session['room'] = f'{event.id}-{edition.id}'
+        ic(session['room'])
+        join_room(session['room'], request.sid)
+        ic('dashboard connected')
 
-        dist_list = []
-        dist =  0
-        for element in passage.inscription.parcours:
-            if isinstance(element, Stand):
-                if element.chrono:
-                    dist_list.append(round(dist, 3))
-            else:
-                dist += element.get_dist()
-            
-        key_passages.append((passage, passage_chronos_list, return_list, delta_list, dist_list))
-'''
-    ic(key_passages)
-    return render_template('chrono.html', user_data=user, key=key, passages=reversed(key_passages))
+    else:
+        False # connection not allowed
 
-@set_route(passages, '/chrono/set', methods=['post'])
-def set_passage():
-    form = SetPassageForm()
-    inscription = Inscription.query.filter(Inscription.dossard == form.dossard.data).first()
+@socketio.on('disconnect', namespace='/dashboard')
+def dashboard_disconnect():
+    leave_room(session['room'], request.sid)
+    del session['room']
+
+@socketio.on('connect', namespace='/key')
+def key_connect(auth):
+    ic('key connect')
+    if not auth.get('key', False):
+        return False # connection not allowed
+    session['room'] = auth['key']
+    join_room(session['room'], request.sid)
+    ic('connected')
+
+@socketio.on('disconnect', namespace='/key')
+def key_disconnect():
+    leave_room(session['room'], request.sid)
+    del session['room']
+
+@socketio.on('get_passages', namespace='/key')
+def get_passages_data():
+    key = PassageKey.query.filter_by(key=session['room']).first()
+    if key:
+        return get_key_passage_data(key, json=True)
+
+@socketio.on('set_passage', namespace='/key')
+def set_passage(data):
+    ic(session['room'])
+    ic('set passage', data)
+    inscription = Inscription.query.filter(Inscription.dossard == data['dossard']).first()
     if not inscription:
-        return jsonify({"success": False, 'saved':False, 'error':'not valide dossard', 'request':{'dossard':form.dossard.data, 'time':form.time.data, 'key':form.key.data}})
-    key = PassageKey.query.filter_by(key=form.key.data).first()
+        emit('passage_response', {"success": False, 'saved':False, 'error':'not valide dossard', 'request':data}, to=session['room'])
+        return
+    key = PassageKey.query.filter_by(key=session['room']).first()
     if not key:
-        return jsonify({"success": False, 'saved':False, 'error':'not valide key', 'request':{'dossard':form.dossard.data, 'time':form.time.data, 'key':form.key.data}})
+        emit('passage_response', {"success": False, 'saved':False, 'error':'not valide key', 'request':data}, to=session['room'])
+        return
     
-    pass_time = datetime.fromtimestamp(form.time.data/1000)
+    pass_time = datetime.fromtimestamp(data['time']/1000)
     ic(key)#type:ignore
     ic(pass_time) #type:ignore
     ic(inscription) #type:ignore
-    user_passages = Passage.query.filter_by(inscription=inscription).order_by(Passage.time_stamp).all()
-    ic(user_passages) #type:ignore
-
-    stand = key.stands.filter_by(parcours=inscription.parcours).first()
-
-    parcours = inscription.parcours
 
     passage = Passage(key_id = key.id, time_stamp=pass_time, inscription_id= inscription.id)
+    db.session.add(passage)
+    db.session.commit()
+    passage:Passage = Passage.query.filter_by(key_id = key.id, time_stamp=pass_time, inscription_id= inscription.id).first()
 
-
-    return jsonify({"success": True, 'saved':True, 'request':{'dossard':form.dossard.data, 'time':form.time.data, 'key':form.key.data}})
+    emit('new_passage', {'time':str(pass_time), 'user':inscription.inscrit.username, 'dossard':inscription.dossard,'key':key.name, 'stand':passage.get_stand().name}, namespace='/dashboard', to=f'{passage.key.event.id}-{passage.key.edition.id}')
+    emit('passage_response', {"success": True, 'request':data, 'passage':get_passage_data(passage, json=True)}, to=session['room'])

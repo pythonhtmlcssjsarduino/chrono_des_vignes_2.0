@@ -39,4 +39,13 @@ class Inscription_form(FlaskForm):
 
     parcours = MultiCheckboxFieldWithDescription(_('form.choosedparcours'), validators=[DataRequired()])
 
-    submit_btn = SubmitField(_('form.register'))    
+    submit_btn = SubmitField(_('form.register'))
+
+class ModifyForm(FlaskForm):
+    name = StringField(_('form.name'), validators=[DataRequired(), Length(max=60)])
+    lastname = StringField(_('form.lastname'), validators=[DataRequired(), Length(max=26)])
+    username = StringField(_('form.username'), validators=[DataRequired(), Length(min=2, max=20)])
+    email = EmailField(_('form.email'))
+    phone = StringField(_('form.tel'))
+    datenaiss = DateField(_('form.birth'), validators=[DataRequired()])
+    submit_btn = SubmitField(_('form.modifyaccount'))
