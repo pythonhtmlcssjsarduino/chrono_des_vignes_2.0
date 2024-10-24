@@ -19,3 +19,13 @@ def get_points_elevation(points:list[tuple[float]]):
 def calc_points_dist(lat1, lng1, lat2, lng2):
     'return the spherical dist of the two points in km'
     return acos((sin(radians(lat1)) * sin(radians(lat2))) + (cos(radians(lat1)) * cos(radians(lat2))) * (cos(radians(lng2) - radians(lng1)))) * 6371
+
+
+def deg_to_dms(deg):
+    """Convert from decimal degrees to degrees, minutes, seconds."""
+    m, s = divmod(abs(deg)*3600, 60)
+    d, m = divmod(m, 60)
+    if deg < 0:
+        d = -d
+    d, m = int(d), int(m)
+    return d, m, s

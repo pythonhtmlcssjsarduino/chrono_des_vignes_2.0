@@ -27,21 +27,21 @@
             <a
               class="nav-link "
               href="{{ url_for('admin.editions.passages.dashboard', event_name=event_data.name, edition_name=edition_data.name) }}"
-              >gerer les passages</a
+              >{{ _('admin.editions.gererpassage') }}</a
             >
           </li>
           <li class="nav-item bg-info btn mb-2">
               <a
               class="nav-link "
               href="{{ url_for('admin.editions.dossard.generate_dossard', event_name=event_data.name, edition_name=edition_data.name) }}"
-              >gerer les dossard</a
+              >{{ _('admin.editions.gererdossard') }}</a
               >
           </li>
           <li class="nav-item bg-info btn mb-2">
               <a
               class="nav-link "
               href="{{ url_for('admin.editions.parcours.view', event_name=event_data.name, edition_name=edition_data.name) }}"
-              >gerer les dossard</a
+              >{{ _('admin.editions.gererparcours') }}</a
               >
           </li>
         </ul>

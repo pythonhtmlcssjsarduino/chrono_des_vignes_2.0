@@ -178,7 +178,7 @@ def dashboard_connect(auth):
         ic('dashboard connected')
 
     else:
-        False # connection not allowed
+        return False # connection not allowed
 
 @socketio.on('disconnect', namespace='/dashboard')
 def dashboard_disconnect():

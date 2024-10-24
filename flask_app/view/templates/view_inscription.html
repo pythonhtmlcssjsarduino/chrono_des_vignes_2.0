@@ -3,7 +3,7 @@
   <div class="card-body">
     <div class="row">
       <div class="col-sm-3">
-        <p class="mb-0">date</p>
+        <p class="mb-0">{{ _('view.date') }}</p>
       </div>
       <div class="col-sm-9">
         <p class="text-muted mb-0">
@@ -14,7 +14,7 @@
     <hr />
     <div class="row">
       <div class="col-sm-3">
-        <p class="mb-0">heure</p>
+        <p class="mb-0">{{ _('view.time') }}</p>
       </div>
       <div class="col-sm-9">
         <p class="text-muted mb-0">
@@ -25,7 +25,7 @@
     <hr />
     <div class="row">
       <div class="col-sm-3">
-        <p class="mb-0">evenement</p>
+        <p class="mb-0">{{ _('view.evenement') }}</p>
       </div>
       <div class="col-sm-9">
         <a class="text-decoration-none link-dark" href="{{ url_for('view.view_event_page', event=inscription.event.name) }}"><p class="text-muted mb-0">{{inscription.event.name}}</p></a>
@@ -34,7 +34,7 @@
     <hr />
     <div class="row">
       <div class="col-sm-3">
-        <p class="mb-0">parcours</p>
+        <p class="mb-0">{{ _('view.parcours') }}</p>
       </div>
       <div class="col-sm-9">
         <a class="text-decoration-none link-dark" href="{{ url_for('view.view_parcours_page', event=inscription.event.name, parcours=inscription.parcours.name) }}"><p class="text-muted mb-0">{{inscription.parcours.name}}</p></a>
@@ -43,7 +43,7 @@
     <hr />
     <div class="row">
       <div class="col-sm-3">
-        <p class="mb-0">rendez-vous</p>
+        <p class="mb-0">{{ _('view.rdv') }}</p>
       </div>
       <div class="col-sm-9">
         <a href="{{rdv_url}}" target="_blank" rel="noopener noreferrer" class="text-muted mb-0">google maps</a>
@@ -52,18 +52,18 @@
     <hr />
     <div class="row">
       <div class="col-sm-3">
-        <p class="mb-0">se désinscrire</p>
+        <p class="mb-0">{{ _('view.desinscription') }}</p>
       </div>
       <div class="col-sm-9">
         <a type="button" class="text-muted mb-0" data-bs-toggle="modal" data-bs-target="#desinscription_modal">
-          ne plus participer
+          {{ _('view.plusparticiper') }}
         </a>
       </div>
       <div class="modal fade" id="desinscription_modal" tabindex="-1" aria-labelledby="sedesinscrire" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">désinscription</h5>
+              <h5 class="modal-title" id="exampleModalLabel">{{ _('view.desinscription') }}</h5>
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -71,7 +71,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <a href="{{ url_for('view.delete_inscription', inscription= inscription.id ) }}" class="btn btn-primary">se desinscrire</a>
+              <a href="{{ url_for('view.delete_inscription', inscription= inscription.id ) }}" class="btn btn-primary">{{ _('view.desinscription') }}</a>
             </div>
           </div>
         </div>

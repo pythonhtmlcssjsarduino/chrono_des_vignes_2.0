@@ -1,10 +1,14 @@
 {% extends 'layout.html' %}
+{% block import %}
+  <!--chart.js-->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+{% endblock %}
 {% block content %}
 <div class="card mb-4">
   <div class="card-body">
     <div class="row">
       <div class="col-sm-3">
-        <p class="mb-0">parcours</p>
+        <p class="mb-0">{{ _('view.parcours') }}</p>
       </div>
       <div class="col-sm-9">
         <p class="text-muted mb-0">{{parcours.name}}</p>
@@ -13,7 +17,7 @@
     <hr>
     <div class="row">
       <div class="col-sm-3">
-        <p class="mb-0">evenement</p>
+        <p class="mb-0">{{ _('view.evenement') }}</p>
       </div>
       <div class="col-sm-9">
         <a class="text-decoration-none link-dark" href="{{ url_for('view.view_event_page', event=parcours.event.name) }}"><p class="text-muted mb-0">{{parcours.event.name}}</p></a>
@@ -30,8 +34,6 @@
   ></iframe>
 </div>
 <div>{# alt graph #}
-  <!--chart.js-->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
   <div class="chartBox pt-3">
       <canvas id="myChart"></canvas>
   </div>
@@ -66,7 +68,6 @@
                   tooltip: {
                       callbacks: {
                           label: (content) => {
-                              console.log('test');
                               return `${content.raw.type} ${content.raw.label}`;
                           },
                       },
@@ -77,20 +78,19 @@
                       type: 'linear',
                       title:{
                           display:true,
-                          text:'distance (km)'
+                          text:'{{ _("view.distance") }} (km)'
                       },
                   },
                   elevation: {
                       type: 'linear',
                       title:{
                           display:true,
-                          text:'altitude (m)'
+                          text:'{{ _("view.altitude") }} (m)'
                       },
                   },
               }
           },
       };
-      console.log(config)
       var ctx = document.getElementById("myChart");
       var myChart = new Chart(ctx, config);
   </script>

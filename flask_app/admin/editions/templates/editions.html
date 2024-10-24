@@ -1,5 +1,5 @@
 {% extends 'layout.html' %} {% block content %}
-<h3>editions</h3>
+<h3>{{ _('admin.editions.editions') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
   {% for edition in event_data.editions %}
   <div class="d-inline-flex card m-1">
@@ -35,7 +35,7 @@
         class="text-decoration-none link-dark"
         href="{{ url_for('admin.parcours.parcours_page', event=event_data.name) }}"
         >
-            <p>commencer par creer un parcours</p>
+            <p>{{ _('admin.editions.startcreateparcours') }}</p>
         </a>
       {% endif %}
     </div>
@@ -52,7 +52,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="new_edition_label">New edition</h5>
+          <h5 class="modal-title" id="new_edition_label">{{ _('admin.editions.newedition') }}</h5>
           <button
             type="button"
             class="btn-close"

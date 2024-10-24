@@ -223,6 +223,38 @@ class Inscription(db.Model):
 
     def __repr__(self) -> str:
         return f'<Inscription id:{self.id} dossard:{self.dossard} >'
+    
+    def has_started(self)->bool:
+        return bool(self.passages.count())
+    
+    def get_last_passage(self)->Passage:
+        return self.passages.order_by(Passage.time_stamp.desc()).first()
+
+    def get_run(self):
+        user_passages:list[Passage] = self.passages.filter(Passage.time_stamp<=self.get_last_passage().time_stamp).all()
+        run=[]
+        if len(user_passages)>0:
+            for stand in self.parcours.iter_chrono_list():
+                if len(user_passages)>0 and stand == user_passages[0].get_stand():
+                    user_passages.pop(0)
+                    run.append(True)
+                elif len(user_passages)>0:
+                    run.append(False)
+                else:
+                    run.append(None)
+        return run
+
+    def has_all_right(self)->bool:
+        if not self.has_started():
+            return False
+        run = self.get_run()
+        return all(run)
+
+    def has_finish(self)->bool:
+        if not self.has_started():
+            return False
+        run = self.get_run()
+        return run[-1]!=None
 
 class PassageKey(db.Model):
     __allow_unmapped__ = True

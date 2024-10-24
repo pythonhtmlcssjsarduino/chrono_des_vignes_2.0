@@ -1,4 +1,7 @@
 {% extends 'layout.html' %}
+{% block import %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+{% endblock %}
 {% block content %}
 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
     {% for parcours in parcours_data %}
@@ -7,11 +10,134 @@
         </li>
     {% endfor %}
 </ul>
+<script>
+    var socket = io('/edition/parcours', {auth: {'edition_id':{{ edition_data.id }}, 'event_id':{{ event_data.id }} } } );
+
+    function create_not_started(data, div, node){
+        let id = data.dossard+'-'+data.time_stamp
+        let time = new Date(data.time_stamp * 1000)
+        
+        data.time_stamp = `${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+        let html = 
+        `<div class="card-header">
+            <p class="mb-0">
+                ${data.dossard} ${ data.name }
+            </p>
+            <button class="
+        </div>`
+
+        if (!node){
+            let node = document.createElement('div')
+            node.innerHTML = html
+            
+            node.classList.add('mb-2')
+            node.classList.add('card')
+            node.classList.add('bg-info')
+
+            if (div.children.length == 0) {
+                div.appendChild(node)
+            } else {
+                div.insertBefore(node, div.children[0])
+            }
+        }else{
+            node.classList.remove('bg-primary')
+            node.classList.remove('bg-danger')
+            node.classList.remove('bg-warning')
+            node.classList.add('bg-info')
+            node.innerHTML = html
+        }
+    }
+
+    function create_passage(data, div, node=null) {
+        let id = data.dossard+'-'+data.time_stamp
+        let time = new Date(data.time_stamp * 1000)
+        
+        data.time_stamp = `${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
+        let html = 
+        `<div class="card-header">
+            <p class="mb-0">
+                ${data.dossard} ${ data.name }
+                <br>
+                ${data.time_stamp}
+            </p>
+            <button class="btn" onclick="toggleDetails('${ id }', this)">
+                <span class="icon" id="icon-${ id }"><i class="fas fa-chevron-right"></i></span>
+            </button>
+        </div>
+        <div id="detail-${ id }" class="collapse">
+            <div class="card-body">
+                <table>
+                    <tbody>`
+                        data.parcours.forEach(passage => {
+                            html+=
+                            `<tr>
+                                <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
+                                <td class="pe-3">${passage.stand.name}</td>
+                                <td class="pe-3">`+
+                                    (passage.succes==true?passage.delta:(passage.succes==false?'<i class="fa-solid fa-xmark"></i>':''))+
+                                `</td>
+                                <td>
+                                    ${ passage.dist !=null?passage.dist+' km':'' }
+                                </td>
+                            </tr>`
+                        });
+        html+=          `</tbody>
+                </table>
+            </div>
+        </div>`
+
+        let color = data.finish?data.all_right?'bg-success':'bg-warning':'bg-danger'
+        if (!node){
+            let node = document.createElement('div')
+            node.innerHTML = html
+
+            
+            node.classList.add('mb-2')
+            node.classList.add('card')
+            node.classList.add(color)
+
+            if (div.children.length == 0) {
+                div.appendChild(node)
+            } else {
+                div.insertBefore(node, div.children[0])
+            }
+        }else{
+            node.classList.remove('bg-primary')
+            node.classList.remove('bg-danger')
+            node.classList.remove('bg-warning')
+            node.classList.add(color)
+            node.innerHTML = html
+        }
+    }
+
+    function toggleDetails(detailId, button) {
+        const detailDiv = document.getElementById(`detail-${detailId}`);
+        const icon = document.getElementById(`icon-${detailId}`);
+
+        detailDiv.classList.toggle('show'); // Toggle the 'show' class for smooth transition
+        icon.innerHTML = detailDiv.classList.contains('show') ? 
+            '<i class="fas fa-chevron-down"></i>' : 
+            '<i class="fas fa-chevron-right"></i>'; // Change icon based on state
+    }
+
+</script>
 <div class="tab-content" id="pills-tabContent">
     {% for parcours in parcours_data %}
-    <div class="tab-pane fade {% if loop.index0==0 %}show active{% endif %}" id="pills-{{ parcours.id }}" role="tabpanel" aria-labelledby="pills-{{ parcours.id }}-tab">
-        ...
+    <div id="pills-{{ parcours.id }}" class="tab-pane fade {% if loop.index0==0 %}show active{% endif %}" id="pills-{{ parcours.id }}" role="tabpanel" aria-labelledby="pills-{{ parcours.id }}-tab">
+        
     </div>
+    <script>
+        socket.emit('get_parcours_passage', {{parcours.id}}, function(data){
+            div = document.getElementById("pills-{{ parcours.id }}")
+            data.forEach(function(passage){
+                if (passage.started){
+                    create_passage(passage, div)
+                }else{
+                    create_not_started(passage, div)
+                }
+            })
+        })
+    </script>
     {% endfor %}
 </div>
 {% endblock %}

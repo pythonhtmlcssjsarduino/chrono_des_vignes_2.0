@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-10-19 11:51+0200\n"
+"POT-Creation-Date: 2024-10-23 19:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: flask_app/__init__.py:89
+#: flask_app/__init__.py:91
 msgid "flash.error.mustadmin"
 msgstr ""
 
-#: flask_app/__init__.py:92
+#: flask_app/__init__.py:94
 msgid "flash.error.wrongadminevent"
 msgstr ""
 
-#: flask_app/__init__.py:100 flask_app/templates/layout.html:98
+#: flask_app/__init__.py:102 flask_app/templates/layout.html:101
 msgid "app.lang"
 msgstr "de"
 
@@ -59,6 +59,30 @@ msgstr ""
 
 #: flask_app/admin/coureurs/templates/view_coureur.html:59
 msgid "admin.view.participation"
+msgstr ""
+
+#: flask_app/admin/editions/templates/edition-sidebar.html:30
+msgid "admin.editions.gererpassage"
+msgstr ""
+
+#: flask_app/admin/editions/templates/edition-sidebar.html:37
+msgid "admin.editions.gererdossard"
+msgstr ""
+
+#: flask_app/admin/editions/templates/edition-sidebar.html:44
+msgid "admin.editions.gererparcours"
+msgstr ""
+
+#: flask_app/admin/editions/templates/editions.html:2
+msgid "admin.editions.editions"
+msgstr ""
+
+#: flask_app/admin/editions/templates/editions.html:38
+msgid "admin.editions.startcreateparcours"
+msgstr ""
+
+#: flask_app/admin/editions/templates/editions.html:55
+msgid "admin.editions.newedition"
 msgstr ""
 
 #: flask_app/admin/parcours/templates/modify_parcours.html:60
@@ -139,43 +163,43 @@ msgstr ""
 msgid "home.nextevent"
 msgstr ""
 
-#: flask_app/templates/layout.html:10 flask_app/templates/layout.html:68
+#: flask_app/templates/layout.html:10 flask_app/templates/layout.html:71
 msgid "app.name"
 msgstr ""
 
-#: flask_app/templates/layout.html:64
+#: flask_app/templates/layout.html:67
 msgid "app.name.short"
 msgstr ""
 
-#: flask_app/templates/layout.html:85
+#: flask_app/templates/layout.html:88
 msgid "app.about"
 msgstr ""
 
-#: flask_app/templates/layout.html:88
+#: flask_app/templates/layout.html:91
 msgid "app.contact"
 msgstr ""
 
-#: flask_app/templates/layout.html:94
+#: flask_app/templates/layout.html:97
 msgid "app.chrono"
 msgstr ""
 
-#: flask_app/templates/layout.html:98
+#: flask_app/templates/layout.html:101
 msgid "app.languages"
 msgstr ""
 
-#: flask_app/templates/layout.html:111
+#: flask_app/templates/layout.html:114
 msgid "app.logout"
 msgstr ""
 
-#: flask_app/templates/layout.html:123
+#: flask_app/templates/layout.html:126
 msgid "app.profil"
 msgstr ""
 
-#: flask_app/templates/layout.html:131
+#: flask_app/templates/layout.html:134
 msgid "app.login"
 msgstr ""
 
-#: flask_app/templates/layout.html:137
+#: flask_app/templates/layout.html:140
 msgid "app.signup"
 msgstr ""
 
@@ -199,23 +223,24 @@ msgstr ""
 msgid "flash.error.pwdnotvalid"
 msgstr ""
 
-#: flask_app/users/__init__.py:52
+#: flask_app/users/__init__.py:51
 msgid "flash.accountcreated"
 msgstr ""
 
-#: flask_app/users/__init__.py:62
+#: flask_app/users/__init__.py:60
 msgid "flash.deconected"
 msgstr ""
 
-#: flask_app/users/__init__.py:74
+#: flask_app/users/__init__.py:71
 msgid "flash.warn.inscriptionsnotopen:date"
 msgstr ""
 
-#: flask_app/users/__init__.py:78
+#: flask_app/users/__init__.py:75
 msgid "flash.warn.inscriptionclosed"
 msgstr ""
 
 #: flask_app/users/forms.py:10 flask_app/users/forms.py:19
+#: flask_app/users/forms.py:47
 msgid "form.username"
 msgstr ""
 
@@ -228,22 +253,27 @@ msgid "form.connect"
 msgstr ""
 
 #: flask_app/users/forms.py:17 flask_app/users/forms.py:34
+#: flask_app/users/forms.py:45
 msgid "form.name"
 msgstr ""
 
 #: flask_app/users/forms.py:18 flask_app/users/forms.py:35
+#: flask_app/users/forms.py:46
 msgid "form.lastname"
 msgstr ""
 
 #: flask_app/users/forms.py:21 flask_app/users/forms.py:36
+#: flask_app/users/forms.py:48
 msgid "form.email"
 msgstr ""
 
 #: flask_app/users/forms.py:22 flask_app/users/forms.py:37
+#: flask_app/users/forms.py:49
 msgid "form.tel"
 msgstr ""
 
 #: flask_app/users/forms.py:23 flask_app/users/forms.py:38
+#: flask_app/users/forms.py:50
 msgid "form.birth"
 msgstr ""
 
@@ -263,40 +293,69 @@ msgstr ""
 msgid "form.register"
 msgstr ""
 
+#: flask_app/users/forms.py:51
+msgid "form.modifyaccount"
+msgstr ""
+
 #: flask_app/users/templates/inscription.html:3
 msgid "inscription"
 msgstr ""
 
-#: flask_app/view/__init__.py:24 flask_app/view/__init__.py:35
+#: flask_app/users/templates/profil.html:34
+msgid "users.profil.fullname"
+msgstr ""
+
+#: flask_app/users/templates/profil.html:43
+msgid "users.profil.email"
+msgstr ""
+
+#: flask_app/users/templates/profil.html:52
+msgid "users.profil.phone"
+msgstr ""
+
+#: flask_app/users/templates/profil.html:61
+msgid "users.profil.birthdate"
+msgstr ""
+
+#: flask_app/users/templates/profil.html:139
+msgid "users.profil.editprofil"
+msgstr ""
+
+#: flask_app/view/__init__.py:16 flask_app/view/__init__.py:27
 msgid "view.error.notyourinscription"
 msgstr ""
 
-#: flask_app/view/__init__.py:62 flask_app/view/__init__.py:68
-#: flask_app/view/__init__.py:77
+#: flask_app/view/__init__.py:54 flask_app/view/__init__.py:60
+#: flask_app/view/__init__.py:69
 msgid "view.error.eventdontexist:event"
 msgstr ""
 
-#: flask_app/view/__init__.py:69
+#: flask_app/view/__init__.py:61
 msgid "view.error.editiondontexist:edition"
 msgstr ""
 
-#: flask_app/view/__init__.py:78
+#: flask_app/view/__init__.py:70
 msgid "view.error.parcoursdontexist:parcours"
 msgstr ""
 
 #: flask_app/view/templates/view_edition.html:8
+#: flask_app/view/templates/view_inscription.html:6
 msgid "view.date"
 msgstr ""
 
 #: flask_app/view/templates/view_edition.html:19
+#: flask_app/view/templates/view_inscription.html:17
 msgid "view.time"
 msgstr ""
 
 #: flask_app/view/templates/view_edition.html:30
+#: flask_app/view/templates/view_inscription.html:28
+#: flask_app/view/templates/view_parcours.html:20
 msgid "view.evenement"
 msgstr ""
 
 #: flask_app/view/templates/view_edition.html:39
+#: flask_app/view/templates/view_inscription.html:46
 msgid "view.rdv"
 msgstr ""
 
@@ -305,10 +364,38 @@ msgid "view.inscriptions"
 msgstr ""
 
 #: flask_app/view/templates/view_edition.html:59
-msgid "view.inscriptionsnotopen"
+msgid "view.inscriptionclosed"
 msgstr ""
 
 #: flask_app/view/templates/view_edition.html:64
-msgid "view.inscriptionclosed"
+msgid "view.inscriptionsnotopen"
+msgstr ""
+
+#: flask_app/view/templates/view_event.html:6
+msgid "view.editions"
+msgstr ""
+
+#: flask_app/view/templates/view_event.html:25
+#: flask_app/view/templates/view_inscription.html:37
+#: flask_app/view/templates/view_parcours.html:11
+msgid "view.parcours"
+msgstr ""
+
+#: flask_app/view/templates/view_inscription.html:55
+#: flask_app/view/templates/view_inscription.html:66
+#: flask_app/view/templates/view_inscription.html:74
+msgid "view.desinscription"
+msgstr ""
+
+#: flask_app/view/templates/view_inscription.html:59
+msgid "view.plusparticiper"
+msgstr ""
+
+#: flask_app/view/templates/view_parcours.html:81
+msgid "view.distance"
+msgstr ""
+
+#: flask_app/view/templates/view_parcours.html:88
+msgid "view.altitude"
 msgstr ""
 

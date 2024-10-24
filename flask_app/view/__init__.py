@@ -5,17 +5,9 @@ from flask_app.admin.parcours import create_map_and_alt_graph
 from flask_login import current_user, login_required
 from datetime import datetime
 from flask_babel import _
+from flask_app.lib import deg_to_dms
 
 view = Blueprint('view', __name__, template_folder='templates')
-
-def deg_to_dms(deg):
-    """Convert from decimal degrees to degrees, minutes, seconds."""
-    m, s = divmod(abs(deg)*3600, 60)
-    d, m = divmod(m, 60)
-    if deg < 0:
-        d = -d
-    d, m = int(d), int(m)
-    return d, m, s
 
 @set_route(view, '/view/inscription/<inscription>/delete')
 @login_required
