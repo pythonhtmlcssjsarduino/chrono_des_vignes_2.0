@@ -4,7 +4,7 @@ from flask_app.models import User, Event, Edition, Parcours, Inscription, Stand,
 with app.app_context():
     db.drop_all()
     db.create_all()
-
+'''
     # users
     user = User(name='romain', lastname='Maurer', password='12345', username='romain.maurer', phone='0774428642', datenaiss=datetime(year=2007,month=7, day=28), creation_date=datetime(year=2023,month=9, day=21), admin=True)
     moi = User(name='moi', lastname='je', password='moije', username='moi.je', datenaiss=datetime(year=2007,month=7, day=28))
@@ -66,4 +66,4 @@ with app.app_context():
     start = Stand(name='debut', parcours_id=b.id, lat=46.54542398593088, lng=6.447682455182076, chrono=1, start_stand=b.id, elevation=534)
     db.session.add_all([start])
 
-    db.session.commit()
+    db.session.commit()'''

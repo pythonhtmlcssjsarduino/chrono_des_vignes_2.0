@@ -16,7 +16,6 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = Login_form()
-    ic(form.password.data)
     if form.validate_on_submit():
         user= User.query.filter_by(username=form.username.data).first()
         if user and form.password.data == user.password:

@@ -7,9 +7,12 @@ from flask_colorpicker import colorpicker
 from icecream import install
 from flask_babel import Babel, lazy_gettext, gettext, _
 from flask_socketio import SocketIO
+from sqlalchemy import URL
 import os
+from dotenv import load_dotenv
 install()
-
+load_dotenv()
+from sqlalchemy import make_url
 # met la langue en francais pour le formatage des dates
 import locale
 locale.setlocale(locale.LC_TIME,'')
@@ -22,14 +25,21 @@ if DEV_ENABLE:
 
 app = Flask(__name__)
 app.config['SERVER_NAME'] = 'localhost:5000'
-app.config['SECRET_KEY'] = 'secret_key' #! change that for deployment
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
+password= os.environ.get('db_password')
+app.config['SECRET_KEY'] = password #! change that for deployment
+url_object = URL.create(
+    "mysql+pymysql",
+    username="root",
+    password=password,  # plain (unescaped) text
+    host="localhost",
+    database="site",
+)
+app.config["SQLALCHEMY_DATABASE_URI"] = url_object
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = f'{app.root_path}/translations'
 app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 app.url_map.default_subdomain = ''
 
-db = SQLAlchemy()
-db.init_app(app)
+db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
 

@@ -27,7 +27,7 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     avatar = db.Column(db.String(80), nullable=False, default=DEFAULT_PROFIL_PIC)
-    name= db.Column(db.String(20), nullable=False)
+    name= db.Column(db.String(40), nullable=False)
     lastname = db.Column(db.String(20), nullable=False)
     password = db.Column(db.String(80), nullable=False)
     username = db.Column(db.String(20), nullable=False, unique=True)
@@ -46,7 +46,7 @@ class Event(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)
     creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
-    name= db.Column(db.String(20), nullable=False, unique=True)
+    name= db.Column(db.String(40), nullable=False, unique=True)
     parcours=db.relationship('Parcours', backref='event', lazy='dynamic')
     editions=db.relationship('Edition', backref='event', lazy='dynamic')
     inscrits=db.relationship('Inscription', backref='event', lazy='dynamic')
@@ -70,7 +70,7 @@ class Parcours(db.Model):
     traces = db.relationship('Trace', backref='parcours', foreign_keys='Trace.parcours_id', lazy ='dynamic')
     start_stand = db.relationship('Stand', foreign_keys='Stand.start_stand', uselist=False)
     end_stand = db.relationship('Stand', foreign_keys='Stand.end_stand', uselist=False)
-    name= db.Column(db.String(20), nullable=False)
+    name= db.Column(db.String(40), nullable=False)
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     editions = db.relationship('Edition', secondary=editions_parcours, back_populates='parcours', lazy ='dynamic')
     inscriptions=db.relationship('Inscription', backref='parcours', lazy='dynamic')
@@ -120,7 +120,7 @@ class Parcours(db.Model):
 class Stand(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)
-    name= db.Column(db.String(20), nullable=False)
+    name= db.Column(db.String(40), nullable=False)
     lat = db.Column( db.Float, nullable=False)
     lng = db.Column( db.Float, nullable=False)
     elevation = db.Column( db.Float)
@@ -145,7 +145,7 @@ class Stand(db.Model):
 class Trace(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)
-    name= db.Column(db.String(20), nullable=False)
+    name= db.Column(db.String(40), nullable=False)
     parcours_id = db.Column(db.Integer, db.ForeignKey('parcours.id'))
     start_id=db.Column(db.Integer, db.ForeignKey('stand.id'), nullable=False)
     end_id=db.Column(db.Integer, db.ForeignKey('stand.id'), nullable=False)
@@ -197,7 +197,7 @@ class Edition(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)
     creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
-    name= db.Column(db.String(20), nullable=False)
+    name= db.Column(db.String(40), nullable=False)
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     parcours = db.relationship('Parcours', secondary=editions_parcours, back_populates='editions', lazy ='dynamic')
     inscriptions=db.relationship('Inscription', backref='edition', lazy='dynamic')
@@ -265,7 +265,7 @@ class PassageKey(db.Model):
     stands=db.relationship('Stand', secondary=passagekey_stand, back_populates='passage_keys', lazy='dynamic')
     passages=db.relationship('Passage', backref='key', lazy='dynamic')
     key=db.Column(db.String(20), nullable=False, unique=True)
-    name=db.Column(db.String(20), nullable=False)
+    name=db.Column(db.String(40), nullable=False)
 
     def __repr__(self) -> str:
         return f'<PassageKey edition:{self.edition.name} stands={', '.join([str(stand) for stand in self.stands.all()])}'
