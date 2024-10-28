@@ -9,6 +9,9 @@
       <th scope="col">coureur</th>
       <th scope="col">dossard</th>
       <th scope="col">parcours</th>
+      {% if now > edition_data.edition_date %}
+        <th scope="col">present</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -17,6 +20,15 @@
       <td>{{inscription.inscrit.name}}</td>
       <td id="inscription_{{inscription.id}}"><a href="javascript:change_dossard({{inscription.id}})"><i class="fa-solid fa-pen-to-square"></i></a> {% if inscription.dossard %}{{inscription.dossard}}{% endif %}</td>
       <td>{{inscription.parcours.name}}</td>
+      {% if now > edition_data.edition_date %}
+        <td><div class="form-check form-switch"><input id="presence_{{inscription.id}}" class="form-check-input" type="checkbox" {% if inscription.present %}checked{% endif %} ></div></td>
+        <script>
+          document.getElementById("presence_{{inscription.id}}").addEventListener('click', function(event){
+            event.preventDefault()
+            change_presence({{inscription.id}}, this)
+          })
+        </script>
+        {% endif %}
     </tr>
     {% endfor %}
   </tbody>
@@ -41,6 +53,22 @@
         }
       })
     }
+  }
+
+  function change_presence(inscription_id, button){
+    checked = button.checked
+    if(checked==false){
+      if (!window.confirm('quoi une personne vient de partire alors qu\'elle étais là??')){
+        return
+      }
+    }
+    
+    socket.emit('change_presence', {'inscription_id':inscription_id, 'presence':checked},
+      function(response){
+        if(response){
+          button.checked = checked
+        }
+      })
   }
 
 </script>

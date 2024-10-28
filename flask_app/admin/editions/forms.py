@@ -4,7 +4,7 @@ from flask_app.custom_validators import DataRequired, Length, DateTimeNotPast, D
 from flask_app.custom_field import MultiCheckboxFieldWithDescription
 
 class Edition_form(FlaskForm):
-    name = StringField('nom de l\'edition', validators=[DataRequired(), Length(max=20)])
+    name = StringField('nom de l\'edition', validators=[DataRequired(), Length(max=40)])
     edition_date = DateTimeLocalField('date le l\'edition', format='%Y-%m-%dT%H:%M', render_kw={}, validators=[DataRequired(), DateTimeNotPast()])
     parcours = MultiCheckboxFieldWithDescription('parcours', validators=[DataRequired()])
     first_inscription = DateTimeLocalField('date d\'ouverture des inscriptions', format='%Y-%m-%dT%H:%M', render_kw={}, validators=[DataRequired(), DateTimeNotPast(), DateTimeBefore('last_inscription')])

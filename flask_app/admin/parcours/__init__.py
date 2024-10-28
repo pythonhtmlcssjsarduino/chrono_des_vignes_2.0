@@ -27,6 +27,34 @@ def delete_parcours_page(event_name, parcours_name):
 
     return redirect(url_for('admin.parcours.parcours_page', event_name=event.name))
 
+@set_route(parcours_bp, '/event/<event_name>/parcours/<parcours_name>/copy')
+@login_required
+@admin_required
+def copy_parcours(event_name, parcours_name):
+    event = Event.query.filter_by(name=event_name).first_or_404()
+    parcours:Parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
+
+    p = Parcours(name=f'{parcours.name} copy', event=event, description=parcours.description, chronos_list=parcours.chronos_list)
+    db.session.add(p)
+    db.session.commit()
+    db.session.refresh(p)
+    old_stands = Stand.query.filter_by(parcours_id=parcours.id).all()
+    old_to_new_id = {}
+    for old_stand in old_stands:
+        new_stand = Stand(name=old_stand.name, lat=old_stand.lat, lng=old_stand.lng, elevation=old_stand.elevation, parcours_id=p.id, start_stand=p.id if old_stand.start_stand else None, end_stand=p.id if old_stand.end_stand else None, color=old_stand.color, chrono=old_stand.chrono)
+        db.session.add(new_stand)
+        db.session.commit()
+        db.session.refresh(new_stand)
+        old_to_new_id[old_stand.id] = new_stand.id
+    
+    old_traces:list[Trace] = Trace.query.filter_by(parcours_id=parcours.id).all()
+    for old_trace in old_traces:
+        new_trace = Trace(name=old_trace.name, parcours_id=p.id, start_id=old_to_new_id[old_trace.start_id], end_id=old_to_new_id[old_trace.end_id], trace=old_trace.trace, turn_nb=old_trace.turn_nb)
+        db.session.add(new_trace)
+        db.session.commit()
+
+    return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=f'{parcours.name} copy'))
+
 @set_route(parcours_bp, '/event/<event_name>/parcours/<parcours_name>/archive')
 @login_required
 @admin_required
@@ -64,7 +92,7 @@ def parcours_page(event_name):
             db.session.add(p)
             db.session.commit()
             p=Parcours.query.filter_by(name=form.name.data).first()
-            s= Stand(name=f'debut-{form.name.data}', parcours_id=p.id, lat=form.start_lat.data, lng=form.start_lng.data, chrono=1, start_stand=p.id)
+            s= Stand(name=f'debut-{form.name.data}'[:36], parcours_id=p.id, lat=form.start_lat.data, lng=form.start_lng.data, chrono=1, start_stand=p.id)
             db.session.add(s)
             db.session.commit()
 
@@ -358,12 +386,11 @@ def modify_parcours(event_name, parcours_name):
     parcours:Parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
     user = current_user
     already_use = bool(parcours.editions.count())
-    if already_use and len(request.args):
+    if (already_use and len(request.args)) and request.args.get('modif', 'map') !='form':
         return redirect(url_for('admin.parcours.modify_parcours', event_name=event_name, parcours_name=parcours_name))
-    modif = request.args.get('modif', 'map') if not already_use else None
     #? formulaire pour le nom du parcours
     name_form= Parcours_name_form(data={'name':parcours.name, 'description':parcours.description})
-    if modif=='form' and name_form.validate_on_submit() :
+    if request.args.get('modif', 'map')=='form' and name_form.validate_on_submit() :
         if name_form.name.data == parcours.name or not event.parcours.filter_by(name=name_form.name.data).first():
             # le nom peut etre utilisé
             parcours.name=name_form.name.data
@@ -549,7 +576,7 @@ def modify_parcours(event_name, parcours_name):
             trace_start = stand
             trace_end = Stand(**args )
             db.session.add(trace_end)
-            nb_name = len(Trace.query.filter(Trace.name.contains(f'{trace_start.name} - {trace_end.name}')).all())
+            nb_name = Trace.query.filter(Trace.name.contains(f'{trace_start.name} - {trace_end.name}'[:36])).count()
             old_trace = Trace.query.filter_by(start_id = trace_start.id, turn_nb=turn_nb).first()
             name = f"{trace_start.name} - {trace_end.name} {'(' if nb_name else ''}{nb_name if nb_name else ''}{')' if nb_name else ''}"
             new_trace = Trace(name=name, parcours_id=parcours.id, start_id = trace_start.id, end_id = trace_end.id, turn_nb=turn_nb)
@@ -619,8 +646,8 @@ def modify_parcours(event_name, parcours_name):
     body= map.get_root().html.render()
     script= map.get_root().script.render()
 
-    ic(request.args)
     folium_map={'header':header, 'body':body, 'script':script}
+    modif = request.args.get('modif', 'map') if request.args.get('modif', 'map')=='form' or not already_use else None
     return render_template('modify_parcours.html', user_data=user, event_data=event, parcours_data=parcours, name_form=name_form, folium_map=folium_map,
                            map_name=map.get_name(), element_name=element_name, path_names={'last':last_path_name, 'next':next_path_name} if last_path_name else markers_name,
                            program_list=program_list, modif=modif, modif_form=modif_form, modif_form_type=modif_form_type, graph=graph, event_modif=True)

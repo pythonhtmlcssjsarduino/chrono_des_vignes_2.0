@@ -56,27 +56,27 @@
                             window.parent.location.href = url;
                         }
                     </script>
-                    {% if parcours_data.editions.count() == 0 %}
-                        <button class="btn btn-outline-info" onclick="name_form_modif()">{{ _('admin.parcours.modify') }} <i class="fa-solid fa-pen"></i></button>
-                    {% else %}
-                        <p>{{ _('admin.parcours.parcoursunmodifyablealreadyused') }}</p>
-                    {% endif %}
-                    </div>
-            </div>
+                    <button class="btn btn-outline-info my-2" onclick="name_form_modif()">{{ _('admin.parcours.modify') }} <i class="fa-solid fa-pen"></i></button>
+                </div>
+        </div>
         {% endif %}
+        <hr>
         {% if parcours_data.editions.count() == 0 %}
             <div>
                 <a href="{{ url_for('admin.parcours.delete_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">{{ _('admin.parcours.supprimer') }}</a>
             </div>
         {% else %}
+            <p>{{ _('admin.parcours.parcoursunmodifyablealreadyused') }}</p>
             {% if parcours_data.archived %}
             <a href="{{ url_for('admin.parcours.unarchive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">{{ _('admin.parcours.desarchiver') }}</a>
             {% else %}
             <a href="{{ url_for('admin.parcours.archive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-danger">{{ _('admin.parcours.archiver') }}</a>
             {% endif %}
         {% endif %}
-        </div>
+        <br>
+        <a href="{{ url_for('admin.parcours.copy_parcours', event_name=event_data.name, parcours_name=parcours_data.name) }}" class="btn btn-outline-success">{{ _('admin.parcours.dupliquer') }}</a>
         <hr>
+    </div>
         {% if modif_form %}
         {% if modif_form_type == "new" %}
         <p class="bg-info rounded">{{ _('admin.parcours.clicknewstand') }}</p>

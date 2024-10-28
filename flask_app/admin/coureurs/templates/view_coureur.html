@@ -63,6 +63,8 @@
           <th scope="col">parcours</th>
           <th scope="col">edition</th>
           <th scope="col">date</th>
+          <th scope="col">dossard</th>
+          <th scope="col">rank</th>
         </tr>
       </thead>
       <tbody>
@@ -71,6 +73,8 @@
           <th>{{inscription.parcours.name}}</th>
           <th>{{inscription.edition.name}}</th>
           <th>{{inscription.edition.edition_date.strftime('%d.%m.%Y')}}</th>
+          <th>{% if inscription.dossard %}{{inscription.dossard}}{% endif %}</th>
+          <th>{# {% if inscription.dossard %}{{inscription.dossard}}{% endif %} #}</th>
         </tr>
         {% endfor %}
       </tbody>

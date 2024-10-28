@@ -56,6 +56,21 @@ def change_dossard(data):
     db.session.commit()
     return True
 
+@socketio.on('change_presence', namespace='/dossard')
+def set_presence(data):
+    if not data.get('presence') is not None or not data.get('inscription_id'):
+        return False
+    
+    inscription:Inscription = Inscription.query.get(data['inscription_id'])
+    if not inscription:
+        return False
+    if inscription.edition.edition_date>datetime.now():
+        return False
+
+    inscription.present = bool(data['presence'])
+    db.session.commit()
+    return True
+
 @set_route(dossard, '/event/<event_name>/editions/<edition_name>/dossard/generate', methods=['POST', 'GET'])
 @login_required
 @admin_required

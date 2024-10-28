@@ -5,7 +5,7 @@ from flask_app.admin.parcours import calc_points_dist
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, User, Inscription, Trace
 from datetime import datetime
-from flask_app.admin.editions.passages.form import NewKeyForm, ChronoLoginForm, ChronoLoginForm, SetPassageForm
+from flask_app.admin.editions.passages.form import NewKeyForm, ChronoLoginForm, ChronoLoginForm
 import secrets
 from flask_socketio import join_room, leave_room, emit
 
@@ -106,7 +106,7 @@ def get_passage_data(passage:Passage, json=False)->dict:
           'name':passage.inscription.inscrit.name,
           'time_stamp':passage.time_stamp if not json else passage.time_stamp.timestamp(),
           'parcours':[]}
-    
+
     user_passages:list[Passage] = Passage.query.filter(Passage.inscription==passage.inscription, Passage.time_stamp<=passage.time_stamp).all()
     if len(user_passages)>0:
         first_passage = user_passages[0]
@@ -226,7 +226,12 @@ def set_passage(data):
     passage = Passage(key_id = key.id, time_stamp=pass_time, inscription_id= inscription.id)
     db.session.add(passage)
     db.session.commit()
-    passage:Passage = Passage.query.filter_by(key_id = key.id, time_stamp=pass_time, inscription_id= inscription.id).first()
+    db.session.refresh(passage)
 
     emit('new_passage', {'time':str(pass_time), 'user':inscription.inscrit.username, 'dossard':inscription.dossard,'key':key.name, 'stand':passage.get_stand().name}, namespace='/dashboard', to=f'{passage.key.event.id}-{passage.key.edition.id}')
     emit('passage_response', {"success": True, 'request':data, 'passage':get_passage_data(passage, json=True)}, to=session['room'])
+
+    first_passage:Passage = inscription.passages.order_by(Passage.time_stamp.asc()).first()
+    pass_data = get_passage_data(passage, json=True)
+    pass_data.update({'started':True, 'parcours_id':inscription.parcours.id, 'start_time':first_passage.time_stamp.timestamp() , 'id':inscription.id, 'finish':inscription.has_finish(), 'all_right':inscription.has_all_right(), 'end':inscription.end})
+    emit('new_passage', pass_data, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')

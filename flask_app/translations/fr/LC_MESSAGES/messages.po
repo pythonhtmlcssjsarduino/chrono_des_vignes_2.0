@@ -242,7 +242,7 @@ msgstr "les inscription sont déjà fermée!"
 #: flask_app/users/forms.py:10 flask_app/users/forms.py:19
 #: flask_app/users/forms.py:47
 msgid "form.username"
-msgstr "usename"
+msgstr "username"
 
 #: flask_app/users/forms.py:12 flask_app/users/forms.py:24
 msgid "form.pwd"

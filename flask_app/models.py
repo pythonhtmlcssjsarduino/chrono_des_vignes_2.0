@@ -41,7 +41,6 @@ class User(UserMixin, db.Model):
     def __repr__(self) -> str:
         return f'<username : {self.username}, password: {self.password}, {self.avatar}>'
 
-
 class Event(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)
@@ -220,6 +219,8 @@ class Inscription(db.Model):
     parcours:Parcours
     dossard=db.Column(db.Integer)
     passages=db.relationship('Passage', backref='inscription', lazy='dynamic')
+    present=db.Column(db.Boolean, nullable=False, default=False)
+    end=db.Column(db.String(10)) # abandon, disqual, absent, finish
 
     def __repr__(self) -> str:
         return f'<Inscription id:{self.id} dossard:{self.dossard} >'
@@ -273,9 +274,9 @@ class PassageKey(db.Model):
 class Passage(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)
-    creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
     time_stamp:datetime=db.Column(db.DateTime, nullable=False)
-    key_id=db.Column(db.Integer, db.ForeignKey('passage_key.id'), nullable=False)
+    key_id=db.Column(db.Integer, db.ForeignKey('passage_key.id'), nullable=True) # pas de key implique demmaré par l'admin
+    key:PassageKey
     inscription_id = db.Column(db.Integer, db.ForeignKey('inscription.id'), nullable=False)
     inscription:Inscription
 
@@ -283,4 +284,8 @@ class Passage(db.Model):
         return f'<Passage time={self.time_stamp} key={self.key.name} inscription={self.inscription.inscrit.username} >'
     
     def get_stand(self)->Stand:
-        return self.key.stands.filter_by(parcours=self.inscription.parcours).first()
+        if self.key is None:
+            stand = self.inscription.parcours.start_stand
+        else:
+            stand = self.key.stands.filter_by(parcours=self.inscription.parcours).first()
+        return stand

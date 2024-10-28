@@ -13,17 +13,65 @@
 <script>
     var socket = io('/edition/parcours', {auth: {'edition_id':{{ edition_data.id }}, 'event_id':{{ event_data.id }} } } );
 
-    function create_not_started(data, div, node){
-        let id = data.dossard+'-'+data.time_stamp
-        let time = new Date(data.time_stamp * 1000)
+    socket.on('new_passage', function new_passage(data){
+        let node = document.getElementById("detail-table-passage-"+data.id)
+        console.log(data.parcours.length, data)
+        if ( data.parcours.length==1){
+            let div = document.getElementById('pills-content-' + data.parcours_id)
+            node = document.getElementById('passage-'+data.id)
+            console.log(node);
+            
+            create_passage(data, div, node)
+        }else{
+
+            let html = `
+                    <table>
+                        <tbody>`
+                            data.parcours.forEach(passage => {
+                                html+=
+                                `<tr>
+                                    <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
+                                    <td class="pe-3">${passage.stand.name}</td>
+                                    <td class="pe-3">`+
+                                        (passage.succes==true?passage.delta:(passage.succes==false?'<i class="fa-solid fa-xmark"></i>':''))+
+                                    `</td>
+                                    <td>
+                                        ${ passage.dist !=null?passage.dist+' km':'' }
+                                    </td>
+                                </tr>`
+                            });
+            html+=          `</tbody>
+                    </table>`
+            let color = data.end!='finish'||data.end==null?data.finish?data.all_right?'bg-success':'bg-warning':'bg-primary':'bg-danger'
+            let div = document.getElementById('passage-' + data.id)
+            div.classList.remove('bg-success')
+            div.classList.remove('bg-warning')
+            div.classList.remove('bg-primary')
+            div.classList.remove('bg-danger')
+            div.classList.add(color)
+            node.innerHTML = html
+        }
+    })
+
+    function create_not_started(data, div, node=null){
+        let id = 'passage-' + data.id
         
-        data.time_stamp = `${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
         let html = 
         `<div class="card-header">
             <p class="mb-0">
                 ${data.dossard} ${ data.name }
             </p>
-            <button class="
+            <button class="btn" onclick="toggleDetails('${ id }', this)">
+                <span class="icon" id="icon-${ id }"><i class="fas fa-chevron-right"></i></span>
+            </button>
+        </div>
+        <div id="detail-${ id }" class="collapse">
+            <div class="card-body" id="detail-table-${id}">
+            </div>
+            <div>
+                <button class="btn btn-outline-danger" id="disqualify-${id}">disqualifié</button>
+                <button class="btn btn-outline-danger" id="abandon-${id}">abandon</button>
+            </div>
         </div>`
 
         if (!node){
@@ -33,6 +81,7 @@
             node.classList.add('mb-2')
             node.classList.add('card')
             node.classList.add('bg-info')
+            node.id = id
 
             if (div.children.length == 0) {
                 div.appendChild(node)
@@ -48,24 +97,35 @@
         }
     }
 
+    function delta_to_display(delta){
+        let days = Math.floor(delta / (24*60*60*1000));
+        let daysms = delta % (24*60*60*1000);
+        let hours = Math.floor(daysms / (60*60*1000));
+        let hoursms = delta % (60*60*1000);
+        let minutes = Math.floor(hoursms / (60*1000));
+        let minutesms = delta % (60*1000);
+        let sec = Math.floor(minutesms / 1000);
+
+        time_string = days>0?days+' Jours ':''
+        time_string +=  `${hours}:${minutes}:${sec}`
+        return time_string
+    }
+
     function create_passage(data, div, node=null) {
-        let id = data.dossard+'-'+data.time_stamp
-        let time = new Date(data.time_stamp * 1000)
+        let id = 'passage-' + data.id
         
-        data.time_stamp = `${time.getDate()}.${time.getMonth()+1} ${time.getHours()}:${time.getMinutes()}:${time.getSeconds()}`
         let html = 
         `<div class="card-header">
             <p class="mb-0">
                 ${data.dossard} ${ data.name }
-                <br>
-                ${data.time_stamp}
+                <div id="chrono-${id}"></div>
             </p>
             <button class="btn" onclick="toggleDetails('${ id }', this)">
                 <span class="icon" id="icon-${ id }"><i class="fas fa-chevron-right"></i></span>
             </button>
         </div>
         <div id="detail-${ id }" class="collapse">
-            <div class="card-body">
+            <div class="card-body" id="detail-table-${id}">
                 <table>
                     <tbody>`
                         data.parcours.forEach(passage => {
@@ -74,7 +134,7 @@
                                 <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
                                 <td class="pe-3">${passage.stand.name}</td>
                                 <td class="pe-3">`+
-                                    (passage.succes==true?passage.delta:(passage.succes==false?'<i class="fa-solid fa-xmark"></i>':''))+
+                                    (passage.succes==true||passage.succes==null?passage.delta:(passage.succes==false?'<i class="fa-solid fa-xmark"></i>':''))+
                                 `</td>
                                 <td>
                                     ${ passage.dist !=null?passage.dist+' km':'' }
@@ -84,9 +144,27 @@
         html+=          `</tbody>
                 </table>
             </div>
+            <div>
+                <button class="btn btn-outline-danger" id="disqualify-${id}">disqualifié</button>
+                <button class="btn btn-outline-danger" id="abandon-${id}">abandon</button>
+            </div>
         </div>`
 
-        let color = data.finish?data.all_right?'bg-success':'bg-warning':'bg-danger'
+        let color
+        if (data.end!='finish'&&data.end!=null){
+            // disqualifié ou abandon
+            color = 'bg-danger'
+        } else if (data.finish && !data.all_right) {
+            // fini mais pas suivis le parcours
+            color = 'bg-warning'
+        } else if (data.finish && data.all_right) {
+            // fini et just
+            color = 'bg-success'
+        } else {
+            // dans las course mais pas fini
+            color = 'bg-primary'
+        }
+        
         if (!node){
             let node = document.createElement('div')
             node.innerHTML = html
@@ -95,6 +173,7 @@
             node.classList.add('mb-2')
             node.classList.add('card')
             node.classList.add(color)
+            node.id = id
 
             if (div.children.length == 0) {
                 div.appendChild(node)
@@ -102,12 +181,30 @@
                 div.insertBefore(node, div.children[0])
             }
         }else{
+            node.classList.remove('bg-success')
             node.classList.remove('bg-primary')
             node.classList.remove('bg-danger')
             node.classList.remove('bg-warning')
+            node.classList.remove('bg-info')
             node.classList.add(color)
             node.innerHTML = html
         }
+
+        // gere l'affichage du temps
+        let chrono_div = document.getElementById(`chrono-${id}`)
+        let start_time = data.start_time*1000
+        let delta = Date.now()-start_time
+        console.log(delta, start_time)
+        chrono_div.innerText = delta_to_display(delta)
+        setInterval(() => {
+            delta = Date.now()-start_time
+            chrono_div.innerText = delta_to_display(delta)
+        }, 1000);
+
+        // 
+        let diqualify_btn = document.getElementById(`disqualify-${id}`)
+        let abandon_btn = document.getElementById(`abandon-${id}`)
+
     }
 
     function toggleDetails(detailId, button) {
@@ -124,18 +221,50 @@
 <div class="tab-content" id="pills-tabContent">
     {% for parcours in parcours_data %}
     <div id="pills-{{ parcours.id }}" class="tab-pane fade {% if loop.index0==0 %}show active{% endif %}" id="pills-{{ parcours.id }}" role="tabpanel" aria-labelledby="pills-{{ parcours.id }}-tab">
-        
+        <div id="pills-header-{{ parcours.id }}" class="mb-2">
+            
+        </div>
+        <div id="pills-content-{{ parcours.id }}"></div>
     </div>
     <script>
         socket.emit('get_parcours_passage', {{parcours.id}}, function(data){
-            div = document.getElementById("pills-{{ parcours.id }}")
+            let launched = true
+            div = document.getElementById("pills-content-{{ parcours.id }}")
             data.forEach(function(passage){
                 if (passage.started){
                     create_passage(passage, div)
                 }else{
+                    launched=false
                     create_not_started(passage, div)
                 }
             })
+            
+            if (!launched){
+
+                let header = document.getElementById('pills-header-{{ parcours.id }}')
+                header.innerHTML = '<button style="min-width: 150px;" id="launch-parcours-{{ parcours.id }}" class="btn btn-info">lancer le parcours</button>'
+                
+                document.getElementById("launch-parcours-{{ parcours.id }}").addEventListener('click', function(event){
+                    let button = event.target
+                    button.removeEventListener('click', this)
+                    button.innerText = 3
+                    setTimeout(() => {
+                        button.innerText = 2
+                        setTimeout(() => {
+                            button.innerText = 1
+                            setTimeout(() => {
+                                console.log('go');
+                                let start_time = Date.now()
+                                button.innerText='go'
+                                socket.emit('launch_parcours', {'parcours_id':{{ parcours.id }}, 'start_time': start_time}, function(){
+
+                                })
+                            }, 1000);
+                        }, 1000);
+                    }, 1000);
+                }, { once: true })
+            }
+
         })
     </script>
     {% endfor %}
