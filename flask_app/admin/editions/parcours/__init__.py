@@ -35,24 +35,28 @@ def get_parcours_passages(parcours):
     inscriptions:list[Inscription] = Inscription.query.filter_by(edition=edition, parcours=parcours).all()
     data = []
     for coureur in inscriptions:
-        passage = coureur.passages.order_by(Passage.time_stamp.desc()).first()
+        passage = coureur.get_last_passage()
         first_passage:Passage = coureur.passages.order_by(Passage.time_stamp.asc()).first()
         if coureur.has_started():
             pass_data = get_passage_data(passage, json=True)
             pass_data.update({'started':True, 'start_time':first_passage.time_stamp.timestamp(), 'id':coureur.id, 'finish':coureur.has_finish(), 'all_right':coureur.has_all_right(), 'end':coureur.end})
             data.append(pass_data)
         else:
-            data.append({'started':False, 'id':coureur.id, 'dossard':coureur.dossard, 'name':coureur.inscrit.name})
+            pass_data = {'parcours':[], 'started':False, 'id':coureur.id, 'dossard':coureur.dossard, 'name':coureur.inscrit.name}
+            for stand, dist in zip(coureur.parcours.iter_chrono_list(), coureur.parcours.get_chrono_dists()):
+                pass_data['parcours'].append({'stand':{'name':stand.name}, 'dist':round(dist, 3), 'delta':'', 'succes':None})
+            data.append(pass_data)
     return data
 
 @socketio.on('launch_parcours', namespace='/edition/parcours')
 def launch_parcours(data):
-    parcours = Parcours.query.get(data['parcours_id'])
+    parcours = Parcours.query.get(data.get('parcours_id'))
     edition = Edition.query.get(session['room'].split('-')[3])
     if parcours is not None and data.get('start_time'):
         start_time =datetime.fromtimestamp(data['start_time']/1000)
+        inscription:Inscription
         for inscription in edition.inscriptions.filter(Inscription.parcours==parcours).all():
-            if inscription.passages.count()==0:
+            if inscription.has_started() and inscription.present:
                 passage = Passage(time_stamp=start_time, inscription_id = inscription.id)
                 db.session.add(passage)
                 db.session.commit()
@@ -64,7 +68,55 @@ def launch_parcours(data):
                 pass_data.update({'started':True, 'parcours_id':inscription.parcours.id, 'start_time':first_passage.time_stamp.timestamp() , 'id':inscription.id, 'finish':inscription.has_finish(), 'all_right':inscription.has_all_right(), 'end':inscription.end})
                 emit('new_passage', pass_data, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
-        
+@socketio.on('launch_parcours', namespace='/edition/parcours')
+def stop_parcours(data):
+    parcours = Parcours.query.get(data.get('parcours_id'))
+    edition = Edition.query.get(session['room'].split('-')[3])
+
+    if parcours is not None:
+        inscription:Inscription
+        for inscription in edition.inscriptions.filter(Inscription.parcours==parcours).all():
+            if inscription.end is None:
+                if inscription.has_started():
+                    if inscription.has_finish():
+                        if inscription.has_all_right():
+                            end = 'finish'
+                        else:
+                            end = 'disqual'
+                    else:
+                        end='abandon'
+                else:
+                    end = 'absent'
+
+                inscription.end = end
+                db.session.commit()
+                emit('stop', {'type':end, 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
+
+@socketio.on('disqualify', namespace='/edition/parcours')
+def disqualify(data):
+    inscription = Inscription.query.get(data.get('inscription_id'))
+    if inscription:
+        inscription.end = 'disqual'
+        db.session.commit()
+        emit('stop', {'type':'disqual', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
+
+@socketio.on('abandon', namespace='/edition/parcours')
+def abandon(data):
+    if data.get('inscription_id'):
+        inscription = Inscription.query.get(data['inscription_id'])
+        inscription.end = 'abandon'
+        db.session.commit()
+        emit('stop', {'type':'abandon', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
+
+@socketio.on('finish', namespace='/edition/parcours')
+def finish(data):
+    if data.get('inscription_id'):
+        inscription:Inscription = Inscription.query.get(data['inscription_id'])
+        if not inscription.has_finish():
+            return False
+        inscription.end = 'finish'
+        db.session.commit()
+        emit('stop', {'type':'finish', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
 @set_route(parcours, '/event/<event_name>/editions/<edition_name>/parcours')
 @login_required
@@ -75,5 +127,9 @@ def view(event_name, edition_name):
     edition:Edition = event.editions.filter_by(name=edition_name).first_or_404()
     parcours = edition.parcours
 
-    return render_template('edition_parcours.html', parcours_data=parcours, edition_data = edition, event_data=event, user_data=user, event_modif=True, edition_sidebar=True)
+    if 0 and edition.edition_date>datetime.now():
+        flash('l\'edition n\'as pas encore commencé', 'warning')
+        return redirect(url_for('admin.editions.modify_edition_page', edition_name=edition.name, event_name=event.name))
+
+    return render_template('edition_parcours.html', parcours_data=parcours, edition_data = edition, event_data=event, user_data=user, event_modif=True, edition_sidebar=True, now=datetime.now())
 

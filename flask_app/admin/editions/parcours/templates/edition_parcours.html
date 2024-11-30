@@ -12,6 +12,32 @@
 </ul>
 <script>
     var socket = io('/edition/parcours', {auth: {'edition_id':{{ edition_data.id }}, 'event_id':{{ event_data.id }} } } );
+    var intervals = {}
+
+    socket.on('stop', function(data){
+        let id = data.inscription_id
+        let chrono_div = document.getElementById(`chrono-passage-${id}`)
+        let diqualify_btn = document.getElementById(`disqualify-passage-${id}`)
+        let abandon_btn = document.getElementById(`abandon-passage-${id}`)
+        let finish_btn = document.getElementById(`finish-passage-${id}`)
+
+        clearInterval(intervals[id])
+        chrono_div.innerText = data.type
+        diqualify_btn.classList.add('disabled')
+        abandon_btn.classList.add('disabled')
+        finish_btn.classList.add('disabled')
+    
+        let color = get_color({'end':data.type })
+        let div = document.getElementById('passage-' + id)
+        div.classList.remove('bg-success')
+        div.classList.remove('bg-primary')
+        div.classList.remove('bg-danger')
+        div.classList.remove('bg-warning')
+        div.classList.remove('bg-info')
+        div.classList.add(color)
+        console.log(data, color)
+    
+    })
 
     socket.on('new_passage', function new_passage(data){
         let node = document.getElementById("detail-table-passage-"+data.id)
@@ -42,59 +68,37 @@
                             });
             html+=          `</tbody>
                     </table>`
-            let color = data.end!='finish'||data.end==null?data.finish?data.all_right?'bg-success':'bg-warning':'bg-primary':'bg-danger'
+            let color = get_color(data)
             let div = document.getElementById('passage-' + data.id)
             div.classList.remove('bg-success')
-            div.classList.remove('bg-warning')
             div.classList.remove('bg-primary')
             div.classList.remove('bg-danger')
+            div.classList.remove('bg-warning')
+            div.classList.remove('bg-info')
             div.classList.add(color)
             node.innerHTML = html
         }
     })
 
-    function create_not_started(data, div, node=null){
-        let id = 'passage-' + data.id
-        
-        let html = 
-        `<div class="card-header">
-            <p class="mb-0">
-                ${data.dossard} ${ data.name }
-            </p>
-            <button class="btn" onclick="toggleDetails('${ id }', this)">
-                <span class="icon" id="icon-${ id }"><i class="fas fa-chevron-right"></i></span>
-            </button>
-        </div>
-        <div id="detail-${ id }" class="collapse">
-            <div class="card-body" id="detail-table-${id}">
-            </div>
-            <div>
-                <button class="btn btn-outline-danger" id="disqualify-${id}">disqualifié</button>
-                <button class="btn btn-outline-danger" id="abandon-${id}">abandon</button>
-            </div>
-        </div>`
-
-        if (!node){
-            let node = document.createElement('div')
-            node.innerHTML = html
-            
-            node.classList.add('mb-2')
-            node.classList.add('card')
-            node.classList.add('bg-info')
-            node.id = id
-
-            if (div.children.length == 0) {
-                div.appendChild(node)
-            } else {
-                div.insertBefore(node, div.children[0])
-            }
-        }else{
-            node.classList.remove('bg-primary')
-            node.classList.remove('bg-danger')
-            node.classList.remove('bg-warning')
-            node.classList.add('bg-info')
-            node.innerHTML = html
+    function get_color(data){
+        let color
+        if (data.end!='finish'&&data.end!=null){
+            // disqualifié ou abandon
+            color = 'bg-danger'
+        } else if (data.end=='finish' || (data.finish && data.all_right)) {
+            // fini et just ou declaré manuellement
+            color = 'bg-success'
+        } else if (data.finish && !data.all_right) {
+            // fini mais pas suivis le parcours
+            color = 'bg-warning'
+        } else if (data.started) {
+            // dans la course mais pas fini
+            color = 'bg-primary'
+        } else {
+            color = 'bg-info'
         }
+
+        return color
     }
 
     function delta_to_display(delta){
@@ -145,25 +149,13 @@
                 </table>
             </div>
             <div>
-                <button class="btn btn-outline-danger" id="disqualify-${id}">disqualifié</button>
-                <button class="btn btn-outline-danger" id="abandon-${id}">abandon</button>
+                <button class="btn btn-danger" id="disqualify-${id}">disqualifier</button>
+                <button class="btn btn-danger" id="abandon-${id}">abandon</button>
+                <button class="btn btn-success" id="finish-${id}">finish</button>
             </div>
         </div>`
 
-        let color
-        if (data.end!='finish'&&data.end!=null){
-            // disqualifié ou abandon
-            color = 'bg-danger'
-        } else if (data.finish && !data.all_right) {
-            // fini mais pas suivis le parcours
-            color = 'bg-warning'
-        } else if (data.finish && data.all_right) {
-            // fini et just
-            color = 'bg-success'
-        } else {
-            // dans las course mais pas fini
-            color = 'bg-primary'
-        }
+        let color = get_color(data)
         
         if (!node){
             let node = document.createElement('div')
@@ -190,21 +182,49 @@
             node.innerHTML = html
         }
 
+        if (!data.started){
+            return
+        }
+
         // gere l'affichage du temps
         let chrono_div = document.getElementById(`chrono-${id}`)
         let start_time = data.start_time*1000
         let delta = Date.now()-start_time
         console.log(delta, start_time)
         chrono_div.innerText = delta_to_display(delta)
-        setInterval(() => {
+        intervals[data.id] = setInterval(() => {
             delta = Date.now()-start_time
             chrono_div.innerText = delta_to_display(delta)
         }, 1000);
 
         // 
-        let diqualify_btn = document.getElementById(`disqualify-${id}`)
+        let disqualify_btn = document.getElementById(`disqualify-${id}`)
         let abandon_btn = document.getElementById(`abandon-${id}`)
+        let finish_btn = document.getElementById(`finish-${id}`)
 
+        if (data.end != null){
+            disqualify_btn.classList.add('disabled')
+            abandon_btn.classList.add('disabled')
+            finish_btn.classList.add('disabled')
+            clearInterval(intervals[data.id])
+            chrono_div.innerText = data.end
+        } else {
+            disqualify_btn.addEventListener('click', function(ev){
+                if (window.confirm('etes vous sur de la disqualifier cette action est irreversible')){
+                    socket.emit('disqualify', {'inscription_id':data.id}, ()=>{console.log('coucu')})
+                }
+            })
+            abandon_btn.addEventListener('click', function(ev){
+                if (window.confirm('etes vous sur que la personne abandonne cette action est irreversible')){
+                    socket.emit('abandon', {'inscription_id':data.id})
+                }
+            })
+            finish_btn.addEventListener('click', function(ev){
+                if (window.confirm('etes vous sur que la personne a fini cette action est irreversible')){
+                    socket.emit('finish', {'inscription_id':data.id})
+                }
+            })
+        }
     }
 
     function toggleDetails(detailId, button) {
@@ -228,32 +248,26 @@
     </div>
     <script>
         socket.emit('get_parcours_passage', {{parcours.id}}, function(data){
-            let launched = true
+            let launched = Boolean(data.length)
             div = document.getElementById("pills-content-{{ parcours.id }}")
             data.forEach(function(passage){
-                if (passage.started){
-                    create_passage(passage, div)
-                }else{
-                    launched=false
-                    create_not_started(passage, div)
-                }
+                create_passage(passage, div)
+                launched = passage.started?launched:false
             })
             
+            let header = document.getElementById('pills-header-{{ parcours.id }}')
             if (!launched){
 
-                let header = document.getElementById('pills-header-{{ parcours.id }}')
                 header.innerHTML = '<button style="min-width: 150px;" id="launch-parcours-{{ parcours.id }}" class="btn btn-info">lancer le parcours</button>'
                 
                 document.getElementById("launch-parcours-{{ parcours.id }}").addEventListener('click', function(event){
                     let button = event.target
-                    button.removeEventListener('click', this)
                     button.innerText = 3
                     setTimeout(() => {
                         button.innerText = 2
                         setTimeout(() => {
                             button.innerText = 1
                             setTimeout(() => {
-                                console.log('go');
                                 let start_time = Date.now()
                                 button.innerText='go'
                                 socket.emit('launch_parcours', {'parcours_id':{{ parcours.id }}, 'start_time': start_time}, function(){
@@ -262,6 +276,14 @@
                             }, 1000);
                         }, 1000);
                     }, 1000);
+                }, { once: true })
+            } else {
+                header.innerHTML = '<button style="min-width: 150px;" id="end-parcours-{{ parcours.id }}" class="btn btn-info">finir le parcours</button>'
+                
+                document.getElementById("end-parcours-{{ parcours.id }}").addEventListener('click', function(event){
+                    let button = event.target
+                    let start_time = Date.now()
+                    socket.emit('launch_parcours', {'parcours_id':{{ parcours.id }}, 'start_time': start_time})
                 }, { once: true })
             }
 

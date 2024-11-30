@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, request
+from flask import Blueprint, flash, redirect, render_template, request, abort
 from flask_app import admin_required, db, set_route, lang_url_for as url_for
 from flask_app.admin.parcours.forms import  Parcours_name_form, Etape_modif_form, Stand_modif_form, New_parcours_form
 from flask_login import login_required, current_user
@@ -196,14 +196,14 @@ def build_alt_graph(graph_data):
 def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
      #! create the map
     map_style = 'satelite'
-    map_styles={'satelite':{'tiles':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
-                            'attr':'Esri',
-                            'name':'Satellite',
-                            'max_zoom':20},
-                'map':{'tiles':'OpenStreetMap',
+    map_styles={'map':{'tiles':'OpenStreetMap',
                         'attr':None,
                         'name':None,
                         'max_zoom':20},
+                'satelite':{'tiles':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                            'attr':'Esri',
+                            'name':'Satellite',
+                            'max_zoom':20},
                 'topographie':{'tiles':'https://tile.opentopomap.org/{z}/{x}/{y}.png',
                         'attr':'opentopomap',
                         'name':'topographie',
@@ -307,8 +307,8 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
     # afficher le trace pour les modifications
     if request.args.get('trace') != None and modif:
         trace = Trace.query.filter_by(id=request.args.get('trace')).first()
-        if not trace or trace.parcours != parcours:
-            return redirect(request.path)
+        if trace is None or trace.parcours != parcours:
+            abort(400)
         poly_points = [[trace.start.lat, trace.start.lng ],*[[lat, lng] for lat, lng, _ in eval(trace.trace)],[trace.end.lat, trace.end.lng]]
         marker_coordonee += poly_points
         popup = Popup()
@@ -318,7 +318,7 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
                     """%trace.id)
         line = PolyLine(poly_points, dash_array='5', tooltip=trace.name, popup=popup).add_to(map)
         element_name= line.get_name()
-        last_point = poly_points[0]
+        last_point = tuple(poly_points[0])
         i=-1
         for i,( lat, lng) in enumerate(poly_points[1:-1]): # affiche chaque marker d'angle et les signes plus pour ajouter un point
             popup = Popup()
@@ -358,7 +358,7 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None):
 
     # trouver et centre la map sur le parcours
     lats, lngs = set([i[0] for i in marker_coordonee]), set([i[1] for i in marker_coordonee])
-    marker_coordonee = [(la, lo) for la, lo in marker_coordonee]
+    marker_coordonee = [[la, lo] for la, lo in marker_coordonee]
     if len(lats)!=0 or len(lngs)!=0:
         map.fit_bounds([min(marker_coordonee), max(marker_coordonee)])
     #? ajout different layer
@@ -406,7 +406,7 @@ def modify_parcours(event_name, parcours_name):
     if request.args.get('marker') and not already_use:#? modif d'un marker
         modif_form_type='marker'
         stand= Stand.query.filter_by(id=request.args.get('marker')).first()
-        if not stand or stand.parcours != parcours:
+        if stand is None or stand.parcours != parcours:
             return redirect(request.path)
         first_or_last = parcours.end_stand==stand or parcours.start_stand==stand
         modif_form= Stand_modif_form(data={'name':stand.name, 'lat':stand.lat, 'lng':stand.lng, 'color':stand.color.hex, 'chrono':stand.chrono})
@@ -436,7 +436,7 @@ def modify_parcours(event_name, parcours_name):
     elif request.args.get('trace') and not already_use:#? modif d'une trace
         modif_form_type = 'trace'
         trace = Trace.query.filter_by(id=request.args.get('trace')).first()
-        if not trace or trace.parcours != parcours:
+        if trace is None or trace.parcours != parcours:
             return redirect(request.path)
         #! suppression de l'etape
         if request.args.get('delete')=='':
@@ -634,7 +634,8 @@ def modify_parcours(event_name, parcours_name):
         modif_form_type = None
         modif_form=None
 
-    element_name, last_path_name, next_path_name, markers_name, program_list, map, graph = create_map_and_alt_graph(parcours, modif=not already_use)
+    map_data = create_map_and_alt_graph(parcours, modif=not already_use)
+    element_name, last_path_name, next_path_name, markers_name, program_list, map, graph = map_data
 
 
     #? render the map

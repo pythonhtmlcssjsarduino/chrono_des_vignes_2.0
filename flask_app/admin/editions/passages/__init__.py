@@ -1,7 +1,7 @@
 import time
 from flask import Blueprint, redirect, render_template, flash, request, jsonify, session
 from flask_app import admin_required, db, set_route, lang_url_for as url_for, socketio
-from flask_app.admin.parcours import calc_points_dist
+from flask_app.lib import calc_points_dist
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, User, Inscription, Trace
 from datetime import datetime
@@ -31,19 +31,21 @@ def dashboard(event_name, edition_name):
         if form.validate_on_submit():
             if not edition.passage_keys.filter_by(name=form.name.data).first():
                 stands = [Stand.query.get(int(stand.data)) for stand in form.stands if stand.data]
-                key_code=secrets.token_urlsafe(5)
-                while PassageKey.query.filter_by(key=key_code).first():
+                if len(stands)>0:
                     key_code=secrets.token_urlsafe(5)
-                key = PassageKey(event_id=event.id,
-                                edition_id=edition.id,
-                                stands=stands,
-                                key=key_code,
-                                name=form.name.data)
-                db.session.add(key)
-                db.session.commit()
-                ic(key, edition, edition.id)
+                    while PassageKey.query.filter_by(key=key_code).first():
+                        key_code=secrets.token_urlsafe(5)
+                    key = PassageKey(event_id=event.id,
+                                    edition_id=edition.id,
+                                    stands=stands,
+                                    key=key_code,
+                                    name=form.name.data)
+                    db.session.add(key)
+                    db.session.commit()
 
-                return redirect(url_for("admin.editions.passages.dashboard", event_name=event.name, edition_name=edition.name))
+                    return redirect(url_for("admin.editions.passages.dashboard", event_name=event.name, edition_name=edition.name))
+                else:
+                    form.stands[0].errors = list(form.stands.errors)+['vous devez au moins selectionner un stand.']
             else:
                 form.name.errors = list(form.name.errors)+['vous utiliser déjà ce nom.']
     else:
@@ -163,7 +165,6 @@ def chrono_page(key_code):
 
 @socketio.on('connect', namespace='/dashboard')
 def dashboard_connect(auth):
-    ic(current_user, auth, request.sid)
     if current_user.is_authenticated and auth.get('event_id') and auth.get('edition_id'):
         event:Event = Event.query.get(auth['event_id'])
         if not event or event.createur != current_user:
@@ -173,9 +174,7 @@ def dashboard_connect(auth):
             return False # connection not allowed
         
         session['room'] = f'{event.id}-{edition.id}'
-        ic(session['room'])
         join_room(session['room'], request.sid)
-        ic('dashboard connected')
 
     else:
         return False # connection not allowed
@@ -187,12 +186,10 @@ def dashboard_disconnect():
 
 @socketio.on('connect', namespace='/key')
 def key_connect(auth):
-    ic('key connect')
     if not auth.get('key', False):
         return False # connection not allowed
     session['room'] = auth['key']
     join_room(session['room'], request.sid)
-    ic('connected')
 
 @socketio.on('disconnect', namespace='/key')
 def key_disconnect():
@@ -207,9 +204,7 @@ def get_passages_data():
 
 @socketio.on('set_passage', namespace='/key')
 def set_passage(data):
-    ic(session['room'])
-    ic('set passage', data)
-    inscription = Inscription.query.filter(Inscription.dossard == data['dossard']).first()
+    inscription:Inscription = Inscription.query.filter(Inscription.dossard == data['dossard']).first()
     if not inscription:
         emit('passage_response', {"success": False, 'saved':False, 'error':'not valide dossard', 'request':data}, to=session['room'])
         return
@@ -218,10 +213,17 @@ def set_passage(data):
         emit('passage_response', {"success": False, 'saved':False, 'error':'not valide key', 'request':data}, to=session['room'])
         return
     
+    if inscription.end == 'finish':
+        emit('passage_response', {"success": False, 'saved':False, 'error':'has already finish', 'request':data}, to=session['room'])
+        return
+    elif inscription.end == 'abandon':
+        emit('passage_response', {"success": False, 'saved':False, 'error':'as abandoné', 'request':data}, to=session['room'])
+        return
+    elif inscription.end == 'disqual':
+        emit('passage_response', {"success": False, 'saved':False, 'error':'is disqualified', 'request':data}, to=session['room'])
+        return
+    
     pass_time = datetime.fromtimestamp(data['time']/1000)
-    ic(key)#type:ignore
-    ic(pass_time) #type:ignore
-    ic(inscription) #type:ignore
 
     passage = Passage(key_id = key.id, time_stamp=pass_time, inscription_id= inscription.id)
     db.session.add(passage)

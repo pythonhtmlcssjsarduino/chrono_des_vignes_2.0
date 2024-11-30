@@ -7,12 +7,14 @@ from datetime import datetime
 from flask_app.admin.editions.dossard import dossard
 from flask_app.admin.editions.passages import passages
 from flask_app.admin.editions.parcours import parcours
+from flask_app.admin.editions.result import result
 from sqlalchemy import or_
 
 editions = Blueprint('editions', __name__, template_folder='templates')
 editions.register_blueprint(dossard)
 editions.register_blueprint(passages)
 editions.register_blueprint(parcours)
+editions.register_blueprint(result)
 
 @set_route(editions, '/event/<event_name>/editions', methods=['POST', 'GET'])
 @login_required
@@ -73,7 +75,6 @@ def modify_edition_page(event_name, edition_name):
                               'rdv_lng':edition.rdv_lng,
                               'parcours':[str((p.name, p.description)) for p in edition.parcours]})
     form.parcours.choices=[str((p.name, p.description)) for p in event.parcours.filter(or_(Parcours.archived==False, Parcours.editions.any(Edition.id==edition.id))).all()]
-    ic(dir(form.parcours)) # type: ignore
 
     #? desactiver le champs si dates deja passé
     form.edition_date.render_kw.pop("disabled", None)
@@ -95,8 +96,6 @@ def modify_edition_page(event_name, edition_name):
     if edition.last_inscription <= datetime.now():
         form.last_inscription.render_kw["disabled"]= "disabled"
     #? fin desactivation des champs
-    ic(form.parcours.data)
-    ic([str((p.name, p.description)) for p in edition.parcours])
 
     if form.validate_on_submit():
         print(form.parcours.data)

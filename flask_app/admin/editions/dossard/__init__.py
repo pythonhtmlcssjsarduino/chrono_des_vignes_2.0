@@ -29,7 +29,6 @@ def generate_dossard(event_name, edition_name):
 
 @socketio.on('connect', namespace='/dossard')
 def dossard_connect(auth):
-    ic(current_user, auth, request.sid)
     if current_user.is_authenticated and auth.get('event_id') and auth.get('edition_id'):
         event:Event = Event.query.get(auth['event_id'])
         if not event or event.createur != current_user:
@@ -47,7 +46,6 @@ def dossard_disconnect():
 @socketio.on('change_dossard', namespace='/dossard')
 def change_dossard(data):
     inscription = Inscription.query.get(data['inscription_id'])
-    ic(data)
     if (not inscription and isinstance(data['new_dossard'], int) and not current_user.is_authenticated and inscription.event.createur == current_user):
         return False
     if Inscription.query.filter(Inscription.dossard == data['new_dossard'], Inscription.edition==inscription.edition, Inscription.id!=inscription.id).first():
@@ -79,7 +77,6 @@ def generate_all_dossard(event_name, edition_name):
     edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
     user = current_user
 
-    ic(edition.inscriptions.count())
     dossard_nb = [inscription.dossard for inscription in edition.inscriptions.filter(Inscription.dossard!=None).all()]
     last_dossard = 1
     for inscription in edition.inscriptions.filter(Inscription.dossard==None).all():

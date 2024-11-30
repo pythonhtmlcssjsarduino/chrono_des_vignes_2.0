@@ -37,11 +37,20 @@
               >{{ _('admin.editions.gererdossard') }}</a
               >
           </li>
-          <li class="nav-item bg-info btn mb-2">
+          {% if now>edition_data.edition_date %}
+            <li class="nav-item bg-info btn mb-2">
               <a
               class="nav-link "
               href="{{ url_for('admin.editions.parcours.view', event_name=event_data.name, edition_name=edition_data.name) }}"
               >{{ _('admin.editions.gererparcours') }}</a
+              >
+            </li>
+          {% endif %}
+          <li class="nav-item bg-info btn mb-2">
+              <a
+              class="nav-link "
+              href="{{ url_for('admin.editions.result.result_page', event_name=event_data.name, edition_name=edition_data.name) }}"
+              >{{ _('admin.editions.result') }}</a
               >
           </li>
         </ul>

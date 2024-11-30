@@ -1,5 +1,5 @@
 {% extends 'layout.html' %}
-{% from 'macro.html' import form_field, submit %}
+{% from 'macro.html' import form_field, submit, map_field %}
 {% block content %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
@@ -21,8 +21,9 @@
         </div>
         {{ form_field(form.first_inscription) }}
         {{ form_field(form.last_inscription) }}
-        {{ form_field(form.rdv_lat) }}
-        {{ form_field(form.rdv_lng) }}
+        {{ form_field(form.rdv_lat, input_id='lat_id', div_class='d-none') }}
+        {{ form_field(form.rdv_lng, input_id='lng_id', div_class='d-none') }}
+        {{ map_field('rendez vous pour cette edition', 'lat_id', 'lng_id', form.rdv_lat.data, form.rdv_lng.data) }}
         {{ submit(form) }}
         {% if form.first_inscription.data > now %}
             <div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="deleteediton" aria-hidden="true">

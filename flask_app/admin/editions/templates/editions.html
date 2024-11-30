@@ -1,4 +1,4 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %} {% from 'macro.html' import map_field %} {% block content %}
 <h3>{{ _('admin.editions.editions') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
   {% for edition in event_data.editions %}
@@ -131,29 +131,32 @@
                 {% else %} {{ form.last_inscription(class="form-control
                 form-control-lg") }} {% endif %}
               </div>
-              <div class="form-group">
+              <div class="form-group d-none">
                 {# rdv lat #} {{ form.rdv_lat.label(class="form-control-label")
                 }} {% if form.rdv_lat.errors %} {{
-                form.rdv_lat(class="form-control form-control-lg is-invalid") }}
+                form.rdv_lat(class="form-control form-control-lg is-invalid", id='rdv_lat') }}
                 <div class="invalid-feedback">
                   {% for error in form.rdv_lat.errors %}
                   <span>{{ error }}</span>
                   {% endfor %}
                 </div>
-                {% else %} {{ form.rdv_lat(class="form-control form-control-lg")
+                {% else %} {{ form.rdv_lat(class="form-control form-control-lg", id='rdv_lat')
                 }} {% endif %}
               </div>
-              <div class="form-group">
+              <div class="form-group d-none">
                 {# rdv lng #} {{ form.rdv_lng.label(class="form-control-label")
                 }} {% if form.rdv_lng.errors %} {{
-                form.rdv_lng(class="form-control form-control-lg is-invalid") }}
+                form.rdv_lng(class="form-control form-control-lg is-invalid", id='rdv_lng') }}
                 <div class="invalid-feedback">
                   {% for error in form.rdv_lng.errors %}
                   <span>{{ error }}</span>
                   {% endfor %}
                 </div>
-                {% else %} {{ form.rdv_lng(class="form-control form-control-lg")
-                }} {% endif %}
+                {% else %} {{ form.rdv_lng(class="form-control form-control-lg", id='rdv_lng')
+                }}{% endif %}
+              </div>
+              <div class="form-group">
+                {{ map_field('rendez vous pour cette edition', 'rdv_lat', 'rdv_lng', form.rdv_lng.data, form.rdv_lng.data) }}
               </div>
             </fieldset>
           </form>

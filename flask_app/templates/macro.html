@@ -1,15 +1,15 @@
-{% macro form_field(field) %}
-    <div class="form-group">{# name #}
+{% macro form_field(field, input_id='', div_class='') %}
+    <div class="form-group {{div_class}}">
         {{ field.label(class="form-control-label") }}
         {% if field.errors %}
-            {{ field(class="form-control form-control-lg is-invalid") }}
+            {{ field(class="form-control form-control-lg is-invalid", id= input_id) }}
             <div class="invalid-feedback">
                 {% for error in field.errors %}
                     <span>{{ error }}</span>
                 {% endfor %}
             </div>
         {% else %}
-            {{ field(class="form-control form-control-lg") }}
+            {{ field(class="form-control form-control-lg", id=input_id) }}
         {% endif %}
     </div>
 {% endmacro %}
@@ -18,4 +18,53 @@
     <div class="form-group">
         {{ form.submit_btn(class="btn btn-outline-info") }}
     </div>
+{% endmacro %}
+
+{% macro map_field(label, lat_field_id, lng_field_id, lat, lng, width='400px', height='400px', start_zoom=12) %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+        crossorigin=""></script>
+    <label class="form-control-label">{{ label }}</label>
+    <div id="map" style="height: {{ height }}; width: {{ width }}"></div>
+    <script type="text/javascript">
+
+        function main() {
+
+            let lat_field = document.getElementById('{{ lat_field_id }}')
+            let lng_field = document.getElementById('{{ lng_field_id }}')
+
+            let options = {
+                center: [{{lat}}, {{lng}}],
+                zoom: {{start_zoom}},
+            }
+            
+            let map = L.map('map', options);
+
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+            }).addTo(map);
+
+            let marker = L.marker([{{lat}}, {{lng}}]).addTo(map);
+
+            map.on('click', 
+                function(e){
+                    lat_field.value = e.latlng.lat
+                    lng_field.value = e.latlng.lng
+                    marker.setLatLng(e.latlng)
+                });
+            
+            var observer = new IntersectionObserver(function(entries) {
+                if(entries[0].isIntersecting === true) {
+                    map.invalidateSize(true);
+                }
+            }, { threshold: [0] });
+
+            observer.observe(document.getElementById('map'));
+                    }
+        window.addEventListener("load", main);
+    </script>
 {% endmacro %}

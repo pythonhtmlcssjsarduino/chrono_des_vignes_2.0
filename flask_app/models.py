@@ -3,7 +3,7 @@ from flask_app import db, DEFAULT_PROFIL_PIC
 from sqlalchemy_utils import ColorType
 from colour import Color
 from flask_login import UserMixin
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask_app.lib import calc_points_dist
 from typing import Iterator, Iterable
 from collections import namedtuple
@@ -230,6 +230,14 @@ class Inscription(db.Model):
     
     def get_last_passage(self)->Passage:
         return self.passages.order_by(Passage.time_stamp.desc()).first()
+    
+    def get_first_passage(self)->Passage:
+        return self.passages.order_by(Passage.time_stamp.asc()).first()
+    
+    def get_time(self)->timedelta|None:
+        if not self.has_started():
+            return None
+        return self.get_last_passage().time_stamp - self.get_first_passage().time_stamp
 
     def get_run(self):
         user_passages:list[Passage] = self.passages.filter(Passage.time_stamp<=self.get_last_passage().time_stamp).all()
