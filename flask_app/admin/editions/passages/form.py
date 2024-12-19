@@ -1,12 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SelectField, SubmitField, DateTimeField, IntegerField, FloatField, FieldList
 from flask_app.custom_validators import DataRequired, Length, DateTimeNotPast, DateTimeBefore, InputRequired
+from flask_babel import lazy_gettext as _
 
 class NewKeyForm(FlaskForm):
-    name = StringField('nom', validators=[DataRequired(), Length(max=40)])
-    stands = FieldList(SelectField('stand'))
-    submit_btn= SubmitField('créer')
+    name = StringField(_('form.lastname'), validators=[DataRequired(), Length(max=40)])
+    stands = FieldList(SelectField(_('form.stand')))
+    submit_btn= SubmitField('form.create')
 
 class ChronoLoginForm(FlaskForm):
-    key = StringField('clé', validators=[DataRequired()])
-    submit_btn= SubmitField('valider')
+    key = StringField(_('form.key'), validators=[DataRequired()])
+    submit_btn= SubmitField(_('form.validate'))

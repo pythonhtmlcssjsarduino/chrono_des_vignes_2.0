@@ -1,28 +1,29 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, DecimalField, BooleanField, TextAreaField
 from flask_app.custom_validators import DataRequired, InputRequired, Length
+from flask_babel import lazy_gettext as _
 
 class Parcours_name_form(FlaskForm):
-    name= StringField('nom du parcours', validators=[DataRequired(), Length(max=40)])
-    description = TextAreaField('description', validators=[], default='')
-    submit_btn=SubmitField('sauvegarder')
+    name= StringField(_('form.parcoursname'), validators=[DataRequired(), Length(max=40)])
+    description = TextAreaField(_('form.parcoursdescription'), validators=[], default='')
+    submit_btn=SubmitField(_('form.save'))
 
 class Stand_modif_form(FlaskForm):
-    name = StringField('nom du stand', validators=[DataRequired(), Length(max=40)])
-    lat = DecimalField('latidude du stand', validators=[InputRequired()], places=None)
-    lng = DecimalField('longitude du stand', validators=[InputRequired()], places=None)
-    color = StringField('couleur du stand', validators=[DataRequired()], default='#f00')
-    chrono = BooleanField('activer le chronometrage du stand', validators=[])
-    submit_btn = SubmitField('enregistrer')
+    name = StringField(_('form.standname'), validators=[DataRequired(), Length(max=40)])
+    lat = DecimalField(_('form.standlat'), validators=[InputRequired()], places=None)
+    lng = DecimalField(_('form.standlng'), validators=[InputRequired()], places=None)
+    color = StringField(_('form.standcouleur'), validators=[DataRequired()], default='#f00')
+    chrono = BooleanField(_('form.chrono'), validators=[])
+    submit_btn = SubmitField(_('form.save'))
 
 class Etape_modif_form(FlaskForm):
-    name = StringField('nom de l\'etape', validators=[DataRequired(), Length(max=40)])
-    path = StringField('path', validators=[DataRequired()])
-    submit_btn = SubmitField('enregistrer')
+    name = StringField(_('form.etapename'), validators=[DataRequired(), Length(max=40)])
+    path = StringField(_('form.path'), validators=[DataRequired()])
+    submit_btn = SubmitField(_('form.save'))
 
 class New_parcours_form(FlaskForm):
-    name = StringField('nom du parcours', validators=[DataRequired(), Length(max=40)])
-    start_lat = DecimalField('latidude du depart', validators=[InputRequired()], places=None)
-    start_lng = DecimalField('longitude du depart', validators=[InputRequired()], places=None)
+    name = StringField(_('form.parcoursname'), validators=[DataRequired(), Length(max=40)])
+    start_lat = DecimalField(_('form.startlat'), validators=[InputRequired()], places=None)
+    start_lng = DecimalField(_('form.startlng'), validators=[InputRequired()], places=None)
 
-    submit_btn = SubmitField('créer')
+    submit_btn = SubmitField(_('form.create'))

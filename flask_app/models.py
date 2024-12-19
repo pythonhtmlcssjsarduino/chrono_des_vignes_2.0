@@ -1,12 +1,14 @@
 from __future__ import annotations
+from html import escape
 from flask_app import db, DEFAULT_PROFIL_PIC
-from sqlalchemy_utils import ColorType
+from sqlalchemy_utils import ColorType, JSONType
 from colour import Color
 from flask_login import UserMixin
 from datetime import datetime, timedelta
 from flask_app.lib import calc_points_dist
 from typing import Iterator, Iterable
 from collections import namedtuple
+from markdown import markdown
 
 TracePoint = namedtuple('TracePoint', ['lat', 'lng', 'alt'], defaults=[None])
 
@@ -46,11 +48,17 @@ class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
     name= db.Column(db.String(40), nullable=False, unique=True)
+    description = db.Column(db.Text, nullable=False, default='')
     parcours=db.relationship('Parcours', backref='event', lazy='dynamic')
     editions=db.relationship('Edition', backref='event', lazy='dynamic')
     inscrits=db.relationship('Inscription', backref='event', lazy='dynamic')
     createur_id=db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     passage_keys=db.relationship('PassageKey', backref='event', lazy='dynamic')
+
+    
+    @property
+    def description_html(self):
+        return markdown(escape(self.description))
 
     def get_unique_inscrits(self):
         uniques =[]
@@ -196,6 +204,7 @@ class Edition(db.Model):
     __allow_unmapped__ = True
     id = db.Column(db.Integer, primary_key=True)
     creation_date=db.Column(db.DateTime, nullable=False, default=datetime.now)
+    description = db.Column(db.Text, nullable=False, default='')
     name= db.Column(db.String(40), nullable=False)
     event_id=db.Column(db.Integer, db.ForeignKey('event.id'), nullable=False)
     parcours = db.relationship('Parcours', secondary=editions_parcours, back_populates='editions', lazy ='dynamic')
@@ -206,6 +215,10 @@ class Edition(db.Model):
     rdv_lat = db.Column( db.Float, nullable=False, default=46.58)
     rdv_lng = db.Column( db.Float, nullable=False, default=6.52)
     passage_keys=db.relationship('PassageKey', backref='edition', foreign_keys='PassageKey.edition_id', lazy='dynamic')
+
+    @property
+    def description_html(self):
+        return markdown(escape(self.description))
 
 class Inscription(db.Model):
     __allow_unmapped__ = True

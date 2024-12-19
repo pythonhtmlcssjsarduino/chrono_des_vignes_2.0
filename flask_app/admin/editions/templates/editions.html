@@ -1,4 +1,4 @@
-{% extends 'layout.html' %} {% from 'macro.html' import map_field %} {% block content %}
+{% extends 'layout.html' %} {% from 'macro.html' import map_field, form_field %} {% block content %}
 <h3>{{ _('admin.editions.editions') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
   {% for edition in event_data.editions %}
@@ -90,6 +90,7 @@
                 {% else %} {{ form.edition_date(class="form-control
                 form-control-lg") }} {% endif %}
               </div>
+              {{ form_field(form.description) }}
               <div class="form-group">
                 {# parcours #} {{
                 form.parcours.label(class="form-control-label") }} {% if

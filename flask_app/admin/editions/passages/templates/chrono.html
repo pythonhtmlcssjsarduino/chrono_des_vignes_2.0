@@ -4,16 +4,16 @@
 {% endblock %}
 {% block content %}
     <div>
-        <p>clé: {{ key.name }} ({{ key.key }})</p>
-        <p>événement: {{ key.event.name }}</p>
+        <p>{{ _('admin.editions.passages.key') }}: {{ key.name }} ({{ key.key }})</p>
+        <p>{{ _('admin.editions.passages.événement') }}: {{ key.event.name }}</p>
         <ul class="list-group">
             {% for stand in key.stands.all() %}
-                <li class="list-group-item">stand: {{ stand.name }}, parcours: {{ stand.parcours.name }}</li>
+                <li class="list-group-item">{{ _('admin.editions.passages.stand') }}: {{ stand.name }}, {{ _('admin.editions.passages.parcours') }}: {{ stand.parcours.name }}</li>
             {% endfor %}
         </ul>
     </div>
     <br>
-    <input type="number" class="form-control form-control-lg" id="dossard_input" placeholder="enter dossard number">
+    <input type="number" class="form-control form-control-lg" id="dossard_input" placeholder="{{ _('admin.editions.passages.enterdossardnb') }}">
     <br>
     <div class="d-flex w-100">
         <div class="w-50">

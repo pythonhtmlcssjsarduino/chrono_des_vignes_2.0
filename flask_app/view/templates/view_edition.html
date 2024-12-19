@@ -1,6 +1,9 @@
 {% extends 'layout.html' %}
 {% block content %}
 <h3>{{edition_data.event.name}} {{edition_data.name}}</h3>
+<br>
+<div>{{ edition_data.description_html | safe }}</div>
+
 <div class="card mb-4">
     <div class="card-body">
       <div class="row">
@@ -39,7 +42,7 @@
           <p class="mb-0">{{ _('view.rdv') }}</p>
         </div>
         <div class="col-sm-9">
-          <a href="{{rdv_url}}" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-muted mb-0">ouvrire sur google maps <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+          <a href="{{rdv_url}}" target="_blank" rel="noopener noreferrer" class="text-decoration-none text-muted mb-0">{{ _('view.opengmap') }} <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
         </div>
       </div>
       <hr />

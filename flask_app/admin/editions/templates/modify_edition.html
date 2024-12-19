@@ -6,6 +6,7 @@
     <fieldset class="form-group">
         {{ form_field(form.name) }}
         {{ form_field(form.edition_date) }}
+        {{ form_field(form.description) }}
         <div class="form-group">{# parcours ne pas remplacer par macro car style different!! #}
             {{ form.parcours.label(class="form-control-label") }}
             {% if form.parcours.errors %}
@@ -23,7 +24,7 @@
         {{ form_field(form.last_inscription) }}
         {{ form_field(form.rdv_lat, input_id='lat_id', div_class='d-none') }}
         {{ form_field(form.rdv_lng, input_id='lng_id', div_class='d-none') }}
-        {{ map_field('rendez vous pour cette edition', 'lat_id', 'lng_id', form.rdv_lat.data, form.rdv_lng.data) }}
+        {{ map_field(_('form.editionrdv'), 'lat_id', 'lng_id', form.rdv_lat.data, form.rdv_lng.data) }}
         {{ submit(form) }}
         {% if form.first_inscription.data > now %}
             <div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="deleteediton" aria-hidden="true">

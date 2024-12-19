@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, render_template, redirect, request
 from flask_app import admin_required, db, set_route, lang_url_for as url_for
-from flask_app.admin.editions.forms import Edition_form
+from flask_app.admin.editions.form import Edition_form
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Parcours, Edition
 from datetime import datetime
@@ -32,6 +32,7 @@ def editions_page(event_name):
                               event_id=event.id,
                               parcours=event.parcours.filter(Parcours.name.in_(form.parcours.data)).all(),
                               edition_date=form.edition_date.data,
+                              description = form.description,
                               first_inscription=form.first_inscription.data,
                               last_inscription=form.last_inscription.data,
                               rdv_lat=form.rdv_lat.data,
@@ -69,6 +70,7 @@ def modify_edition_page(event_name, edition_name):
     user = current_user
     form = Edition_form(data={'name':edition.name,
                               'edition_date':edition.edition_date,
+                              'description':edition.description,
                               'first_inscription':edition.first_inscription,
                               'last_inscription':edition.last_inscription,
                               'rdv_lat':edition.rdv_lat,
@@ -98,10 +100,10 @@ def modify_edition_page(event_name, edition_name):
     #? fin desactivation des champs
 
     if form.validate_on_submit():
-        print(form.parcours.data)
         if form.name.data == edition.name or not event.editions.filter_by(name=form.name.data).first():
             edition.name = form.name.data
             edition.edition_date = form.edition_date.data
+            edition.description = form.description.data
             edition.parcours = event.parcours.filter(Parcours.name.in_([eval(p)[0] for p in form.parcours.data])).all()
             edition.first_inscription = form.first_inscription.data
             edition.last_inscription = form.last_inscription.data

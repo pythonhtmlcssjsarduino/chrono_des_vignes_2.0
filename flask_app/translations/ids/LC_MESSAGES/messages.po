@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2024-10-23 19:18+0200\n"
+"POT-Creation-Date: 2024-12-01 11:22+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: flask_app/__init__.py:91
+#: flask_app/__init__.py:101
 msgid "flash.error.mustadmin"
 msgstr "flash.error.mustadmin"
 
-#: flask_app/__init__.py:94
+#: flask_app/__init__.py:104
 msgid "flash.error.wrongadminevent"
 msgstr "flash.error.wrongadminevent"
 
-#: flask_app/__init__.py:102 flask_app/templates/layout.html:101
+#: flask_app/__init__.py:112 flask_app/templates/layout.html:101
 msgid "app.lang"
 msgstr "app.lang"
 
@@ -36,6 +36,10 @@ msgstr "admin.view.error.coureurdontexist:coureur"
 #: flask_app/admin/coureurs/templates/coureurs.html:3
 msgid "admin.view.coureurs"
 msgstr "admin.view.coureurs"
+
+#: flask_app/admin/coureurs/templates/view_coureur.html:3
+msgid "admin.view.info"
+msgstr "admin.view.info"
 
 #: flask_app/admin/coureurs/templates/view_coureur.html:8
 msgid "admin.view.name"
@@ -61,6 +65,96 @@ msgstr "admin.view.username"
 msgid "admin.view.participation"
 msgstr "admin.view.participation"
 
+#: flask_app/admin/coureurs/templates/view_coureur.html:63
+msgid "admin.view.parcours"
+msgstr "admin.view.parcours"
+
+#: flask_app/admin/coureurs/templates/view_coureur.html:64
+msgid "admin.view.edition"
+msgstr "admin.view.edition"
+
+#: flask_app/admin/coureurs/templates/view_coureur.html:65
+msgid "admin.view.date"
+msgstr "admin.view.date"
+
+#: flask_app/admin/coureurs/templates/view_coureur.html:66
+msgid "admin.view.dossard"
+msgstr "admin.view.dossard"
+
+#: flask_app/admin/coureurs/templates/view_coureur.html:67
+msgid "admin.view.rank"
+msgstr "admin.view.rank"
+
+#: flask_app/admin/editions/form.py:8
+msgid "form.edition_name"
+msgstr "form.edition_name"
+
+#: flask_app/admin/editions/form.py:9
+msgid "form.edition_date"
+msgstr "form.edition_date"
+
+#: flask_app/admin/editions/form.py:10
+msgid "form.parcours"
+msgstr "form.parcours"
+
+#: flask_app/admin/editions/form.py:11
+msgid "form.firstinscriptiondate"
+msgstr "form.firstinscriptiondate"
+
+#: flask_app/admin/editions/form.py:12
+msgid "form.lastinscriptiondate"
+msgstr "form.lastinscriptiondate"
+
+#: flask_app/admin/editions/form.py:13
+msgid "form.rdvlng"
+msgstr "form.rdvlng"
+
+#: flask_app/admin/editions/form.py:14
+msgid "form.rdvlat"
+msgstr "form.rdvlat"
+
+#: flask_app/admin/editions/form.py:15 flask_app/admin/parcours/forms.py:9
+#: flask_app/admin/parcours/forms.py:17 flask_app/admin/parcours/forms.py:22
+msgid "form.save"
+msgstr "form.save"
+
+#: flask_app/admin/editions/passages/form.py:7 flask_app/users/forms.py:18
+#: flask_app/users/forms.py:35 flask_app/users/forms.py:46
+msgid "form.lastname"
+msgstr "form.lastname"
+
+#: flask_app/admin/editions/passages/form.py:8
+msgid "form.stand"
+msgstr "form.stand"
+
+#: flask_app/admin/editions/passages/form.py:12
+msgid "form.key"
+msgstr "form.key"
+
+#: flask_app/admin/editions/passages/form.py:13
+msgid "form.validate"
+msgstr "form.validate"
+
+#: flask_app/admin/editions/passages/templates/chrono.html:7
+msgid "admin.editions.passages.key"
+msgstr "admin.editions.passages.key"
+
+#: flask_app/admin/editions/passages/templates/chrono.html:8
+msgid "admin.editions.passages.événement"
+msgstr "admin.editions.passages.événement"
+
+#: flask_app/admin/editions/passages/templates/chrono.html:11
+msgid "admin.editions.passages.stand"
+msgstr "admin.editions.passages.stand"
+
+#: flask_app/admin/editions/passages/templates/chrono.html:11
+msgid "admin.editions.passages.parcours"
+msgstr "admin.editions.passages.parcours"
+
+#: flask_app/admin/editions/passages/templates/chrono.html:16
+msgid "admin.editions.passages.enterdossardnb"
+msgstr "admin.editions.passages.enterdossardnb"
+
 #: flask_app/admin/editions/templates/edition-sidebar.html:30
 msgid "admin.editions.gererpassage"
 msgstr "admin.editions.gererpassage"
@@ -69,9 +163,13 @@ msgstr "admin.editions.gererpassage"
 msgid "admin.editions.gererdossard"
 msgstr "admin.editions.gererdossard"
 
-#: flask_app/admin/editions/templates/edition-sidebar.html:44
+#: flask_app/admin/editions/templates/edition-sidebar.html:45
 msgid "admin.editions.gererparcours"
 msgstr "admin.editions.gererparcours"
+
+#: flask_app/admin/editions/templates/edition-sidebar.html:53
+msgid "admin.editions.result"
+msgstr "admin.editions.result"
 
 #: flask_app/admin/editions/templates/editions.html:2
 msgid "admin.editions.editions"
@@ -85,27 +183,83 @@ msgstr "admin.editions.startcreateparcours"
 msgid "admin.editions.newedition"
 msgstr "admin.editions.newedition"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:60
+#: flask_app/admin/editions/templates/modify_edition.html:26
+msgid "form.editionrdv"
+msgstr "form.editionrdv"
+
+#: flask_app/admin/parcours/forms.py:7 flask_app/admin/parcours/forms.py:25
+msgid "form.parcoursname"
+msgstr "form.parcoursname"
+
+#: flask_app/admin/parcours/forms.py:8
+msgid "form.parcoursdescription"
+msgstr "form.parcoursdescription"
+
+#: flask_app/admin/parcours/forms.py:12
+msgid "form.standname"
+msgstr "form.standname"
+
+#: flask_app/admin/parcours/forms.py:13
+msgid "form.standlat"
+msgstr "form.standlat"
+
+#: flask_app/admin/parcours/forms.py:14
+msgid "form.standlng"
+msgstr "form.standlng"
+
+#: flask_app/admin/parcours/forms.py:15
+msgid "form.standcouleur"
+msgstr "form.standcouleur"
+
+#: flask_app/admin/parcours/forms.py:16
+msgid "form.chrono"
+msgstr "form.chrono"
+
+#: flask_app/admin/parcours/forms.py:20
+msgid "form.etapename"
+msgstr "form.etapename"
+
+#: flask_app/admin/parcours/forms.py:21
+msgid "form.path"
+msgstr "form.path"
+
+#: flask_app/admin/parcours/forms.py:26
+msgid "form.startlat"
+msgstr "form.startlat"
+
+#: flask_app/admin/parcours/forms.py:27
+msgid "form.startlng"
+msgstr "form.startlng"
+
+#: flask_app/admin/parcours/forms.py:29
+msgid "form.create"
+msgstr "form.create"
+
+#: flask_app/admin/parcours/templates/modify_parcours.html:59
 #: flask_app/admin/parcours/templates/parcours.html:13
 #: flask_app/admin/parcours/templates/parcours.html:42
 msgid "admin.parcours.modify"
 msgstr "admin.parcours.modify"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:62
-msgid "admin.parcours.parcoursunmodifyablealreadyused"
-msgstr "admin.parcours.parcoursunmodifyablealreadyused"
-
-#: flask_app/admin/parcours/templates/modify_parcours.html:69
+#: flask_app/admin/parcours/templates/modify_parcours.html:66
 msgid "admin.parcours.supprimer"
 msgstr "admin.parcours.supprimer"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:73
+#: flask_app/admin/parcours/templates/modify_parcours.html:69
+msgid "admin.parcours.parcoursunmodifyablealreadyused"
+msgstr "admin.parcours.parcoursunmodifyablealreadyused"
+
+#: flask_app/admin/parcours/templates/modify_parcours.html:71
 msgid "admin.parcours.desarchiver"
 msgstr "admin.parcours.desarchiver"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:75
+#: flask_app/admin/parcours/templates/modify_parcours.html:73
 msgid "admin.parcours.archiver"
 msgstr "admin.parcours.archiver"
+
+#: flask_app/admin/parcours/templates/modify_parcours.html:77
+msgid "admin.parcours.dupliquer"
+msgstr "admin.parcours.dupliquer"
 
 #: flask_app/admin/parcours/templates/modify_parcours.html:82
 msgid "admin.parcours.clicknewstand"
@@ -122,6 +276,14 @@ msgstr "admin.parcours.deletape"
 #: flask_app/admin/parcours/templates/modify_parcours.html:210
 msgid "admin.parcours.addstand"
 msgstr "admin.parcours.addstand"
+
+#: flask_app/admin/parcours/templates/modify_parcours.html:442
+msgid "chart.dist"
+msgstr "chart.dist"
+
+#: flask_app/admin/parcours/templates/modify_parcours.html:449
+msgid "chart.alt"
+msgstr "chart.alt"
 
 #: flask_app/admin/parcours/templates/parcours.html:2
 msgid "admin.parcours.parcours"
@@ -215,27 +377,27 @@ msgstr "side.parcours"
 msgid "side.runner"
 msgstr "side.runner"
 
-#: flask_app/users/__init__.py:24
+#: flask_app/users/__init__.py:23
 msgid "flash.connected:name"
 msgstr "flash.connected:name"
 
-#: flask_app/users/__init__.py:32
+#: flask_app/users/__init__.py:31
 msgid "flash.error.pwdnotvalid"
 msgstr "flash.error.pwdnotvalid"
 
-#: flask_app/users/__init__.py:51
+#: flask_app/users/__init__.py:50
 msgid "flash.accountcreated"
 msgstr "flash.accountcreated"
 
-#: flask_app/users/__init__.py:60
+#: flask_app/users/__init__.py:59
 msgid "flash.deconected"
 msgstr "flash.deconected"
 
-#: flask_app/users/__init__.py:71
+#: flask_app/users/__init__.py:70
 msgid "flash.warn.inscriptionsnotopen:date"
 msgstr "flash.warn.inscriptionsnotopen:date"
 
-#: flask_app/users/__init__.py:75
+#: flask_app/users/__init__.py:74
 msgid "flash.warn.inscriptionclosed"
 msgstr "flash.warn.inscriptionclosed"
 
@@ -256,11 +418,6 @@ msgstr "form.connect"
 #: flask_app/users/forms.py:45
 msgid "form.name"
 msgstr "form.name"
-
-#: flask_app/users/forms.py:18 flask_app/users/forms.py:35
-#: flask_app/users/forms.py:46
-msgid "form.lastname"
-msgstr "form.lastname"
 
 #: flask_app/users/forms.py:21 flask_app/users/forms.py:36
 #: flask_app/users/forms.py:48
@@ -358,6 +515,10 @@ msgstr "view.evenement"
 #: flask_app/view/templates/view_inscription.html:46
 msgid "view.rdv"
 msgstr "view.rdv"
+
+#: flask_app/view/templates/view_edition.html:42
+msgid "view.opengmap"
+msgstr "view.opengmap"
 
 #: flask_app/view/templates/view_edition.html:48
 msgid "view.inscriptions"

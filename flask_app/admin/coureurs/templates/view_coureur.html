@@ -1,6 +1,6 @@
 {% extends 'layout.html' %} {% block content %}
 <div>
-  <h3>info</h3>
+  <h3>{{ _('admin.view.info') }}</h3>
   <div class="card mb-4">
     <div class="card-body">
       <div class="row">
@@ -60,11 +60,11 @@
     <table class="table">
       <thead>
         <tr>
-          <th scope="col">parcours</th>
-          <th scope="col">edition</th>
-          <th scope="col">date</th>
-          <th scope="col">dossard</th>
-          <th scope="col">rank</th>
+          <th scope="col">{{ _('admin.view.parcours') }}</th>
+          <th scope="col">{{ _('admin.view.edition') }}</th>
+          <th scope="col">{{ _('admin.view.date') }}</th>
+          <th scope="col">{{ _('admin.view.dossard') }}</th>
+          <th scope="col">{{ _('admin.view.rank') }}</th>
         </tr>
       </thead>
       <tbody>

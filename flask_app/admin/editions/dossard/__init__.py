@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, render_template, redirect, url_for, request, session
 from flask_app import admin_required, db, set_route, socketio
-from flask_app.admin.editions.forms import Edition_form
+from flask_app.admin.editions.form import Edition_form
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Parcours, Edition, Inscription
 from datetime import datetime
