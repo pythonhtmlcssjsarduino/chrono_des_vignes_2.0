@@ -1,5 +1,6 @@
 from wtforms import validators
 from datetime import datetime
+from flask_app.models import get_column_max_length
 
 class DataRequired:
     def __init__(self, message=None):
@@ -20,6 +21,11 @@ class Length:
 
     def __call__(self, form, field):
         self.validator.__call__(form, field)
+
+class DbLength(Length):
+    def __init__(self, table, column, min=-1, message=None):
+        max = get_column_max_length(table, column)
+        super().__init__(min, max, message)
 
 class EqualTo:
     def __init__(self, fieldname, message=None):

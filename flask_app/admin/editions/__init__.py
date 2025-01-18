@@ -4,10 +4,10 @@ from flask_app.admin.editions.form import Edition_form
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Parcours, Edition
 from datetime import datetime
-from flask_app.admin.editions.dossard import dossard
-from flask_app.admin.editions.passages import passages
-from flask_app.admin.editions.parcours import parcours
-from flask_app.admin.editions.result import result
+from .dossard import dossard
+from .passages import passages
+from .parcours import parcours
+from .result import result
 from sqlalchemy import or_
 
 editions = Blueprint('editions', __name__, template_folder='templates')

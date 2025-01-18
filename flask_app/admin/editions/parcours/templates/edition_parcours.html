@@ -149,9 +149,9 @@
                 </table>
             </div>
             <div>
-                <button class="btn btn-danger" id="disqualify-${id}">disqualifier</button>
-                <button class="btn btn-danger" id="abandon-${id}">abandon</button>
-                <button class="btn btn-success" id="finish-${id}">finish</button>
+                <button class="btn btn-danger" id="disqualify-${id}">{{ _('admin.editions.parcours.disqualifier') }}</button>
+                <button class="btn btn-danger" id="abandon-${id}">{{ _('admin.editions.parcours.abandon') }}</button>
+                <button class="btn btn-success" id="finish-${id}">{{ _('admin.editions.parcours.finish') }}</button>
             </div>
         </div>`
 
@@ -258,7 +258,7 @@
             let header = document.getElementById('pills-header-{{ parcours.id }}')
             if (!launched){
 
-                header.innerHTML = '<button style="min-width: 150px;" id="launch-parcours-{{ parcours.id }}" class="btn btn-info">lancer le parcours</button>'
+                header.innerHTML = '<button style="min-width: 150px;" id="launch-parcours-{{ parcours.id }}" class="btn btn-info">{{ _('admin.editions.parcours.launch') }}</button>'
                 
                 document.getElementById("launch-parcours-{{ parcours.id }}").addEventListener('click', function(event){
                     let button = event.target
@@ -278,7 +278,7 @@
                     }, 1000);
                 }, { once: true })
             } else {
-                header.innerHTML = '<button style="min-width: 150px;" id="end-parcours-{{ parcours.id }}" class="btn btn-info">finir le parcours</button>'
+                header.innerHTML = '<button style="min-width: 150px;" id="end-parcours-{{ parcours.id }}" class="btn btn-info">{{ _('admin.editions.parcours.end') }}</button>'
                 
                 document.getElementById("end-parcours-{{ parcours.id }}").addEventListener('click', function(event){
                     let button = event.target

@@ -1,12 +1,11 @@
-from flask import render_template, request, session, redirect
+from flask import render_template, request, session, redirect, send_file, send_from_directory
 from flask_app import app, LANGAGES, set_route
 from flask_login import current_user
 from flask_app.models import Edition, Inscription, Event
 from sqlalchemy import and_
 from datetime import datetime
 from flask_babel import gettext, force_locale, get_locale, lazy_gettext
-
-
+from io import BytesIO
 
 @set_route(app, '/')
 def home():
@@ -35,3 +34,19 @@ def change_lang(lang, next:str):
             return redirect(next)
         else:
             return redirect(f'{next[:lang_index]}/{lang}{next[lang_index:]}')
+
+@app.route('/<path:path>', subdomain='doc')
+@app.route('/', subdomain='doc')
+def doc(path=''):
+    return render_template('doc/site/index.html' if path == '' else f'doc/site/{path}/index.html')
+
+@app.route('/assets/<path:path>', subdomain='doc')
+def assets_doc_files(path):
+    return doc_file('assets', path)
+
+@app.route('/search/<path:path>', subdomain='doc')
+def search_doc_files(path):
+    return doc_file('search', path)
+
+def doc_file(dir, path:str):
+    return send_from_directory(app.template_folder, f'doc/site/{dir}/{path}', download_name=path.split('/')[-1])

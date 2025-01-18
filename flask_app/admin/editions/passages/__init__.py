@@ -5,7 +5,7 @@ from flask_app.lib import calc_points_dist
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, User, Inscription, Trace
 from datetime import datetime
-from flask_app.admin.editions.passages.form import NewKeyForm, ChronoLoginForm, ChronoLoginForm
+from .form import NewKeyForm, ChronoLoginForm, ChronoLoginForm
 import secrets
 from flask_socketio import join_room, leave_room, emit
 

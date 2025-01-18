@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
 {% block content %}
-    <h1>results</h1>
+    <h1>{{ _('admin.editions.result.results') }}</h1>
 
     <div>
-        <a href="{{ url_for('admin.editions.result.pdf_result', edition_name=edition_data.name, event_name=event_data.name) }}">view result pdf <i class="fa fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
+        <a href="{{ url_for('admin.editions.result.pdf_result', edition_name=edition_data.name, event_name=event_data.name) }}" target="_blank" rel="noopener noreferrer">view result pdf <i class="fa fa-arrow-up-right-from-square" aria-hidden="true"></i></a>
         <br>
         <a href="{{ url_for('admin.editions.result.pdf_result', edition_name=edition_data.name, event_name=event_data.name, download=True) }}">download result pdf <i class="fa-solid fa-download"></i></i></a>
         <br>
@@ -15,11 +15,11 @@
         <table class="table table-striped table-info">
             <thead>
                 <tr>
-                    <th scope="col">place</th>
-                    <th scope="col">nom</th>
-                    <th scope="col">prénom</th>
-                    <th scope="col">dossard</th>
-                    <th scope="col">temps</th>
+                    <th scope="col">{{ _('admin.editions.result.place') }}</th>
+                    <th scope="col">{{ _('admin.editions.result.nom') }}</th>
+                    <th scope="col">{{ _('admin.editions.result.prénom') }}</th>
+                    <th scope="col">{{ _('admin.editions.result.dossard') }}</th>
+                    <th scope="col">{{ _('admin.editions.result.temps') }}</th>
                 </tr>
             </thead>
             <tbody>

@@ -97,7 +97,7 @@ def reload():
     create_cfg()
 
     os.system('pybabel extract -F flask_app/babel.cfg -k lazy_gettext -o flask_app/messages.pot .')
-    os.system('pybabel update -i flask_app/messages.pot -d flask_app/translations')
+    os.system('pybabel update -i flask_app/messages.pot -d flask_app/translations --no-fuzzy-matching')
 
     translations = export_strings()
     new = translations.copy()

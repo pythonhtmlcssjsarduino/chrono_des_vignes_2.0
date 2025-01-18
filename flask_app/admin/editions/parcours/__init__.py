@@ -5,7 +5,7 @@ from flask_app.admin.parcours import calc_points_dist
 from flask_login import login_required, current_user
 from flask_app.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, User, Inscription, Trace
 from flask_socketio import join_room, leave_room, emit
-from flask_app.admin.editions.passages import get_passage_data
+from ..passages import get_passage_data
 
 parcours = Blueprint('parcours', __name__, template_folder='templates')
 

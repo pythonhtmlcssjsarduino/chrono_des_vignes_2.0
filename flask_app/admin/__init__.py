@@ -3,9 +3,9 @@ from flask_login import login_required, current_user
 from flask_app import admin_required, set_route, db
 from flask_app.models import Event
 from .form import EventForm
-from flask_app.admin.editions import editions
-from flask_app.admin.parcours import parcours_bp
-from flask_app.admin.coureurs import coureurs
+from .editions import editions
+from .parcours import parcours_bp
+from .coureurs import coureurs
 
 admin = Blueprint('admin', __name__, template_folder='templates')
 admin.register_blueprint(parcours_bp)

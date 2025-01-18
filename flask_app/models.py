@@ -10,6 +10,16 @@ from typing import Iterator, Iterable
 from collections import namedtuple
 from markdown import markdown
 
+md_extentions = ['admonition', 'tables']
+def get_html_from_markdown(markdown_text):
+    return markdown(escape(markdown_text), extensions=md_extentions)
+
+def get_column_max_length(table, column_name):
+    for column in table.__table__.columns:
+        if column.name == column_name:
+            return column.type.length
+    return None
+
 TracePoint = namedtuple('TracePoint', ['lat', 'lng', 'alt'], defaults=[None])
 
 editions_parcours = db.Table(
@@ -58,7 +68,7 @@ class Event(db.Model):
     
     @property
     def description_html(self):
-        return markdown(escape(self.description))
+        return get_html_from_markdown(self.description)
 
     def get_unique_inscrits(self):
         uniques =[]
@@ -218,7 +228,7 @@ class Edition(db.Model):
 
     @property
     def description_html(self):
-        return markdown(escape(self.description))
+        return get_html_from_markdown(self.description)
 
 class Inscription(db.Model):
     __allow_unmapped__ = True

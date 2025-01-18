@@ -14,7 +14,7 @@
                             <ul class="text-muted list-group">
                                 {% for stand in key.stands.all() %}
                                     <li class="list-group-item">
-                                        parcours: {{ stand.parcours.name }}, stand: {{ stand.name }}
+                                        {{ _('admin.editions.passages.parcours') }}: {{ stand.parcours.name }}, {{ _('admin.editions.passages.stand') }}: {{ stand.name }}
                                     </li>
                                 {% endfor %}
                             </ul>
@@ -45,10 +45,10 @@
     <table class="table">
         <thead>
             <tr>
-                <th scope="col">time</th>
-                <th scope="col">user</th>
-                <th scope="col">key</th>
-                <th scope="col">stand</th>
+                <th scope="col">{{ _('admin.editions.passages.time') }}</th>
+                <th scope="col">{{ _('admin.editions.passages.user') }}</th>
+                <th scope="col">{{ _('admin.editions.passages.key') }}</th>
+                <th scope="col">{{ _('admin.editions.passages.stand') }}</th>
             </tr>
         </thead>
         <tbody id="passage_table" class="table-group-divider table-divider-color">

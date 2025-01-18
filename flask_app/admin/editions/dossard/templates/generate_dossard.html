@@ -6,11 +6,11 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">coureur</th>
-      <th scope="col">dossard</th>
-      <th scope="col">parcours</th>
+      <th scope="col">{{ _('admin.editions.dossard.coureur') }}</th>
+      <th scope="col">{{ _('admin.editions.dossard.dossard') }}</th>
+      <th scope="col">{{ _('admin.editions.dossard.parcours') }}</th>
       {% if now > edition_data.edition_date %}
-        <th scope="col">present</th>
+        <th scope="col">{{ _('admin.editions.dossard.present') }}</th>
       {% endif %}
     </tr>
   </thead>
@@ -34,7 +34,10 @@
   </tbody>
 </table>
 
-<a class="btn bg-info" href="{{ url_for('admin.editions.dossard.generate_all_dossard', event_name=event_data.name, edition_name=edition_data.name) }}">generer</a>
+<a class="btn bg-info" href="{{ url_for('admin.editions.dossard.generate_all_dossard', event_name=event_data.name, edition_name=edition_data.name) }}">{{ _('admin.editions.dossard.generer') }}</a>
+<a class="btn bg-success" href="{{ url_for('admin.editions.dossard.export_dossard', event_name=event_data.name, edition_name=edition_data.name) }}" target="_blank" rel="noopener noreferrer">{{ _('admin.editions.dossard.export_excel') }}</a>
+<br><br>
+<a class="btn bg-info" onclick="modal.show()">{{ _('admin.editions.dossard.addnewcoureur') }}</a>
 
 <script>
   var socket = io('/dossard', {auth:{'event_id': {{ event_data.id }}, 'edition_id': {{ edition_data.id }} } })
@@ -72,5 +75,7 @@
   }
 
 </script>
+
+{% include "new_coureur_modal.html" %}
 
 {% endblock content %}

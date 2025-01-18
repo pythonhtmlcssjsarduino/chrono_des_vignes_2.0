@@ -1,7 +1,7 @@
 from flask import Blueprint, redirect, flash, render_template, request
 from flask_login import login_required, current_user, login_user, logout_user
 from flask_app.models import User, Event, Parcours, Inscription, Edition
-from flask_app.users.forms import Login_form, Signup_form, Inscription_connected_form, Inscription_form, ModifyForm
+from .forms import Login_form, Signup_form, Inscription_connected_form, Inscription_form, ModifyForm
 from flask_app import db, set_route, lang_url_for as url_for
 from sqlalchemy import and_, not_
 from datetime import datetime
@@ -112,6 +112,7 @@ def inscription_page(event, edition):
                         password=hash_pwd,)
             db.session.add(user)
             db.session.commit()
+            db.session.refresh(user)
             login_user(user)
             print(user, form.parcours.data)
             choices = event.parcours.filter(Parcours.name.in_([eval(data)[0] for data in form.parcours.data])).all()

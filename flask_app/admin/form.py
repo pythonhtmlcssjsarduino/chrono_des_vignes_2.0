@@ -6,5 +6,5 @@ from flask_babel import lazy_gettext as _
 
 
 class EventForm(FlaskForm):
-    description = TextAreaField(_('form.description'), render_kw={'style':'height:200px'})
+    description = TextAreaField(_('form.eventdescription'), render_kw={'style':'height:400px'})
     submit_btn = SubmitField(_('form.save'))

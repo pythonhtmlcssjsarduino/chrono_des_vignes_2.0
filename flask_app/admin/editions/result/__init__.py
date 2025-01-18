@@ -108,12 +108,9 @@ def get_result_excel(edition:Edition):
     workbook = Workbook(buffer)
     for parcours in edition.parcours:
         data = get_result_data(edition, parcours)
-        ic(data)
         worksheet = workbook.add_worksheet()
         for y, rows in enumerate(data, start=1):
-            ic(y)
             for x, cell in enumerate(['rank', 'name', 'lastname', 'dossard', 'time']):
-                ic(x)
                 worksheet.write(y, x, rows[cell])
         worksheet.add_table(0,0,max(len(data), 1),4, {'columns': [{'header': h} for h in ['place', 'nom', 'prénom', 'dossard', 'temps']], 'autofilter': False})
     workbook.close()
