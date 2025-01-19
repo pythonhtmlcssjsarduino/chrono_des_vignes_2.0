@@ -14,14 +14,6 @@ from sqlalchemy import func, and_, or_, not_
 
 dossard = Blueprint('dossard', __name__, template_folder='templates')
 
-@set_route(dossard, '/event/<event_name>/editions/<edition_name>/modify_dossard', methods=['POST', 'GET'])
-@login_required
-@admin_required
-def dossard_page(event_name, edition_name):
-    user = current_user
-    return render_template('dossard.html', user_data=user, pyscript=True)
-
-
 @set_route(dossard, '/event/<event_name>/editions/<edition_name>/dossard', methods=['POST', 'GET'])
 @login_required
 @admin_required
