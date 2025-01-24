@@ -1,116 +1,23 @@
 {% extends 'layout.html' %}
+{% from 'macro.html' import form_field, submit %}
 {% block content %}
-    <h3>{{ _('inscription') }} {{ event_data.name }} {{ edition_data.name }}</h3>
-    {% if user_data %}
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <div class="form-group" id="parcours">
-                {{ form.parcours.label(class="form-control-label") }}
-                {% if form.parcours.errors %}
-                    {{ form.parcours(class="form-control form-control-lg is-invalid list-group") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.parcours.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.parcours(class="form-control form-control-lg list-group") }}
-                {% endif %}
-            </div>
-        </fieldset>
-        <div class="form-group">
-            {{ form.submit_btn(class="btn btn-outline-info") }}
-        </div>
-    </form>
-    {% else %}
-    <form action="" method="post">
-        {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <div class="form-group" id="name">
-                {{ form.name.label(class="form-control-label") }}
-                {% if form.name.errors %}
-                    {{ form.name(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.name.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.name(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group" id="lastname">
-                {{ form.lastname.label(class="form-control-label") }}
-                {% if form.lastname.errors %}
-                    {{ form.lastname(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.lastname.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.lastname(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group" id="email">
-                {{ form.email.label(class="form-control-label") }}
-                {% if form.email.errors %}
-                    {{ form.email(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.email.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.email(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group" id="phone">
-                {{ form.phone.label(class="form-control-label") }}
-                {% if form.phone.errors %}
-                    {{ form.phone(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.phone.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.phone(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-            <div class="form-group" id="datenaiss">
-                {{ form.datenaiss.label(class="form-control-label") }}
-                {% if form.datenaiss.errors %}
-                    {{ form.datenaiss(class="form-control form-control-lg is-invalid") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.datenaiss.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.datenaiss(class="form-control form-control-lg") }}
-                {% endif %}
-            </div>
-        </fieldset>
-        <fieldset class="form-group">
-            <div class="form-group" id="parcours">
-                {{ form.parcours.label(class="form-control-label") }}
-                {% if form.parcours.errors %}
-                    {{ form.parcours(class="form-control form-control-lg is-invalid list-group") }}
-                    <div class="invalid-feedback">
-                        {% for error in form.parcours.errors %}
-                            <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    {{ form.parcours(class="form-control form-control-lg list-group") }}
-                {% endif %}
-            </div>
-        </fieldset>
-        <div class="form-group">
-            {{ form.submit_btn(class="btn btn-outline-info") }}
-        </div>
-    </form>
-    {% endif %}
+<h3>{{ _('inscription') }} {{ event_data.name }} {{ edition_data.name }}</h3>
+{% if user_data %}
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form_field(form.parours, id='parours') }}
+    {{ form.submit_btn(class="btn btn-outline-info") }}
+</form>
+{% else %}
+<form action="" method="post">
+    {{ form.hidden_tag() }}
+    {{ form_field(form.name, id='name') }}
+    {{ form_field(form.lastname, id='lastname') }}
+    {{ form_field(form.email, id='email') }}
+    {{ form_field(form.phone, id='phone') }}
+    {{ form_field(form.datenaiss, id='datenaiss') }}
+    {{ form_field(form.parcours, id='parcours') }}
+    {{ form.submit_btn(class="btn btn-outline-info") }}
+</form>
+{% endif %}
 {% endblock content %}

@@ -1,5 +1,5 @@
 <!-- Modal -->
-
+{% from 'macro.html' import form_field, submit %}
 <div class="modal fade show" id="new_coureur_modal" tabindex="-2" aria-labelledby="new_edition_label"
     aria-hidden='true'>
     <div class="modal-dialog">
@@ -11,105 +11,15 @@
             <div class="modal-body">
                 <form action="" method="post" id="add_new_coureur">
                     {{ form.hidden_tag() }}
-                    <fieldset class="form-group">
-                        <div class="form-group" id="name">
-                            {{ form.name.label(class="form-control-label") }}
-                            {% if form.name.errors %}
-                            {{ form.name(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.name.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.name(class="form-control form-control-lg") }}
-                            {% endif %}
-                        </div>
-                        <div class="form-group" id="lastname">
-                            {{ form.lastname.label(class="form-control-label") }}
-                            {% if form.lastname.errors %}
-                            {{ form.lastname(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.lastname.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.lastname(class="form-control form-control-lg") }}
-                            {% endif %}
-                        </div>
-
-                        <div class="form-group" id="username">
-                            {{ form.username.label(class="form-control-label") }}
-                            {% if form.username.errors %}
-                            {{ form.username(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.username.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.username(class="form-control form-control-lg") }}
-                            {% endif %}
-                        </div>
-                        <div class="form-group" id="email">
-                            {{ form.email.label(class="form-control-label") }}
-                            {% if form.email.errors %}
-                            {{ form.email(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.email.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.email(class="form-control form-control-lg") }}
-                            {% endif %}
-                        </div>
-                        <div class="form-group" id="phone">
-                            {{ form.phone.label(class="form-control-label") }}
-                            {% if form.phone.errors %}
-                            {{ form.phone(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.phone.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.phone(class="form-control form-control-lg") }}
-                            {% endif %}
-                        </div>
-                        <div class="form-group" id="datenaiss">
-                            {{ form.datenaiss.label(class="form-control-label") }}
-                            {% if form.datenaiss.errors %}
-                            {{ form.datenaiss(class="form-control form-control-lg is-invalid") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.datenaiss.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.datenaiss(class="form-control form-control-lg") }}
-                            {% endif %}
-                        </div>
-                    </fieldset>
-                    <fieldset class="form-group">
-                        <div class="form-group" id="parcours">
-                            {{ form.parcours.label(class="form-control-label") }}
-                            {% if form.parcours.errors %}
-                            {{ form.parcours(class="form-control form-control-lg is-invalid list-group") }}
-                            <div class="invalid-feedback">
-                                {% for error in form.parcours.errors %}
-                                <span>{{ error }}</span>
-                                {% endfor %}
-                            </div>
-                            {% else %}
-                            {{ form.parcours(class="form-control form-control-lg list-group") }}
-                            {% endif %}
-                        </div>
-                    </fieldset>
+                    {{ form_field(form.name) }}
+                    {{ form_field(form.lastname) }}
+                    {{ form_field(form.username) }}
+                    {{ form_field(form.email) }}
+                    {{ form_field(form.phone) }}
+                    {{ form_field(form.datenaiss) }}
+                    {{ form_field(form.parcours) }}
                     <input type="text" name="user_id" class="d-none">
                 </form>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -157,24 +67,6 @@
             </div>
         </div>
     </div>
-    {% if validate_form %}
-    <form class="d-none" id="validate_form"
-        action="{{ url_for('admin.editions.dossard.validate_new_user', event_name=event_data.name, edition_name=edition_data.name) }}"
-        method="post">
-        {{validate_form.hidden_tag()}}
-        {{ validate_form.user_id }}
-
-        {{ validate_form.name }}
-        {{ validate_form.lastname }}
-        {{ validate_form.username }}
-        {{ validate_form.email }}
-        {{ validate_form.phone }}
-        {{ validate_form.datenaiss }}
-
-        {{ validate_form.parcours(id='parcours modal2') }}
-
-    </form>
-    {% endif %}
     <script>
         $('#validation_new_coureur_modal').on('shown.bs.modal', function () {
             $('#new_coureur_modal').addClass('modal-backdrop');
@@ -185,32 +77,10 @@
         });
         validate_modal = new bootstrap.Modal(document.getElementById('validation_new_coureur_modal'))
         {% if validate_form %}
-        validate_modal.show()
+            validate_modal.show()
         {% endif %}
-        validate_form = document.getElementById('validate_form')
         form = document.getElementById('add_new_coureur')
         async function validate_user(id) {
-            /*validate_form['user_id'].value = id
-            validate_form['name'].value = form['name'].value
-            validate_form['lastname'].value = form['lastname'].value
-            validate_form['username'].value = form['username'].value
-            validate_form['email'].value = form['email'].value
-            validate_form['phone'].value = form['phone'].value
-            validate_form['datenaiss'].value = form['datenaiss'].value
-
-            let parcours = document.getElementById('parcours modal2')
-            form['parcours'].forEach((checkbox) => {
-                const newInput = document.createElement('input');
-                newInput.type = 'checkbox';
-                newInput.value = checkbox.value;
-                newInput.checked = checkbox.checked;
-
-                const newLi = document.createElement('li');
-                newLi.appendChild(newInput);
-
-                parcours.appendChild(newLi);
-            });
-            validate_form.submit()*/
             form['user_id'].value = id
             form.action = '{{ url_for('admin.editions.dossard.validate_new_user', event_name=event_data.name, edition_name=edition_data.name) }}'
             form.submit()

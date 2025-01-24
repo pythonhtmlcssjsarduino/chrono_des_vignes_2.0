@@ -1,53 +1,59 @@
 {% extends 'layout.html' %}
-{% from 'macro.html' import form_field, submit, map_field %}
+{% from 'macro.html' import form_field, submit, map_field, label_span, input_span %}
 {% block content %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
-    <fieldset class="form-group">
-        {{ form_field(form.name) }}
-        {{ form_field(form.edition_date) }}
-        {{ form_field(form.description) }}
-        <div class="form-group">{# parcours ne pas remplacer par macro car style different!! #}
-            {{ form.parcours.label(class="form-control-label") }}
+    {{ form_field(form.name) }}
+    {{ form_field(form.edition_date) }}
+    {{ form_field(form.description) }}
+    <div class="mb-3 row" id="parcours">{# parcours ne pas remplacer par macro car style different!! #}
+        {{ form.parcours.label(class="col-sm-"+label_span+" col-form-label") }}
+        <div class="col-sm-{{input_span}}">
             {% if form.parcours.errors %}
-                {{ form.parcours(class="form-control form-control-lg is-invalid list-group") }}
-                <div class="invalid-feedback">
-                    {% for error in form.parcours.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
+            {{ form.parcours(class="form-control form-control-lg is-invalid list-group") }}
+            <div class="invalid-feedback">
+                {% for error in form.parcours.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
             {% else %}
-                {{ form.parcours(class="form-control form-control-lg list-group") }}
+            {{ form.parcours(class="form-control form-control-lg list-group") }}
             {% endif %}
         </div>
-        {{ form_field(form.first_inscription) }}
-        {{ form_field(form.last_inscription) }}
-        {{ form_field(form.rdv_lat, input_id='lat_id', div_class='d-none') }}
-        {{ form_field(form.rdv_lng, input_id='lng_id', div_class='d-none') }}
-        {{ map_field(_('form.editionrdv'), 'lat_id', 'lng_id', form.rdv_lat.data, form.rdv_lng.data) }}
-        {{ submit(form) }}
-        {% if form.first_inscription.data > now %}
-            <div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="deleteediton" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">supprimer</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p>voulez vous vraiment supprimer cette edition</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <a href="{{ url_for('admin.editions.delete_edition_page', event_name=event_data.name, edition_name = edition_data.name ) }}" class="btn btn-primary">supprimer l'edition</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete_modal">supprimer l'edition</button>
-            </div>
-        {% endif %}
-    </fieldset>
+    </div>
+    {{ form_field(form.first_inscription) }}
+    {{ form_field(form.last_inscription) }}
+    {{ form_field(form.rdv_lat, input_id='lat_id', div_class='d-none') }}
+    {{ form_field(form.rdv_lng, input_id='lng_id', div_class='d-none') }}
+    {{ map_field(_('form.editionrdv'), 'lat_id', 'lng_id', form.rdv_lat.data, form.rdv_lng.data) }}
+    {{ submit(form) }}
 </form>
+
+<!-- Modal -->
+
+{% if form.first_inscription.data > now %}
+<div class="modal fade" id="delete_modal" tabindex="-1" aria-labelledby="deleteediton" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">supprimer</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>voulez vous vraiment supprimer cette edition</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <a href="{{ url_for('admin.editions.delete_edition_page', event_name=event_data.name, edition_name = edition_data.name ) }}"
+                    class="btn btn-primary">supprimer l'edition</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <button class="btn btn-outline-danger" type="button" data-bs-toggle="modal" data-bs-target="#delete_modal">supprimer
+        l'edition</button>
+</div>
+{% endif %}
+
 {% endblock content %}

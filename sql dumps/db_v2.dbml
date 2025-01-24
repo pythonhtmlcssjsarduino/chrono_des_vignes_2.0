@@ -1,3 +1,7 @@
+Project ChronoDesVignes {
+  database_type: 'MySQL'
+}
+
 Table "edition" {
   "id" int [pk, not null, increment]
   "creation_date" datetime [not null]
@@ -202,3 +206,4 @@ Ref "trace_ibfk_1":"parcours"."id" < "trace"."parcours_id"
 Ref "trace_ibfk_2":"stand"."id" < "trace"."start_id"
 
 Ref "trace_ibfk_3":"stand"."id" < "trace"."end_id"
+

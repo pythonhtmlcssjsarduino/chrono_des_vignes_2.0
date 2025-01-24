@@ -1,27 +1,26 @@
-{% extends 'layout.html' %} {% block content %}
+{% extends 'layout.html' %}
+{% from 'macro.html' import form_field, submit, map_field %}
+{% block content %}
 <h3>{{ _('admin.parcours.parcours') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
     {% for parcours in active_parcours %}
-        <div class="d-inline-flex card m-1">
-            <div class="w-100 card-header d-flex justify-content-between align-items-center">
-                <h5 class="px-2">{{parcours.name}}</h5>
-                <div class="vr"></div>
-                <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
-            </div>
-            <div class="card-body">
-                <a href="{{ url_for('admin.parcours.modify_parcours', event_name=event_data.name, parcours_name=parcours.name) }}" class="text-decoration-none link-dark">
-                    {{ _('admin.parcours.modify') }}
-                </a>
-            </div>
+    <div class="d-inline-flex card m-1">
+        <div class="w-100 card-header d-flex justify-content-between align-items-center">
+            <h5 class="px-2">{{parcours.name}}</h5>
+            <div class="vr"></div>
+            <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
         </div>
+        <div class="card-body">
+            <a href="{{ url_for('admin.parcours.modify_parcours', event_name=event_data.name, parcours_name=parcours.name) }}"
+                class="text-decoration-none link-dark">
+                {{ _('admin.parcours.modify') }}
+            </a>
+        </div>
+    </div>
     {% endfor %}
     <div class="d-inline-flex card m-1">
         <div class="card-body d-flex align-items-center justify-content-center">
-            <a
-            type="button"
-            onclick="modal.show()"
-            class="text-decoration-none link-dark"
-            >
+            <a type="button" onclick="modal.show()" class="text-decoration-none link-dark">
                 <i class="fa-solid fa-circle-plus"></i>
             </a>
         </div>
@@ -31,102 +30,53 @@
 <h3>{{ _('admin.parcours.archivedparcours') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
     {% for parcours in archived_parcours %}
-        <div class="d-inline-flex card m-1">
-            <div class="w-100 card-header d-flex justify-content-between align-items-center">
-                <h5 class="px-2">{{parcours.name}}</h5>
-                <div class="vr"></div>
-                <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
-            </div>
-            <div class="card-body">
-                <a href="{{ url_for('admin.parcours.modify_parcours', event_name=event_data.name, parcours_name=parcours.name) }}" class="text-decoration-none link-dark">
-                    {{ _('admin.parcours.modify') }}
-                </a>
-            </div>
+    <div class="d-inline-flex card m-1">
+        <div class="w-100 card-header d-flex justify-content-between align-items-center">
+            <h5 class="px-2">{{parcours.name}}</h5>
+            <div class="vr"></div>
+            <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
         </div>
+        <div class="card-body">
+            <a href="{{ url_for('admin.parcours.modify_parcours', event_name=event_data.name, parcours_name=parcours.name) }}"
+                class="text-decoration-none link-dark">
+                {{ _('admin.parcours.modify') }}
+            </a>
+        </div>
+    </div>
     {% endfor %}
 </div>
 {% endif %}
+
+
 <!-- Modal -->
-<div 
-class="modal fade show"
-id="new_edition_modal"
-tabindex="-1"
-aria-labelledby="new_edition_label"
-aria-hidden='true'
->
+<div class="modal fade show" id="new_edition_modal" tabindex="-1" aria-labelledby="new_edition_label"
+    aria-hidden='true'>
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="new_edition_label">{{ _('admin.parcours.createnewparcours') }}</h5>
-                <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-                ></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="" method="post" id="new_edition_form">
                     {{ form.hidden_tag() }}
-                    <fieldset class="form-group">
-                        <div class="form-group">
-                            {# name #}
-                            {{ form.name.label(class="form-control-label") }}
-                            {% if form.name.errors %}
-                                {{ form.name(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form.name.errors %}
-                                    <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %}
-                                {{ form.name(class="form-control form-control-lg") }}
-                            {% endif %}
-                        </div>
-                        <div class="form-group">
-                        {# start lat #} {{ form.start_lat.label(class="form-control-label")
-                        }} {% if form.start_lat.errors %} {{
-                        form.start_lat(class="form-control form-control-lg is-invalid") }}
-                        <div class="invalid-feedback">
-                            {% for error in form.start_lat.errors %}
-                            <span>{{ error }}</span>
-                            {% endfor %}
-                        </div>
-                        {% else %} {{ form.start_lat(class="form-control form-control-lg")
-                        }} {% endif %}
-                        </div>
-                        <div class="form-group">
-                            {# start lng #}
-                            {{ form.start_lng.label(class="form-control-label")}}
-                                {% if form.start_lng.errors %}
-                            {{form.start_lng(class="form-control form-control-lg is-invalid") }}
-                                <div class="invalid-feedback">
-                                    {% for error in form.start_lng.errors %}
-                                    <span>{{ error }}</span>
-                                    {% endfor %}
-                                </div>
-                            {% else %} 
-                                {{ form.start_lng(class="form-control form-control-lg")}}
-                            {% endif %}
-                        </div>
-                    </fieldset>
+                    {{ form_field(form.name) }}
+                    {{ form_field(form.start_lat, input_id='start_lat', div_class='d-none') }}
+                    {{ form_field(form.start_lng, input_id='start_lng', div_class='d-none') }}
+                    {{ map_field(_('admin.parcours.startpoint'), 'start_lat', 'start_lng', 0,0) }}
                 </form>
             </div>
             <div class="modal-footer">
-                <button
-                type="button"
-                class="btn btn-secondary"
-                data-bs-dismiss="modal"
-                >
-                {{ _('admin.parcours.close') }}
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    {{ _('admin.parcours.close') }}
                 </button>
                 {{ form.submit_btn(class="btn btn-primary", type='submit', form='new_edition_form') }}
             </div>
         </div>
     </div>
-<script>
-    modal = new bootstrap.Modal(document.getElementById('new_edition_modal'))
-    {% if form.errors|length %}modal.show(){% endif %}
-</script>
+    <script>
+        modal = new bootstrap.Modal(document.getElementById('new_edition_modal'))
+        {% if form.errors | length %} modal.show(){% endif %}
+    </script>
 </div>
 {% endblock content %}

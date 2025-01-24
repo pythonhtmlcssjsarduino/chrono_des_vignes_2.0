@@ -1,10 +1,81 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} 
+{% block import %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
+{% endblock %}
 {% block content %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">{{ _('admin.editions.dossard.coureur') }}</th>
+      <th scope="col">{{ _('admin.editions.dossard.dossard') }}</th>
+      <th scope="col">{{ _('admin.editions.dossard.parcours') }}</th>
+      {% if now > edition_data.edition_date %}
+        <th scope="col">{{ _('admin.editions.dossard.present') }}</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for inscription in inscriptions | sort(attribute="inscrit.name") %}
+    <tr>
+      <td>{{inscription.inscrit.name}}</td>
+      <td id="inscription_{{inscription.id}}"><a href="javascript:change_dossard({{inscription.id}})"><i class="fa-solid fa-pen-to-square"></i></a> {% if inscription.dossard %}{{inscription.dossard}}{% endif %}</td>
+      <td>{{inscription.parcours.name}}</td>
+      {% if now > edition_data.edition_date %}
+        <td><div class="form-check form-switch"><input id="presence_{{inscription.id}}" class="form-check-input" type="checkbox" {% if inscription.present %}checked{% endif %} ></div></td>
+        <script>
+          document.getElementById("presence_{{inscription.id}}").addEventListener('click', function(event){
+            event.preventDefault()
+            change_presence({{inscription.id}}, this)
+          })
+        </script>
+        {% endif %}
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
 
-<div id="dossard_content" style=" aspect-ratio: 297/210;overflow: hidden" class="border border-1"><h1>loading...</h1></div>
-<div id="dossard_modif" style=" aspect-ratio: 4/1" class="border border-1"></div>
-<div id="output_content" style=" aspect-ratio: 297/210;overflow: hidden" class="border border-1"></div>
+<a class="btn bg-info" href="{{ url_for('admin.editions.dossard.generate_all_dossard', event_name=event_data.name, edition_name=edition_data.name) }}">{{ _('admin.editions.dossard.generer') }}</a>
+<a class="btn bg-success" href="{{ url_for('admin.editions.dossard.export_dossard', event_name=event_data.name, edition_name=edition_data.name) }}" target="_blank" rel="noopener noreferrer">{{ _('admin.editions.dossard.export_excel') }}</a>
+<br><br>
+<a class="btn bg-info" onclick="modal.show()">{{ _('admin.editions.dossard.addnewcoureur') }}</a>
 
-<script type="py" env="dossard" src="{{ url_for('static', filename='/pyscript/main.py') }}" config="{{ url_for('static', filename='pyscript/pyscript.json') }}"></script>
+<script>
+  var socket = io('/dossard', {auth:{'event_id': {{ event_data.id }}, 'edition_id': {{ edition_data.id }} } })
+  function change_dossard(inscription_id){
+    console.log(inscription_id)
+    let new_dossard = parseInt(window.prompt('enter the new dossard number'))
+    if (new_dossard){
+      socket.emit('change_dossard', {'inscription_id':inscription_id, 'new_dossard':new_dossard},
+      function(response){
+        if (response == true){
+          let node = document.getElementById(`inscription_${inscription_id}`)
+          let html = `<a href="javascript:change_dossard(${inscription_id})"><i class="fa-solid fa-pen-to-square"></i></a> ${new_dossard}`
+          node.innerHTML = html
+        } else if (response != false) {
+          window.alert(response.erreur)
+        }
+      })
+    }
+  }
+
+  function change_presence(inscription_id, button){
+    checked = button.checked
+    if(checked==false){
+      if (!window.confirm('quoi une personne vient de partire alors qu\'elle étais là??')){
+        return
+      }
+    }
+    
+    socket.emit('change_presence', {'inscription_id':inscription_id, 'presence':checked},
+      function(response){
+        if(response){
+          button.checked = checked
+        }
+      })
+  }
+
+</script>
+
+{% include "new_coureur_modal.html" %}
 
 {% endblock content %}

@@ -1,37 +1,12 @@
-{% extends 'layout.html' %} 
+{% extends 'layout.html' %}
+{% from 'macro.html' import form_field, submit %}
 {% block content %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
     <fieldset class="form-group">
-        <div class="form-group"> {# username #}
-            {{ form.username.label(class="form-control-label") }}
-            {% if form.username.errors %}
-                {{ form.username(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.username.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.username(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-group"> {# password #}
-            {{ form.password.label(class="form-control-label") }}
-            {% if form.password.errors %}
-                {{ form.password(class="form-control form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                    {% for error in form.password.errors %}
-                        <span>{{ error }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                {{ form.password(class="form-control form-control-lg") }}
-            {% endif %}
-        </div>
-        <div class="form-group">
-            {{ form.submit_btn(class="btn btn-outline-info") }}
-        </div>
+        {{ form_field(form.username) }}
+        {{ form_field(form.password) }}
+        {{ form.submit_btn(class="btn btn-outline-info") }}
     </fieldset>
 </form>
 {% endblock content %}

@@ -73,7 +73,7 @@ def generate_dossard(event_name, edition_name):
         users = []
         validate_form = None
 
-    return render_template('generate_dossard.html', user_data=user, event_data=event, edition_data=edition, now=datetime.now(), inscriptions=edition.inscriptions, event_modif=True, edition_sidebar=True, form=form, validate_form=validate_form, validate_users=users)
+    return render_template('dossard.html', user_data=user, event_data=event, edition_data=edition, now=datetime.now(), inscriptions=edition.inscriptions, event_modif=True, edition_sidebar=True, form=form, validate_form=validate_form, validate_users=users)
 
 @set_route(dossard, '/event/<event_name>/editions/<edition_name>/dossard/newuser', methods=['POST'])
 @login_required

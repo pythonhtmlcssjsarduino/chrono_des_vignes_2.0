@@ -1,6 +1,6 @@
 from markupsafe import Markup
-from wtforms import widgets, SelectMultipleField
-import time
+from wtforms import widgets, SelectMultipleField, StringField
+from wtforms.widgets import Input
 
 class BootstrapListWidget(widgets.ListWidget):
     def __call__(self, field, **kwargs):
@@ -58,3 +58,12 @@ class MultiCheckboxFieldWithDescription(SelectMultipleField):
     """
     widget = BootstrapListWidgetWithDescription(prefix_label=False)
     option_widget = widgets.CheckboxInput()
+
+class ColorField(StringField):
+    widget = Input(input_type='color')
+
+    def process_formdata(self, valuelist):
+        if valuelist:
+            self.data = valuelist[0]
+        else:
+            self.data = ''

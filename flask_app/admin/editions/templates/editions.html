@@ -3,18 +3,14 @@
 <div class="d-flex justify-content-center flex-wrap">
   {% for edition in event_data.editions %}
   <div class="d-inline-flex card m-1">
-    <div
-      class="w-100 card-header d-flex justify-content-between align-items-center"
-    >
+    <div class="w-100 card-header d-flex justify-content-between align-items-center">
       <h5 class="px-2">{{edition.name}}</h5>
       <div class="vr"></div>
       <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
     </div>
     <div class="card-body">
-      <a
-        href="{{ url_for('admin.editions.modify_edition_page', event_name=event_data.name, edition_name=edition.name) }}"
-        class="text-decoration-none link-dark"
-      >
+      <a href="{{ url_for('admin.editions.modify_edition_page', event_name=event_data.name, edition_name=edition.name) }}"
+        class="text-decoration-none link-dark">
         {{edition.edition_date.strftime('%d.%m.%Y')}}
       </a>
     </div>
@@ -23,151 +19,43 @@
   <div class="d-inline-flex card m-1">
     <div class="card-body d-flex align-items-center justify-content-center">
       {% if form.parcours.choices|length > 0 %}
-        <a
-        type="button"
-        onclick="modal.show()"
-        class="text-decoration-none link-dark"
-        >
-            <i class="fa-solid fa-circle-plus"></i>
-        </a>
+      <a type="button" onclick="modal.show()" class="text-decoration-none link-dark">
+        <i class="fa-solid fa-circle-plus"></i>
+      </a>
       {% else %}
-        <a
-        class="text-decoration-none link-dark"
-        href="{{ url_for('admin.parcours.parcours_page', event=event_data.name) }}"
-        >
-            <p>{{ _('admin.editions.startcreateparcours') }}</p>
-        </a>
+      <a class="text-decoration-none link-dark"
+        href="{{ url_for('admin.parcours.parcours_page', event=event_data.name) }}">
+        <p>{{ _('admin.editions.startcreateparcours') }}</p>
+      </a>
       {% endif %}
     </div>
   </div>
 
   <!-- Modal -->
-  <div
-    class="modal fade show"
-    id="new_edition_modal"
-    tabindex="-1"
-    aria-labelledby="new_edition_label"
-    aria-hidden='true'
-  >
+  <div class="modal fade show" id="new_edition_modal" tabindex="-1" aria-labelledby="new_edition_label"
+    aria-hidden='true'>
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="new_edition_label">{{ _('admin.editions.newedition') }}</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <form action="" method="post" id="new_edition_form">
             {{ form.hidden_tag() }}
-            <fieldset class="form-group">
-              <div class="form-group">
-                {# name #} {{ form.name.label(class="form-control-label") }} {%
-                if form.name.errors %} {{ form.name(class="form-control
-                form-control-lg is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.name.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.name(class="form-control form-control-lg") }}
-                {% endif %}
-              </div>
-              <div class="form-group">
-                {# edition date #} {{
-                form.edition_date.label(class="form-control-label") }} {% if
-                form.edition_date.errors %} {{
-                form.edition_date(class="form-control form-control-lg
-                is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.edition_date.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.edition_date(class="form-control
-                form-control-lg") }} {% endif %}
-              </div>
-              {{ form_field(form.description) }}
-              <div class="form-group">
-                {# parcours #} {{
-                form.parcours.label(class="form-control-label") }} {% if
-                form.parcours.errors %} {{ form.parcours(class="form-control
-                form-control-lg is-invalid list-group") }}
-                <div class="invalid-feedback">
-                  {% for error in form.parcours.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.parcours(class="form-control form-control-lg
-                list-group") }} {% endif %}
-              </div>
-              <div class="form-group">
-                {# first inscription #} {{
-                form.first_inscription.label(class="form-control-label") }} {%
-                if form.first_inscription.errors %} {{
-                form.first_inscription(class="form-control form-control-lg
-                is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.first_inscription.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.first_inscription(class="form-control
-                form-control-lg") }} {% endif %}
-              </div>
-              <div class="form-group">
-                {# last inscription #} {{
-                form.last_inscription.label(class="form-control-label") }} {% if
-                form.last_inscription.errors %} {{
-                form.last_inscription(class="form-control form-control-lg
-                is-invalid") }}
-                <div class="invalid-feedback">
-                  {% for error in form.last_inscription.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.last_inscription(class="form-control
-                form-control-lg") }} {% endif %}
-              </div>
-              <div class="form-group d-none">
-                {# rdv lat #} {{ form.rdv_lat.label(class="form-control-label")
-                }} {% if form.rdv_lat.errors %} {{
-                form.rdv_lat(class="form-control form-control-lg is-invalid", id='rdv_lat') }}
-                <div class="invalid-feedback">
-                  {% for error in form.rdv_lat.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.rdv_lat(class="form-control form-control-lg", id='rdv_lat')
-                }} {% endif %}
-              </div>
-              <div class="form-group d-none">
-                {# rdv lng #} {{ form.rdv_lng.label(class="form-control-label")
-                }} {% if form.rdv_lng.errors %} {{
-                form.rdv_lng(class="form-control form-control-lg is-invalid", id='rdv_lng') }}
-                <div class="invalid-feedback">
-                  {% for error in form.rdv_lng.errors %}
-                  <span>{{ error }}</span>
-                  {% endfor %}
-                </div>
-                {% else %} {{ form.rdv_lng(class="form-control form-control-lg", id='rdv_lng')
-                }}{% endif %}
-              </div>
-              <div class="form-group">
-                {{ map_field('rendez vous pour cette edition', 'rdv_lat', 'rdv_lng', form.rdv_lng.data, form.rdv_lng.data) }}
-              </div>
-            </fieldset>
+            {{ form_field(form.name) }}
+            {{ form_field(form.edition_date) }}
+            {{ form_field(form.description) }}
+            {{ form_field(form.parcours) }}
+            {{ form_field(form.first_inscription) }}
+            {{ form_field(form.last_inscription) }}
+            {{ form_field(form.rdv_lat, input_id='rdv_lat', div_class='d-none') }}
+            {{ form_field(form.rdv_lng, input_id='rdv_lng', div_class='d-none') }}
+            {{ map_field('rendez vous pour cette edition', 'rdv_lat', 'rdv_lng', form.rdv_lng.data, form.rdv_lng.data)}}
           </form>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
             Close
           </button>
           {{ form.submit_btn(class="btn btn-primary", type='submit', form='new_edition_form') }}
@@ -176,8 +64,8 @@
     </div>
     <script>
       modal = new bootstrap.Modal(document.getElementById('new_edition_modal'))
-      {% if form.errors|length %}modal.show(){% endif %}
-  </script>
+      {% if form.errors | length %} modal.show(){% endif %}
+    </script>
   </div>
 </div>
 {% endblock content %}

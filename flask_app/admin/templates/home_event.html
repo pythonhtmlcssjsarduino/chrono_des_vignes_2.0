@@ -3,9 +3,7 @@
 {% block content %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
-    <fieldset class="form-group">
-        {{ form_field(form.description) }}
-        {{ submit(form) }}
-    </fieldset>
+    {{ form_field(form.description) }}
+    {{ submit(form) }}
 </form>
 {% endblock content %}

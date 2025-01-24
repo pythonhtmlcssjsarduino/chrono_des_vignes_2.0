@@ -1,7 +1,7 @@
 from __future__ import annotations
 from html import escape
 from flask_app import db, DEFAULT_PROFIL_PIC
-from sqlalchemy_utils import ColorType, JSONType
+from sqlalchemy_utils import ColorType as ColorType_sql_utils, JSONType
 from colour import Color
 from flask_login import UserMixin
 from datetime import datetime, timedelta
@@ -19,6 +19,9 @@ def get_column_max_length(table, column_name):
         if column.name == column_name:
             return column.type.length
     return None
+
+class ColorType(ColorType_sql_utils):
+    STORE_FORMAT='hex_l'
 
 TracePoint = namedtuple('TracePoint', ['lat', 'lng', 'alt'], defaults=[None])
 
@@ -157,7 +160,6 @@ class Stand(db.Model):
 
     def __repr__(self):
         return f'<Stand id:{self.id}, name:{self.name}, parcours:{self.parcours_id}>'
-
 
 class Trace(db.Model):
     __allow_unmapped__ = True

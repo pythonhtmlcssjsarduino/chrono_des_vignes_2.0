@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-18 15:06+0100\n"
+"POT-Creation-Date: 2025-01-21 19:31+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -34,8 +34,8 @@ msgid "form.eventdescription"
 msgstr "XXXXXXXX"
 
 #: flask_app/admin/editions/form.py:16 flask_app/admin/form.py:10
-#: flask_app/admin/parcours/forms.py:9 flask_app/admin/parcours/forms.py:17
-#: flask_app/admin/parcours/forms.py:22
+#: flask_app/admin/parcours/forms.py:10 flask_app/admin/parcours/forms.py:18
+#: flask_app/admin/parcours/forms.py:23
 msgid "form.save"
 msgstr "XXXXXXXX"
 
@@ -127,53 +127,53 @@ msgstr "XXXXXXXX"
 msgid "form.rdvlat"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:110
+#: flask_app/admin/editions/dossard/__init__.py:102
 msgid "flash.success.newuser:username:name:lastname"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:192
-#: flask_app/admin/editions/dossard/templates/generate_dossard.html:10
+#: flask_app/admin/editions/dossard/__init__.py:184
+#: flask_app/admin/editions/dossard/templates/dossard.html:10
 msgid "admin.editions.dossard.dossard"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:193
+#: flask_app/admin/editions/dossard/__init__.py:185
 msgid "admin.editions.dossard.name"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:194
+#: flask_app/admin/editions/dossard/__init__.py:186
 msgid "admin.editions.dossard.lastname"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:195
+#: flask_app/admin/editions/dossard/__init__.py:187
 msgid "admin.editions.dossard.email"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:196
+#: flask_app/admin/editions/dossard/__init__.py:188
 msgid "admin.editions.dossard.phone"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:197
+#: flask_app/admin/editions/dossard/__init__.py:189
 msgid "admin.editions.dossard.datenaiss"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:198
+#: flask_app/admin/editions/dossard/__init__.py:190
 msgid "admin.editions.dossard.username"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:199
-#: flask_app/admin/editions/dossard/templates/generate_dossard.html:11
+#: flask_app/admin/editions/dossard/__init__.py:191
+#: flask_app/admin/editions/dossard/templates/dossard.html:11
 msgid "admin.editions.dossard.parcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:200
+#: flask_app/admin/editions/dossard/__init__.py:192
 msgid "admin.editions.dossard.edition_date"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:201
+#: flask_app/admin/editions/dossard/__init__.py:193
 msgid "admin.editions.dossard.edition_name"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/__init__.py:202
+#: flask_app/admin/editions/dossard/__init__.py:194
 msgid "admin.editions.dossard.event_name"
 msgstr "XXXXXXXX"
 
@@ -225,34 +225,34 @@ msgstr "XXXXXXXX"
 msgid "form.register"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/templates/generate_dossard.html:9
+#: flask_app/admin/editions/dossard/templates/dossard.html:9
 msgid "admin.editions.dossard.coureur"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/templates/generate_dossard.html:13
+#: flask_app/admin/editions/dossard/templates/dossard.html:13
 msgid "admin.editions.dossard.present"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/templates/generate_dossard.html:37
+#: flask_app/admin/editions/dossard/templates/dossard.html:37
 msgid "admin.editions.dossard.generer"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/templates/generate_dossard.html:38
+#: flask_app/admin/editions/dossard/templates/dossard.html:38
 msgid "admin.editions.dossard.export_excel"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/templates/generate_dossard.html:40
+#: flask_app/admin/editions/dossard/templates/dossard.html:40
 #: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:8
 msgid "admin.editions.dossard.addnewcoureur"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:116
-#: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:155
-#: flask_app/admin/parcours/templates/parcours.html:121
+#: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:26
+#: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:65
+#: flask_app/admin/parcours/templates/parcours.html:71
 msgid "admin.parcours.close"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:136
+#: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:46
 msgid "admin.editions.dossard.userexistcousewhoadd"
 msgstr "XXXXXXXX"
 
@@ -364,126 +364,130 @@ msgstr "XXXXXXXX"
 msgid "admin.editions.editions"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/templates/editions.html:38
+#: flask_app/admin/editions/templates/editions.html:28
 msgid "admin.editions.startcreateparcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/templates/editions.html:55
+#: flask_app/admin/editions/templates/editions.html:40
 msgid "admin.editions.newedition"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/templates/modify_edition.html:27
+#: flask_app/admin/editions/templates/modify_edition.html:28
 msgid "form.editionrdv"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:7 flask_app/admin/parcours/forms.py:25
+#: flask_app/admin/parcours/forms.py:8 flask_app/admin/parcours/forms.py:26
 msgid "form.parcoursname"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:8
+#: flask_app/admin/parcours/forms.py:9
 msgid "form.parcoursdescription"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:12
+#: flask_app/admin/parcours/forms.py:13
 msgid "form.standname"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:13
+#: flask_app/admin/parcours/forms.py:14
 msgid "form.standlat"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:14
+#: flask_app/admin/parcours/forms.py:15
 msgid "form.standlng"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:15
+#: flask_app/admin/parcours/forms.py:16
 msgid "form.standcouleur"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:16
+#: flask_app/admin/parcours/forms.py:17
 msgid "form.chrono"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:20
+#: flask_app/admin/parcours/forms.py:21
 msgid "form.etapename"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:21
+#: flask_app/admin/parcours/forms.py:22
 msgid "form.path"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:26
+#: flask_app/admin/parcours/forms.py:27
 msgid "form.startlat"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:27
+#: flask_app/admin/parcours/forms.py:28
 msgid "form.startlng"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/forms.py:29
+#: flask_app/admin/parcours/forms.py:30
 msgid "form.create"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:59
-#: flask_app/admin/parcours/templates/parcours.html:13
+#: flask_app/admin/parcours/templates/modify_parcours.html:33
+#: flask_app/admin/parcours/templates/parcours.html:16
 #: flask_app/admin/parcours/templates/parcours.html:42
 msgid "admin.parcours.modify"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:66
+#: flask_app/admin/parcours/templates/modify_parcours.html:41
 msgid "admin.parcours.supprimer"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:69
+#: flask_app/admin/parcours/templates/modify_parcours.html:43
 msgid "admin.parcours.parcoursunmodifyablealreadyused"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:71
+#: flask_app/admin/parcours/templates/modify_parcours.html:46
 msgid "admin.parcours.desarchiver"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:73
+#: flask_app/admin/parcours/templates/modify_parcours.html:49
 msgid "admin.parcours.archiver"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:77
+#: flask_app/admin/parcours/templates/modify_parcours.html:54
 msgid "admin.parcours.dupliquer"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:82
+#: flask_app/admin/parcours/templates/modify_parcours.html:59
 msgid "admin.parcours.clicknewstand"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:104
+#: flask_app/admin/parcours/templates/modify_parcours.html:68
 msgid "admin.parcours.changepos"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:198
+#: flask_app/admin/parcours/templates/modify_parcours.html:83
 msgid "admin.parcours.deletape"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:210
+#: flask_app/admin/parcours/templates/modify_parcours.html:92
 msgid "admin.parcours.addstand"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:442
+#: flask_app/admin/parcours/templates/modify_parcours.html:256
 msgid "chart.dist"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:449
+#: flask_app/admin/parcours/templates/modify_parcours.html:263
 msgid "chart.alt"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/parcours.html:2
+#: flask_app/admin/parcours/templates/parcours.html:4
 msgid "admin.parcours.parcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/parcours.html:31
+#: flask_app/admin/parcours/templates/parcours.html:30
 msgid "admin.parcours.archivedparcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/parcours.html:60
+#: flask_app/admin/parcours/templates/parcours.html:57
 msgid "admin.parcours.createnewparcours"
+msgstr "XXXXXXXX"
+
+#: flask_app/admin/parcours/templates/parcours.html:66
+msgid "admin.parcours.startpoint"
 msgstr "XXXXXXXX"
 
 #: flask_app/templates/0-home.html:5
@@ -610,7 +614,7 @@ msgstr "XXXXXXXX"
 msgid "form.modifyaccount"
 msgstr "XXXXXXXX"
 
-#: flask_app/users/templates/inscription.html:3
+#: flask_app/users/templates/inscription.html:4
 msgid "inscription"
 msgstr "XXXXXXXX"
 

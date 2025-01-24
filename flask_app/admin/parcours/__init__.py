@@ -409,7 +409,7 @@ def modify_parcours(event_name, parcours_name):
         if stand is None or stand.parcours != parcours:
             return redirect(request.path)
         first_or_last = parcours.end_stand==stand or parcours.start_stand==stand
-        modif_form= Stand_modif_form(data={'name':stand.name, 'lat':stand.lat, 'lng':stand.lng, 'color':stand.color.hex, 'chrono':stand.chrono})
+        modif_form= Stand_modif_form(data={'name':stand.name, 'lat':stand.lat, 'lng':stand.lng, 'color':stand.color.hex_l, 'chrono':stand.chrono})
         if first_or_last:
             modif_form.chrono.render_kw = {'disabled':''}
 
@@ -440,15 +440,15 @@ def modify_parcours(event_name, parcours_name):
             return redirect(request.path)
         #! suppression de l'etape
         if request.args.get('delete')=='':
-            nb_etape_end = len(trace.end.end_trace.all())
+            nb_etape_end = trace.end.end_trace.count()
             if trace.end == parcours.start_stand:
-                # si le stand d'arrivée est le debut du parcour la var turn_nb dout etre incrementée
+                # si le stand d'arrivée est le debut du parcour la var turn_nb doit etre incrementée
                 next_trace = trace.end.start_trace.filter_by(turn_nb=trace.turn_nb + 1).first()
             else:
                 next_trace = trace.end.start_trace.filter_by(turn_nb=trace.turn_nb).first()
-            #! eviter les boucles hors du depart
-            if trace.end == parcours.start_stand and not (trace.end == parcours.end_stand and len(trace.end.end_trace.filter_by(turn_nb=trace.turn_nb+1).all())==0):
-                # trouver tous les stans que pass depuis le dernier passage par le start
+            # ! eviter les boucles hors du depart
+            if trace.end == parcours.start_stand and not (trace.end == parcours.end_stand and trace.end.end_trace.filter_by(turn_nb=trace.turn_nb+1).count()==0):
+                # trouver tous les stands que passe depuis le dernier passage par le start
                 before = []
                 stand=trace.start
                 while True:
@@ -473,7 +473,7 @@ def modify_parcours(event_name, parcours_name):
                     db.session.delete(trace.end.start_trace.filter_by(turn_nb = trace.turn_nb+1).first())
                     loop=False
                 elif any([e in after for e in before]):
-                    flash('action impossible', 'danger')
+                    flash('action impossible vous allez faire une boucle hors du depart', 'danger')
                     loop=True
                 else:
                     loop=False
@@ -538,16 +538,15 @@ def modify_parcours(event_name, parcours_name):
             stand = stand.start_trace.filter_by(turn_nb=turn_nb).first().end
             if stand == parcours.start_stand:
                 turn_nb += 1
+        ic(stand, turn_nb)
 
-        #! creer le modif_form
+        # ! creer le modif_form
+        modif_form= Stand_modif_form()
         if last_marker == -1 or not stand.start_trace.filter_by(turn_nb=turn_nb).first():
-            modif_form= Stand_modif_form()
             modif_form.chrono.data=1
             modif_form.chrono.render_kw  = {'disabled':''}
-        else:
-            modif_form= Stand_modif_form()
 
-        #! efectue les actions si le form est submit
+        # ! efectue les actions si le form est submit
         if modif_form.validate_on_submit():
 
             if last_marker == -1: # il sera le premier
@@ -555,46 +554,43 @@ def modify_parcours(event_name, parcours_name):
             elif not stand.start_trace.filter_by(turn_nb=turn_nb).first(): # il sera le dernier
                 stand.end_stand=None
                 args = {'name':modif_form.name.data,
-                          'lat':modif_form.lat.data,
-                          'lng':modif_form.lng.data,
-                          'elevation':get_points_elevation([(modif_form.lat.data, modif_form.lng.data)])[0]['elevation'],
-                          'parcours_id':parcours.id,
-                          'color':modif_form.color.data,
-                          'chrono':modif_form.chrono.data,
-                          'end_stand':parcours.id
-                          }
+                        'lat':modif_form.lat.data,
+                        'lng':modif_form.lng.data,
+                        'elevation':get_points_elevation([(modif_form.lat.data, modif_form.lng.data)])[0]['elevation'],
+                        'parcours_id':parcours.id,
+                        'color':modif_form.color.data,
+                        'chrono':modif_form.chrono.data,
+                        'end_stand':parcours.id
+                        }
             else:
                 args = {'name':modif_form.name.data,
-                          'lat':modif_form.lat.data,
-                          'lng':modif_form.lng.data,
-                          'elevation':get_points_elevation([(modif_form.lat.data, modif_form.lng.data)])[0]['elevation'],
-                          'parcours_id':parcours.id,
-                          'color':modif_form.color.data,
-                          'chrono':modif_form.chrono.data,
-                          }
+                        'lat':modif_form.lat.data,
+                        'lng':modif_form.lng.data,
+                        'elevation':get_points_elevation([(modif_form.lat.data, modif_form.lng.data)])[0]['elevation'],
+                        'parcours_id':parcours.id,
+                        'color':modif_form.color.data,
+                        'chrono':modif_form.chrono.data,
+                        }
 
             trace_start = stand
             trace_end = Stand(**args )
             db.session.add(trace_end)
+            db.session.commit()
+            db.session.refresh(trace_end)
+
             nb_name = Trace.query.filter(Trace.name.contains(f'{trace_start.name} - {trace_end.name}'[:36])).count()
             old_trace = Trace.query.filter_by(start_id = trace_start.id, turn_nb=turn_nb).first()
             name = f"{trace_start.name} - {trace_end.name} {'(' if nb_name else ''}{nb_name if nb_name else ''}{')' if nb_name else ''}"
             new_trace = Trace(name=name, parcours_id=parcours.id, start_id = trace_start.id, end_id = trace_end.id, turn_nb=turn_nb)
 
-            all_stands = set()
-            for t in Trace.query.filter_by(turn_nb=turn_nb).all():
-                all_stands.add(t.start)
-                all_stands.add(t.end)
-            if trace_end in all_stands:
-                flash('action pas possible', 'danger')
-                return redirect(request.path)
+            ic(trace_start, trace_end, new_trace, old_trace)
 
             if old_trace:
+                ic(old_trace, 'ok change start_id')
+                old_trace.start_id = trace_end.id
 
-                old_trace.start = trace_end
-
-            if not trace_end.start_trace.filter_by(turn_nb=turn_nb).first():
-                parcours.end_stand=trace_end
+            #if not trace_end.start_trace.filter_by(turn_nb=turn_nb).first():
+            #    parcours.end_stand=trace_end
             db.session.add(new_trace)
             db.session.commit()
 
@@ -602,27 +598,27 @@ def modify_parcours(event_name, parcours_name):
 
         if request.args.get('stand'): # creer la trace en direction d'un stand
             try:
-                nb_stand = int(request.args.get('stand'))
+                end_stand_id = int(request.args.get('stand'))
             except:
                 redirect(request.path)
 
             trace_start = stand
-            trace_end = Stand.query.filter_by(id = nb_stand).first()
+            trace_end = Stand.query.filter_by(id = end_stand_id).first()
             nb_name = len(Trace.query.filter(Trace.name.contains(f'{trace_start.name} - {trace_end.name}')).all())
             old_trace = Trace.query.filter_by(start_id = trace_start.id, turn_nb=turn_nb).first()
             name = f"{trace_start.name} - {trace_end.name} {'(' if nb_name else ''}{nb_name if nb_name else ''}{')' if nb_name else ''}"
             new_trace = Trace(name=name, parcours_id=parcours.id, start_id = trace_start.id, end_id = trace_end.id, turn_nb=turn_nb)
 
             all_stands = set()
-            for t in Trace.query.filter_by(turn_nb=turn_nb).all():
+            for t in Trace.query.filter_by(turn_nb=turn_nb, parcours_id=parcours.id).all():
                 all_stands.add(t.start)
                 all_stands.add(t.end)
-            if trace_end in all_stands:
+            if trace_end in all_stands and trace_end != parcours.start_stand:
+                ic(trace_end, all_stands)
                 flash('action pas possible', 'danger')
                 return redirect(request.path)
 
             if old_trace:
-
                 old_trace.start = trace_end
 
             if not stand.start_trace.filter_by(turn_nb=turn_nb).first():
