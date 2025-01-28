@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, flash, render_template, request
 from flask_login import login_required, current_user, login_user, logout_user
 from flask_app.models import User, Event, Parcours, Inscription, Edition
 from .forms import Login_form, Signup_form, Inscription_connected_form, Inscription_form, ModifyForm
-from flask_app import db, set_route, lang_url_for as url_for
+from flask_app import db, set_route, lang_url_for as url_for, bcrypt, DEV_ENABLE
 from sqlalchemy import and_, not_
 from datetime import datetime
 import string, secrets
@@ -18,7 +18,8 @@ def login():
     form = Login_form()
     if form.validate_on_submit():
         user= User.query.filter_by(username=form.username.data).first()
-        if user and form.password.data == user.password:
+        # ! remove the dev part when done
+        if user and (bcrypt.check_password_hash(user.password, form.password.data) or (form.password.data == user.password and DEV_ENABLE)):
             login_user(user)
             flash(_('flash.connected:name').format(name = user.name), 'success')
             if request.args.get('next'):
@@ -37,7 +38,7 @@ def signup():
         return redirect(url_for('home'))
     form = Signup_form()
     if form.validate_on_submit():
-        hash_pwd=form.password.data
+        hash_pwd= bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         user = User(name=form.name.data,
                     lastname=form.lastname.data,
                     username=form.username.data,
@@ -99,7 +100,8 @@ def inscription_page(event, edition):
         form.parcours.choices = [str((p.name, p.description)) for p in choices]
 
         if form.validate_on_submit():
-            hash_pwd= 'dev' #! ''.join(secrets.choice(alphabet) for _ in range(10))
+            pwd= 'dev' #! ''.join(secrets.choice(alphabet) for _ in range(10))
+            hash_pwd = bcrypt.generate_password_hash(pwd).decode('utf-8')
             username=f'{form.name.data}.{form.lastname.data}'
             nb = User.query.filter(User.username.contains(username)).count()
             username += str(nb) if nb>0 else ''

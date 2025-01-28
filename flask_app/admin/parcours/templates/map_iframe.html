@@ -10,24 +10,20 @@
     <script>
         {% if modif_form_type =="new" %}
         function on_marker_click(stand){
-            let url = window.parent.location.href;
-            url += "&stand="+stand;
+            let url = "{{url_for('admin.parcours.new_step', event_name=event_data.name, parcours_name=parcours_data.name, last_marker=last_marker, stand_id=0)[:-1]}}"
+            url += stand;
             window.parent.location.href = url;
         };
         {% else %}
-        function on_marker_click(marker){
-            let url = window.parent.location.href;
-            if (url.indexOf("?") > -1){
-                url = url.slice(0, url.indexOf("?"))};
-            url += "?marker="+marker;
+        function on_marker_click(stand){
+            let url = "{{url_for('admin.parcours.modify_stand', event_name=event_data.name, parcours_name=parcours_data.name, stand_id=0)[:-1]}}"
+            url += stand;
             window.parent.location.href = url;
         };
         {% endif %}
         function on_trace_click(trace){
-            let url = window.parent.location.href;
-            if (url.indexOf("?") > -1){
-                url = url.slice(0, url.indexOf("?"))};
-            url += "?trace="+trace;
+            let url = "{{url_for('admin.parcours.modify_trace', event_name=event_data.name, parcours_name=parcours_data.name, trace_id=0)[:-1]}}"
+            url += trace;
             window.parent.location.href = url;
         };
         function get_map_data(){

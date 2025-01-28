@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-21 19:31+0100\n"
+"POT-Creation-Date: 2025-01-26 17:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,8 @@ msgstr "tu doit être admin pour acceder a cette page."
 msgid "flash.error.wrongadminevent"
 msgstr "tu doit être admin de cet evenement pour acceder a cette page."
 
-#: flask_app/__init__.py:112 flask_app/templates/layout.html:108
+#: copy.html:108 flask_app/__init__.py:112 flask_app/templates/layout
+#: flask_app/templates/layout.html:108
 msgid "app.lang"
 msgstr "fr"
 
@@ -47,51 +48,67 @@ msgstr "le coureur ayans l\\'id {coureur} n\\'existe pas."
 msgid "admin.view.coureurs"
 msgstr "coureurs"
 
+#: flask_app/admin/coureurs/templates/coureurs.html:9
+msgid "admin.coureurs.username"
+msgstr "nom d'utilisateur"
+
+#: flask_app/admin/coureurs/templates/coureurs.html:10
+msgid "admin.coureurs.lastname"
+msgstr "nom"
+
+#: flask_app/admin/coureurs/templates/coureurs.html:11
+msgid "admin.coureurs.name"
+msgstr "prénom"
+
 #: flask_app/admin/coureurs/templates/view_coureur.html:3
 msgid "admin.view.info"
 msgstr "info"
 
 #: flask_app/admin/coureurs/templates/view_coureur.html:8
 msgid "admin.view.name"
+msgstr "prénom"
+
+#: flask_app/admin/coureurs/templates/view_coureur.html:19
+msgid "admin.view.lastname"
 msgstr "nom"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:20
+#: flask_app/admin/coureurs/templates/view_coureur.html:31
 msgid "admin.view.email"
 msgstr "e-mail"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:31
+#: flask_app/admin/coureurs/templates/view_coureur.html:42
 msgid "admin.view.phone"
 msgstr "téléphone"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:41
+#: flask_app/admin/coureurs/templates/view_coureur.html:52
 msgid "admin.view.birth"
 msgstr "date de naissance"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:50
+#: flask_app/admin/coureurs/templates/view_coureur.html:61
 msgid "admin.view.username"
 msgstr "username"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:59
+#: flask_app/admin/coureurs/templates/view_coureur.html:70
 msgid "admin.view.participation"
 msgstr "participations"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:63
+#: flask_app/admin/coureurs/templates/view_coureur.html:74
 msgid "admin.view.parcours"
 msgstr "parcours"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:64
+#: flask_app/admin/coureurs/templates/view_coureur.html:75
 msgid "admin.view.edition"
 msgstr "editions"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:65
+#: flask_app/admin/coureurs/templates/view_coureur.html:76
 msgid "admin.view.date"
 msgstr "date"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:66
+#: flask_app/admin/coureurs/templates/view_coureur.html:77
 msgid "admin.view.dossard"
 msgstr "dossard"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:67
+#: flask_app/admin/coureurs/templates/view_coureur.html:78
 msgid "admin.view.rank"
 msgstr "place"
 
@@ -109,7 +126,7 @@ msgstr "description du parcours"
 
 #: flask_app/admin/editions/form.py:11
 msgid "form.parcours"
-msgstr "nom du parcours"
+msgstr "parcours"
 
 #: flask_app/admin/editions/form.py:12
 msgid "form.firstinscriptiondate"
@@ -248,7 +265,7 @@ msgstr "ajouter un nouveau coureur"
 
 #: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:26
 #: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:65
-#: flask_app/admin/parcours/templates/parcours.html:71
+#: flask_app/admin/parcours/templates/parcours.html:73
 msgid "admin.parcours.close"
 msgstr "fermer"
 
@@ -344,19 +361,19 @@ msgstr "dossard"
 msgid "admin.editions.result.temps"
 msgstr "temps"
 
-#: flask_app/admin/editions/templates/edition-sidebar.html:30
+#: flask_app/admin/editions/templates/edition-sidebar.html:11
 msgid "admin.editions.gererpassage"
 msgstr "gérer les passages"
 
-#: flask_app/admin/editions/templates/edition-sidebar.html:37
+#: flask_app/admin/editions/templates/edition-sidebar.html:16
 msgid "admin.editions.gererdossard"
 msgstr "gérer les dossard"
 
-#: flask_app/admin/editions/templates/edition-sidebar.html:45
+#: flask_app/admin/editions/templates/edition-sidebar.html:22
 msgid "admin.editions.gererparcours"
 msgstr "gérer les parcours"
 
-#: flask_app/admin/editions/templates/edition-sidebar.html:53
+#: flask_app/admin/editions/templates/edition-sidebar.html:28
 msgid "admin.editions.result"
 msgstr "résultats"
 
@@ -364,11 +381,19 @@ msgstr "résultats"
 msgid "admin.editions.editions"
 msgstr "éditions"
 
-#: flask_app/admin/editions/templates/editions.html:28
+#: flask_app/admin/editions/templates/editions.html:7
+msgid "admin.editions.name"
+msgstr "nom"
+
+#: flask_app/admin/editions/templates/editions.html:8
+msgid "admin.editions.date"
+msgstr "date"
+
+#: flask_app/admin/editions/templates/editions.html:29
 msgid "admin.editions.startcreateparcours"
 msgstr "commencer par créer un parcours"
 
-#: flask_app/admin/editions/templates/editions.html:40
+#: flask_app/admin/editions/templates/editions.html:45
 msgid "admin.editions.newedition"
 msgstr "nouvelle édition"
 
@@ -424,53 +449,47 @@ msgstr "longitude du depart"
 msgid "form.create"
 msgstr "créer"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:33
-#: flask_app/admin/parcours/templates/parcours.html:16
-#: flask_app/admin/parcours/templates/parcours.html:42
-msgid "admin.parcours.modify"
-msgstr "modifier"
-
-#: flask_app/admin/parcours/templates/modify_parcours.html:41
+#: flask_app/admin/parcours/templates/modify_parcours.html:14
 msgid "admin.parcours.supprimer"
 msgstr "supprimer"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:43
+#: flask_app/admin/parcours/templates/modify_parcours.html:16
 msgid "admin.parcours.parcoursunmodifyablealreadyused"
 msgstr "parcours non modifiable car déjà utilisé dans une édition"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:46
+#: flask_app/admin/parcours/templates/modify_parcours.html:19
 msgid "admin.parcours.desarchiver"
 msgstr "desarchiver"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:49
+#: flask_app/admin/parcours/templates/modify_parcours.html:22
 msgid "admin.parcours.archiver"
 msgstr "archiver"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:54
+#: flask_app/admin/parcours/templates/modify_parcours.html:27
 msgid "admin.parcours.dupliquer"
 msgstr "créer une copie du parcours"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:59
+#: flask_app/admin/parcours/templates/modify_parcours.html:32
 msgid "admin.parcours.clicknewstand"
 msgstr "cliquer où vous voulez ajouter le stand"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:68
+#: flask_app/admin/parcours/templates/modify_parcours.html:41
 msgid "admin.parcours.changepos"
 msgstr "changer la position"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:83
+#: flask_app/admin/parcours/templates/modify_parcours.html:60
 msgid "admin.parcours.deletape"
 msgstr "supprimer l'etape"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:92
+#: flask_app/admin/parcours/templates/modify_parcours.html:71
 msgid "admin.parcours.addstand"
 msgstr "nouveau stand"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:256
+#: flask_app/admin/parcours/templates/modify_parcours.html:233
 msgid "chart.dist"
 msgstr "distance"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:263
+#: flask_app/admin/parcours/templates/modify_parcours.html:240
 msgid "chart.alt"
 msgstr "altitude"
 
@@ -478,15 +497,20 @@ msgstr "altitude"
 msgid "admin.parcours.parcours"
 msgstr "parcours"
 
-#: flask_app/admin/parcours/templates/parcours.html:30
+#: flask_app/admin/parcours/templates/parcours.html:9
+#: flask_app/admin/parcours/templates/parcours.html:33
+msgid "admin.parcours.name"
+msgstr "nom"
+
+#: flask_app/admin/parcours/templates/parcours.html:28
 msgid "admin.parcours.archivedparcours"
 msgstr "parcours archivés"
 
-#: flask_app/admin/parcours/templates/parcours.html:57
+#: flask_app/admin/parcours/templates/parcours.html:59
 msgid "admin.parcours.createnewparcours"
 msgstr "créer un nouveau Parcours"
 
-#: flask_app/admin/parcours/templates/parcours.html:66
+#: flask_app/admin/parcours/templates/parcours.html:68
 msgid "admin.parcours.startpoint"
 msgstr "nouveau stand"
 
@@ -514,59 +538,60 @@ msgstr "le"
 msgid "home.nextevent"
 msgstr "prochain evenement"
 
+#: copy.html:10 copy.html:71 flask_app/templates/layout
 #: flask_app/templates/layout.html:10 flask_app/templates/layout.html:71
 msgid "app.name"
-msgstr "course des vignes 2.0"
+msgstr "chrono des vignes 2.0"
 
-#: flask_app/templates/layout.html:67
+#: copy.html:67 flask_app/templates/layout flask_app/templates/layout.html:67
 msgid "app.name.short"
 msgstr "cdv 2.0"
 
-#: flask_app/templates/layout.html:88
+#: copy.html:88 flask_app/templates/layout flask_app/templates/layout.html:88
 msgid "app.about"
 msgstr "about"
 
-#: flask_app/templates/layout.html:91
+#: copy.html:91 flask_app/templates/layout flask_app/templates/layout.html:91
 msgid "app.contact"
 msgstr "nous contacter"
 
-#: flask_app/templates/layout.html:97
+#: copy.html:97 flask_app/templates/layout flask_app/templates/layout.html:97
 msgid "app.chrono"
 msgstr "chronometrer"
 
-#: flask_app/templates/layout.html:104
+#: copy.html:104 flask_app/templates/layout flask_app/templates/layout.html:104
 msgid "app.docu"
 msgstr "documentation"
 
-#: flask_app/templates/layout.html:108
+#: copy.html:108 flask_app/templates/layout flask_app/templates/layout.html:108
 msgid "app.languages"
 msgstr "langues"
 
-#: flask_app/templates/layout.html:121
+#: copy.html:121 flask_app/templates/layout flask_app/templates/layout.html:121
 msgid "app.logout"
 msgstr "se déconnecter"
 
-#: flask_app/templates/layout.html:133
+#: copy.html:133 flask_app/templates/layout flask_app/templates/layout.html:133
 msgid "app.profil"
 msgstr "profil"
 
-#: flask_app/templates/layout.html:141
+#: copy.html:141 flask_app/templates/layout flask_app/templates/layout.html:141
 msgid "app.login"
 msgstr "se connecter"
 
-#: flask_app/templates/layout.html:147
+#: copy.html:147 flask_app/templates/layout flask_app/templates/layout.html:147
 msgid "app.signup"
 msgstr "créer un compte"
 
-#: flask_app/templates/sidebar.html:30
+#: copy.html:30 flask_app/templates/sidebar flask_app/templates/sidebar.html:30
 msgid "side.editions"
 msgstr "editions"
 
-#: flask_app/templates/sidebar.html:59
+#: copy.html:34 flask_app/templates/sidebar flask_app/templates/sidebar.html:59
 msgid "side.parcours"
 msgstr "parcours"
 
-#: flask_app/templates/sidebar.html:87
+#: copy.html:37 flask_app/templates/sidebar flask_app/templates/sidebar.html:87
 msgid "side.runner"
 msgstr "coureurs"
 

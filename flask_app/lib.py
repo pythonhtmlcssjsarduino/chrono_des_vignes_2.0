@@ -1,5 +1,6 @@
 import requests
 from math import acos, sin, radians, cos
+from time import time
 
 
 def midpoint(latlng1, latlng2):
@@ -7,14 +8,34 @@ def midpoint(latlng1, latlng2):
     lng = (latlng1[1]+latlng2[1])/2
     return (lat, lng)
 
-def get_points_elevation(points:list[tuple[float]]):
+def get_points_elevation(points:list[tuple[float, float]]) -> list[dict[str, float]]:
+    """Get the elevation of a list of points using the open-elevation API
+
+    Args:
+        points (list[tuple[float, float]]): A list of points as tuples of latitude and longitude in decimal degrees
+
+    Returns:
+        list[dict[str, float]]: A list of dictionaries with keys 'latitude', 'longitude' and 'elevation' in meters
+    """
+    start = time()
     if len(points) == 0:
         return []
+    ic('get_points_elevation', points)
     data = {'locations':[{'latitude':float(lat), 'longitude':float(lng)} for lat, lng in points]}
     url = 'https://api.open-elevation.com/api/v1/lookup'
-    response = requests.post(url, json=data)
-    if response.status_code == 200:
-        return response.json()['results']
+    try:
+        response = requests.post(url, json=data, timeout=1)
+    except requests.exceptions.ReadTimeout as e:
+        ic(e)
+        ic(time() - start, 'get_points_elevation')
+    else:
+        ic(response.status_code, response)
+        ic(time() - start, 'get_points_elevation')
+        if response.status_code == 200:
+            ic(response.json())
+            return response.json()['results'] # [{'latitude':float, 'longitude':float, 'elevation':float}, ...]
+        else :
+            ic('open-elevation api error', response.status_code)
 
 def calc_points_dist(lat1, lng1, lat2, lng2):
     'return the spherical dist of the two points in km'

@@ -2,19 +2,30 @@
 {% block content %}
 <h3>{{ _('admin.view.coureurs') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
-    {% for inscrit in event_data.get_unique_inscrits() %}
-        <div class="d-inline-flex card m-1">
-            <div class="w-100 card-header d-flex justify-content-between align-items-center">
-                <h5 class="px-2">{{inscrit.inscrit.name}} {{inscrit.inscrit.lastname}}</h5>
-                <div class="vr"></div>
-                <a href="#" class="px-2"><i class="fa-solid fa-ellipsis-vertical"></i></a>
-            </div>
-            <div class="card-body">
-                <a href="{{ url_for('admin.coureurs.view_coureur_page', event_name=event_data.name, coureur=inscrit.inscrit.id) }}" class="text-decoration-none link-dark">
-                    {{inscrit.inscrit.username}}
-                </a>
-            </div>
-        </div>
-    {% endfor %}
+
+    <table class="table table-striped table-hover clickable-table">
+    <thead>
+      <tr>
+        <th scope="col">{{_('admin.coureurs.username')}}</th>
+        <th scope="col">{{_('admin.coureurs.lastname')}}</th>
+        <th scope="col">{{_('admin.coureurs.name')}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for inscrit in event_data.get_unique_inscrits() %}
+        <tr data-href="{{ url_for('admin.coureurs.view_coureur_page', event_name=event_data.name, coureur=inscrit.inscrit.id) }}">
+          <th scope="row">{{ inscrit.inscrit.username }}</th>
+          <td>{{ inscrit.inscrit.lastname }}</td>
+          <td>{{ inscrit.inscrit.name }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <script>
+    $('table tbody tr').on('click', function() {
+      window.location.href = $(this).data('href');
+    });
+  </script>
 </div>
 {% endblock content %}

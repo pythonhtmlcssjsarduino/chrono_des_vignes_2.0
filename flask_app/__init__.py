@@ -8,6 +8,7 @@ from icecream import install
 from flask_babel import Babel, lazy_gettext, gettext, _
 from flask_socketio import SocketIO
 from sqlalchemy import URL
+from flask_bcrypt import Bcrypt
 import os
 from dotenv import load_dotenv
 install()
@@ -44,6 +45,8 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 socketio = SocketIO(app)
+
+bcrypt = Bcrypt(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)

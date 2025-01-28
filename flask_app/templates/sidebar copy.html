@@ -23,17 +23,17 @@
             >{{ event_data.name }}</a
           >
         </li>
-        <li class="nav-item btn-group-justified bg-info my-2"> {# edition #}
+        <li class="nav-item"> {# edition #}
           <a
             class="nav-link"
             href="{{ url_for('admin.editions.editions_page', event_name=event_data.name) }}"
             >{{ _('side.editions') }}</a
           >
         </li>
-        <li class="nav-item btn-group-justified bg-info my-2"> {# parcours #}
+        <li class="nav-item"> {# parcours #}
           <a class="nav-link" href="{{ url_for('admin.parcours.parcours_page', event_name=event_data.name) }}">{{ _('side.parcours') }}</a>
         </li>
-        <li class="nav-item btn-group-justified bg-info my-2"> {# inscrit #}
+        <li class="nav-item"> {# inscrit #}
           <a class="nav-link" href="{{ url_for('admin.coureurs.coureurs_page', event_name=event_data.name) }}">{{ _('side.runner') }}</a>
         </li>
       </ul>

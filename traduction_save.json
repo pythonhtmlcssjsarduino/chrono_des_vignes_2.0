@@ -1,0 +1,827 @@
+{
+    "flash.error.mustadmin": {
+        "fr": "tu doit être admin pour acceder a cette page.",
+        "de": "",
+        "en": ""
+    },
+    "flash.error.wrongadminevent": {
+        "fr": "tu doit être admin de cet evenement pour acceder a cette page.",
+        "de": "",
+        "en": ""
+    },
+    "app.lang": {
+        "fr": "fr",
+        "de": "de",
+        "en": "en"
+    },
+    "form.eventdescription": {
+        "fr": "description de l'évenement",
+        "de": "",
+        "en": ""
+    },
+    "form.save": {
+        "fr": "sauver",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.error.coureurdontexist:coureur": {
+        "fr": "le coureur ayans l\\'id {coureur} n\\'existe pas.",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.coureurs": {
+        "fr": "coureurs",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.info": {
+        "fr": "info",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.name": {
+        "fr": "nom",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.email": {
+        "fr": "e-mail",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.phone": {
+        "fr": "téléphone",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.birth": {
+        "fr": "date de naissance",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.username": {
+        "fr": "username",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.participation": {
+        "fr": "participations",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.parcours": {
+        "fr": "parcours",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.edition": {
+        "fr": "editions",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.date": {
+        "fr": "date",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.dossard": {
+        "fr": "dossard",
+        "de": "",
+        "en": ""
+    },
+    "admin.view.rank": {
+        "fr": "place",
+        "de": "",
+        "en": ""
+    },
+    "form.edition_name": {
+        "fr": "nom de l'édition",
+        "de": "",
+        "en": ""
+    },
+    "form.edition_date": {
+        "fr": "date de l'édition",
+        "de": "",
+        "en": ""
+    },
+    "form.description": {
+        "fr": "description du parcours",
+        "de": "",
+        "en": ""
+    },
+    "form.parcours": {
+        "fr": "nom du parcours",
+        "de": "",
+        "en": ""
+    },
+    "form.firstinscriptiondate": {
+        "fr": "date d'ouverture des inscriptions",
+        "de": "",
+        "en": ""
+    },
+    "form.lastinscriptiondate": {
+        "fr": "date de fermeture des inscriptions",
+        "de": "",
+        "en": ""
+    },
+    "form.rdvlng": {
+        "fr": "longitude du depart",
+        "de": "",
+        "en": ""
+    },
+    "form.rdvlat": {
+        "fr": "latitude du depart",
+        "de": "",
+        "en": ""
+    },
+    "flash.success.newuser:username:name:lastname": {
+        "fr": "l'utilisateur {username} a été inscrit avec succes",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.dossard": {
+        "fr": "dossard",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.name": {
+        "fr": "prénom",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.lastname": {
+        "fr": "nom",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.email": {
+        "fr": "email",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.phone": {
+        "fr": "numéro de téléphone",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.datenaiss": {
+        "fr": "date de naissance",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.username": {
+        "fr": "nom d'utilisateur",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.parcours": {
+        "fr": "parcours",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.edition_date": {
+        "fr": "date de l'édition",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.edition_name": {
+        "fr": "nom de l'édition",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.event_name": {
+        "fr": "nom de l'évenement",
+        "de": "",
+        "en": ""
+    },
+    "form.name": {
+        "fr": "prénom",
+        "de": "",
+        "en": ""
+    },
+    "form.lastname": {
+        "fr": "nom",
+        "de": "",
+        "en": ""
+    },
+    "form.username": {
+        "fr": "username",
+        "de": "",
+        "en": ""
+    },
+    "form.email": {
+        "fr": "email",
+        "de": "",
+        "en": ""
+    },
+    "form.tel": {
+        "fr": "télephone",
+        "de": "",
+        "en": ""
+    },
+    "form.birth": {
+        "fr": "date de naissance",
+        "de": "",
+        "en": ""
+    },
+    "form.choosedparcours": {
+        "fr": "parcours choisis",
+        "de": "",
+        "en": ""
+    },
+    "form.register": {
+        "fr": "s'inscrire",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.coureur": {
+        "fr": "coureur",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.present": {
+        "fr": "présents",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.generer": {
+        "fr": "générer",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.export_excel": {
+        "fr": "exporter au format excel",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.addnewcoureur": {
+        "fr": "ajouter un nouveau coureur",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.close": {
+        "fr": "fermer",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.dossard.userexistcousewhoadd": {
+        "fr": "des utilisateur on été trouvé avec les mêmes nom. choisir qui inscrire",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.parcours.disqualifier": {
+        "fr": "disqualifier",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.parcours.abandon": {
+        "fr": "abandon",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.parcours.finish": {
+        "fr": "fini",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.parcours.launch": {
+        "fr": "lancer le parcours",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.parcours.end": {
+        "fr": "finir le parcours",
+        "de": "",
+        "en": ""
+    },
+    "form.stand": {
+        "fr": "stand",
+        "de": "",
+        "en": ""
+    },
+    "form.key": {
+        "fr": "clé",
+        "de": "",
+        "en": ""
+    },
+    "form.validate": {
+        "fr": "valider",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.passages.key": {
+        "fr": "clé",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.passages.événement": {
+        "fr": "événement",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.passages.stand": {
+        "fr": "stand",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.passages.parcours": {
+        "fr": "parcours",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.passages.enterdossardnb": {
+        "fr": "entrer le numéro de dossard",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.passages.time": {
+        "fr": "temps",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.passages.user": {
+        "fr": "coureur",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.result.results": {
+        "fr": "résultats",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.result.place": {
+        "fr": "rang",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.result.nom": {
+        "fr": "nom",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.result.prénom": {
+        "fr": "prénom",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.result.dossard": {
+        "fr": "dossard",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.result.temps": {
+        "fr": "temps",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.gererpassage": {
+        "fr": "gérer les passages",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.gererdossard": {
+        "fr": "gérer les dossard",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.gererparcours": {
+        "fr": "gérer les parcours",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.result": {
+        "fr": "résultats",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.editions": {
+        "fr": "éditions",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.startcreateparcours": {
+        "fr": "commencer par créer un parcours",
+        "de": "",
+        "en": ""
+    },
+    "admin.editions.newedition": {
+        "fr": "nouvelle édition",
+        "de": "",
+        "en": ""
+    },
+    "form.editionrdv": {
+        "fr": "lieu de rendez-vous",
+        "de": "",
+        "en": ""
+    },
+    "form.parcoursname": {
+        "fr": "nom du parcours",
+        "de": "",
+        "en": ""
+    },
+    "form.parcoursdescription": {
+        "fr": "description du parcours",
+        "de": "",
+        "en": ""
+    },
+    "form.standname": {
+        "fr": "nom du stand",
+        "de": "",
+        "en": ""
+    },
+    "form.standlat": {
+        "fr": "latitude du stand",
+        "de": "",
+        "en": ""
+    },
+    "form.standlng": {
+        "fr": "longitude du stand",
+        "de": "",
+        "en": ""
+    },
+    "form.standcouleur": {
+        "fr": "couleur du stand",
+        "de": "",
+        "en": ""
+    },
+    "form.chrono": {
+        "fr": "activer le chrono pour ce stand",
+        "de": "",
+        "en": ""
+    },
+    "form.etapename": {
+        "fr": "nom de l'etape",
+        "de": "",
+        "en": ""
+    },
+    "form.path": {
+        "fr": "chemin",
+        "de": "",
+        "en": ""
+    },
+    "form.startlat": {
+        "fr": "latitude du depart",
+        "de": "",
+        "en": ""
+    },
+    "form.startlng": {
+        "fr": "longitude du depart",
+        "de": "",
+        "en": ""
+    },
+    "form.create": {
+        "fr": "créer",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.modify": {
+        "fr": "modifier",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.supprimer": {
+        "fr": "supprimer",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.parcoursunmodifyablealreadyused": {
+        "fr": "parcours non modifiable car déjà utilisé dans une édition",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.desarchiver": {
+        "fr": "desarchiver",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.archiver": {
+        "fr": "archiver",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.dupliquer": {
+        "fr": "créer une copie du parcours",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.clicknewstand": {
+        "fr": "cliquer où vous voulez ajouter le stand",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.changepos": {
+        "fr": "changer la position",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.deletape": {
+        "fr": "supprimer l'etape",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.addstand": {
+        "fr": "nouveau stand",
+        "de": "",
+        "en": ""
+    },
+    "chart.dist": {
+        "fr": "distance",
+        "de": "",
+        "en": ""
+    },
+    "chart.alt": {
+        "fr": "altitude",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.parcours": {
+        "fr": "parcours",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.archivedparcours": {
+        "fr": "parcours archivés",
+        "de": "",
+        "en": ""
+    },
+    "admin.parcours.createnewparcours": {
+        "fr": "créer un nouveau Parcours",
+        "de": "",
+        "en": ""
+    },
+    "home.events": {
+        "fr": "vos evenement",
+        "de": "",
+        "en": ""
+    },
+    "home.modify": {
+        "fr": "modifier",
+        "de": "",
+        "en": ""
+    },
+    "home.inscriptions": {
+        "fr": "vos inscriptions",
+        "de": "",
+        "en": ""
+    },
+    "home.parcours": {
+        "fr": "parcours",
+        "de": "",
+        "en": ""
+    },
+    "home.the": {
+        "fr": "le",
+        "de": "",
+        "en": ""
+    },
+    "home.nextevent": {
+        "fr": "prochain evenement",
+        "de": "",
+        "en": ""
+    },
+    "app.name": {
+        "fr": "course des vignes 2.0",
+        "de": "",
+        "en": ""
+    },
+    "app.name.short": {
+        "fr": "cdv 2.0",
+        "de": "",
+        "en": ""
+    },
+    "app.about": {
+        "fr": "about",
+        "de": "",
+        "en": ""
+    },
+    "app.contact": {
+        "fr": "nous contacter",
+        "de": "",
+        "en": ""
+    },
+    "app.chrono": {
+        "fr": "chronometrer",
+        "de": "",
+        "en": ""
+    },
+    "app.docu": {
+        "fr": "documentation",
+        "de": "",
+        "en": ""
+    },
+    "app.languages": {
+        "fr": "langues",
+        "de": "",
+        "en": ""
+    },
+    "app.logout": {
+        "fr": "se déconnecter",
+        "de": "",
+        "en": ""
+    },
+    "app.profil": {
+        "fr": "profil",
+        "de": "",
+        "en": ""
+    },
+    "app.login": {
+        "fr": "se connecter",
+        "de": "",
+        "en": ""
+    },
+    "app.signup": {
+        "fr": "créer un compte",
+        "de": "",
+        "en": ""
+    },
+    "side.editions": {
+        "fr": "editions",
+        "de": "",
+        "en": ""
+    },
+    "side.parcours": {
+        "fr": "parcours",
+        "de": "",
+        "en": ""
+    },
+    "side.runner": {
+        "fr": "coureurs",
+        "de": "",
+        "en": ""
+    },
+    "flash.connected:name": {
+        "fr": "bienvenue {name} tu est bien connecté",
+        "de": "",
+        "en": ""
+    },
+    "flash.error.pwdnotvalid": {
+        "fr": "le mot de passe ou nom d\\'utilisateur n\\'est pas valide",
+        "de": "",
+        "en": ""
+    },
+    "flash.accountcreated": {
+        "fr": "votre compte a bien été crée",
+        "de": "",
+        "en": ""
+    },
+    "flash.deconected": {
+        "fr": "tu es bien déconnecté !",
+        "de": "",
+        "en": ""
+    },
+    "flash.warn.inscriptionsnotopen:date": {
+        "fr": "Les inscriptions ne sont pas encore ouvertes! Elles ouvrent le {date}",
+        "de": "",
+        "en": ""
+    },
+    "flash.warn.inscriptionclosed": {
+        "fr": "les inscription sont déjà fermée!",
+        "de": "",
+        "en": ""
+    },
+    "form.pwd": {
+        "fr": "mot de passe",
+        "de": "",
+        "en": ""
+    },
+    "form.connect": {
+        "fr": "se connecter",
+        "de": "",
+        "en": ""
+    },
+    "form.repetepwd": {
+        "fr": "répéter le mot de passe",
+        "de": "",
+        "en": ""
+    },
+    "form.createaccount": {
+        "fr": "créer un compte",
+        "de": "",
+        "en": ""
+    },
+    "form.modifyaccount": {
+        "fr": "modifier son compte",
+        "de": "",
+        "en": ""
+    },
+    "inscription": {
+        "fr": "inscriptions",
+        "de": "",
+        "en": ""
+    },
+    "users.profil.fullname": {
+        "fr": "nom complet",
+        "de": "",
+        "en": ""
+    },
+    "users.profil.email": {
+        "fr": "email",
+        "de": "",
+        "en": ""
+    },
+    "users.profil.phone": {
+        "fr": "numéro de téléphone",
+        "de": "",
+        "en": ""
+    },
+    "users.profil.birthdate": {
+        "fr": "date de naissance",
+        "de": "",
+        "en": ""
+    },
+    "users.profil.editprofil": {
+        "fr": "modifier son profile",
+        "de": "",
+        "en": ""
+    },
+    "view.error.notyourinscription": {
+        "fr": "ce n\\'est pas votre inscription.",
+        "de": "",
+        "en": ""
+    },
+    "view.error.eventdontexist:event": {
+        "fr": "l\\'evenement \"{event}\" n\\'existe pas",
+        "de": "",
+        "en": ""
+    },
+    "view.error.editiondontexist:edition": {
+        "fr": "l\\'edition \"{edition}\" n\\'existe pas",
+        "de": "",
+        "en": ""
+    },
+    "view.error.parcoursdontexist:parcours": {
+        "fr": "le parcours \"{parcours}\" n\\'existe pas",
+        "de": "",
+        "en": ""
+    },
+    "view.date": {
+        "fr": "date",
+        "de": "",
+        "en": ""
+    },
+    "view.time": {
+        "fr": "heure",
+        "de": "",
+        "en": ""
+    },
+    "view.evenement": {
+        "fr": "evenement",
+        "de": "",
+        "en": ""
+    },
+    "view.rdv": {
+        "fr": "rendez-vous",
+        "de": "",
+        "en": ""
+    },
+    "view.opengmap": {
+        "fr": "ouvrir sur google maps",
+        "de": "",
+        "en": ""
+    },
+    "view.inscriptions": {
+        "fr": "vos inscriptions",
+        "de": "",
+        "en": ""
+    },
+    "view.inscriptionclosed": {
+        "fr": "les inscription sont déjà fermée!",
+        "de": "",
+        "en": ""
+    },
+    "view.inscriptionsnotopen": {
+        "fr": "Les inscriptions ne sont pas encore ouvertes!",
+        "de": "",
+        "en": ""
+    },
+    "view.editions": {
+        "fr": "editions",
+        "de": "",
+        "en": ""
+    },
+    "view.parcours": {
+        "fr": "parcours",
+        "de": "",
+        "en": ""
+    },
+    "view.desinscription": {
+        "fr": "se désinscrire",
+        "de": "",
+        "en": ""
+    },
+    "view.plusparticiper": {
+        "fr": "ne plus participer",
+        "de": "",
+        "en": ""
+    },
+    "view.distance": {
+        "fr": "distance",
+        "de": "",
+        "en": ""
+    },
+    "view.altitude": {
+        "fr": "altitude",
+        "de": "",
+        "en": ""
+    }
+}

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-21 19:31+0100\n"
+"POT-Creation-Date: 2025-01-26 17:30+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,7 +25,8 @@ msgstr "XXXXXXXX"
 msgid "flash.error.wrongadminevent"
 msgstr "XXXXXXXX"
 
-#: flask_app/__init__.py:112 flask_app/templates/layout.html:108
+#: copy.html:108 flask_app/__init__.py:112 flask_app/templates/layout
+#: flask_app/templates/layout.html:108
 msgid "app.lang"
 msgstr "XXXXXXXX"
 
@@ -47,6 +48,18 @@ msgstr "XXXXXXXX"
 msgid "admin.view.coureurs"
 msgstr "XXXXXXXX"
 
+#: flask_app/admin/coureurs/templates/coureurs.html:9
+msgid "admin.coureurs.username"
+msgstr "XXXXXXXX"
+
+#: flask_app/admin/coureurs/templates/coureurs.html:10
+msgid "admin.coureurs.lastname"
+msgstr "XXXXXXXX"
+
+#: flask_app/admin/coureurs/templates/coureurs.html:11
+msgid "admin.coureurs.name"
+msgstr "XXXXXXXX"
+
 #: flask_app/admin/coureurs/templates/view_coureur.html:3
 msgid "admin.view.info"
 msgstr "XXXXXXXX"
@@ -55,43 +68,47 @@ msgstr "XXXXXXXX"
 msgid "admin.view.name"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:20
-msgid "admin.view.email"
+#: flask_app/admin/coureurs/templates/view_coureur.html:19
+msgid "admin.view.lastname"
 msgstr "XXXXXXXX"
 
 #: flask_app/admin/coureurs/templates/view_coureur.html:31
+msgid "admin.view.email"
+msgstr "XXXXXXXX"
+
+#: flask_app/admin/coureurs/templates/view_coureur.html:42
 msgid "admin.view.phone"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:41
+#: flask_app/admin/coureurs/templates/view_coureur.html:52
 msgid "admin.view.birth"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:50
+#: flask_app/admin/coureurs/templates/view_coureur.html:61
 msgid "admin.view.username"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:59
+#: flask_app/admin/coureurs/templates/view_coureur.html:70
 msgid "admin.view.participation"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:63
+#: flask_app/admin/coureurs/templates/view_coureur.html:74
 msgid "admin.view.parcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:64
+#: flask_app/admin/coureurs/templates/view_coureur.html:75
 msgid "admin.view.edition"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:65
+#: flask_app/admin/coureurs/templates/view_coureur.html:76
 msgid "admin.view.date"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:66
+#: flask_app/admin/coureurs/templates/view_coureur.html:77
 msgid "admin.view.dossard"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/coureurs/templates/view_coureur.html:67
+#: flask_app/admin/coureurs/templates/view_coureur.html:78
 msgid "admin.view.rank"
 msgstr "XXXXXXXX"
 
@@ -248,7 +265,7 @@ msgstr "XXXXXXXX"
 
 #: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:26
 #: flask_app/admin/editions/dossard/templates/new_coureur_modal.html:65
-#: flask_app/admin/parcours/templates/parcours.html:71
+#: flask_app/admin/parcours/templates/parcours.html:73
 msgid "admin.parcours.close"
 msgstr "XXXXXXXX"
 
@@ -344,19 +361,19 @@ msgstr "XXXXXXXX"
 msgid "admin.editions.result.temps"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/templates/edition-sidebar.html:30
+#: flask_app/admin/editions/templates/edition-sidebar.html:11
 msgid "admin.editions.gererpassage"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/templates/edition-sidebar.html:37
+#: flask_app/admin/editions/templates/edition-sidebar.html:16
 msgid "admin.editions.gererdossard"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/templates/edition-sidebar.html:45
+#: flask_app/admin/editions/templates/edition-sidebar.html:22
 msgid "admin.editions.gererparcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/templates/edition-sidebar.html:53
+#: flask_app/admin/editions/templates/edition-sidebar.html:28
 msgid "admin.editions.result"
 msgstr "XXXXXXXX"
 
@@ -364,11 +381,19 @@ msgstr "XXXXXXXX"
 msgid "admin.editions.editions"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/templates/editions.html:28
+#: flask_app/admin/editions/templates/editions.html:7
+msgid "admin.editions.name"
+msgstr "XXXXXXXX"
+
+#: flask_app/admin/editions/templates/editions.html:8
+msgid "admin.editions.date"
+msgstr "XXXXXXXX"
+
+#: flask_app/admin/editions/templates/editions.html:29
 msgid "admin.editions.startcreateparcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/editions/templates/editions.html:40
+#: flask_app/admin/editions/templates/editions.html:45
 msgid "admin.editions.newedition"
 msgstr "XXXXXXXX"
 
@@ -424,53 +449,47 @@ msgstr "XXXXXXXX"
 msgid "form.create"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:33
-#: flask_app/admin/parcours/templates/parcours.html:16
-#: flask_app/admin/parcours/templates/parcours.html:42
-msgid "admin.parcours.modify"
-msgstr "XXXXXXXX"
-
-#: flask_app/admin/parcours/templates/modify_parcours.html:41
+#: flask_app/admin/parcours/templates/modify_parcours.html:14
 msgid "admin.parcours.supprimer"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:43
+#: flask_app/admin/parcours/templates/modify_parcours.html:16
 msgid "admin.parcours.parcoursunmodifyablealreadyused"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:46
+#: flask_app/admin/parcours/templates/modify_parcours.html:19
 msgid "admin.parcours.desarchiver"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:49
+#: flask_app/admin/parcours/templates/modify_parcours.html:22
 msgid "admin.parcours.archiver"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:54
+#: flask_app/admin/parcours/templates/modify_parcours.html:27
 msgid "admin.parcours.dupliquer"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:59
+#: flask_app/admin/parcours/templates/modify_parcours.html:32
 msgid "admin.parcours.clicknewstand"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:68
+#: flask_app/admin/parcours/templates/modify_parcours.html:41
 msgid "admin.parcours.changepos"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:83
+#: flask_app/admin/parcours/templates/modify_parcours.html:60
 msgid "admin.parcours.deletape"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:92
+#: flask_app/admin/parcours/templates/modify_parcours.html:71
 msgid "admin.parcours.addstand"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:256
+#: flask_app/admin/parcours/templates/modify_parcours.html:233
 msgid "chart.dist"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:263
+#: flask_app/admin/parcours/templates/modify_parcours.html:240
 msgid "chart.alt"
 msgstr "XXXXXXXX"
 
@@ -478,15 +497,20 @@ msgstr "XXXXXXXX"
 msgid "admin.parcours.parcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/parcours.html:30
+#: flask_app/admin/parcours/templates/parcours.html:9
+#: flask_app/admin/parcours/templates/parcours.html:33
+msgid "admin.parcours.name"
+msgstr "XXXXXXXX"
+
+#: flask_app/admin/parcours/templates/parcours.html:28
 msgid "admin.parcours.archivedparcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/parcours.html:57
+#: flask_app/admin/parcours/templates/parcours.html:59
 msgid "admin.parcours.createnewparcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/admin/parcours/templates/parcours.html:66
+#: flask_app/admin/parcours/templates/parcours.html:68
 msgid "admin.parcours.startpoint"
 msgstr "XXXXXXXX"
 
@@ -514,59 +538,60 @@ msgstr "XXXXXXXX"
 msgid "home.nextevent"
 msgstr "XXXXXXXX"
 
+#: copy.html:10 copy.html:71 flask_app/templates/layout
 #: flask_app/templates/layout.html:10 flask_app/templates/layout.html:71
 msgid "app.name"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:67
+#: copy.html:67 flask_app/templates/layout flask_app/templates/layout.html:67
 msgid "app.name.short"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:88
+#: copy.html:88 flask_app/templates/layout flask_app/templates/layout.html:88
 msgid "app.about"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:91
+#: copy.html:91 flask_app/templates/layout flask_app/templates/layout.html:91
 msgid "app.contact"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:97
+#: copy.html:97 flask_app/templates/layout flask_app/templates/layout.html:97
 msgid "app.chrono"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:104
+#: copy.html:104 flask_app/templates/layout flask_app/templates/layout.html:104
 msgid "app.docu"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:108
+#: copy.html:108 flask_app/templates/layout flask_app/templates/layout.html:108
 msgid "app.languages"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:121
+#: copy.html:121 flask_app/templates/layout flask_app/templates/layout.html:121
 msgid "app.logout"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:133
+#: copy.html:133 flask_app/templates/layout flask_app/templates/layout.html:133
 msgid "app.profil"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:141
+#: copy.html:141 flask_app/templates/layout flask_app/templates/layout.html:141
 msgid "app.login"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/layout.html:147
+#: copy.html:147 flask_app/templates/layout flask_app/templates/layout.html:147
 msgid "app.signup"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/sidebar.html:30
+#: copy.html:30 flask_app/templates/sidebar flask_app/templates/sidebar.html:30
 msgid "side.editions"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/sidebar.html:59
+#: copy.html:34 flask_app/templates/sidebar flask_app/templates/sidebar.html:59
 msgid "side.parcours"
 msgstr "XXXXXXXX"
 
-#: flask_app/templates/sidebar.html:87
+#: copy.html:37 flask_app/templates/sidebar flask_app/templates/sidebar.html:87
 msgid "side.runner"
 msgstr "XXXXXXXX"
 

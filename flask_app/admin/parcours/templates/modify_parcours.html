@@ -2,39 +2,12 @@
 {% from 'macro.html' import form_field, submit, boolean_field, color_field %}
 {% block content %}
 <div> {# name form #}
-    {% if modif == "form" %}
-    <form action="" method="post">
+    <form action="{{url_for('admin.parcours.modify_parcours', event_name=event_data.name, parcours_name=parcours_data.name)}}" method="post">
         {{ name_form.hidden_tag() }}
         {{ form_field(name_form.name) }}
         {{ form_field(name_form.description) }}
         {{ submit(name_form) }}
     </form>
-    {% else %}
-    <div class="form-group">
-                <div class="form-group">
-                    <p class="form-control-label">{{ name_form.name.label }}</p>
-                    <p class="form-control form-control-lg text-start">{{ name_form.name.data }}</p>
-                </div>
-                <div class="form-group">
-                    <p class="form-control-label">{{ name_form.description.label }}</p>
-                    <textarea class="form-control form-control-lg text-start" rows="5" readonly>{{ name_form.description.data }}</textarea>
-                </div>
-                <div>
-        <script>
-            function name_form_modif() {
-                let url = window.parent.location.href;
-                if (url.indexOf("?") > -1) {
-                    url = url.slice(0, url.indexOf("?"))
-                };
-                url += "?modif=form";
-                window.parent.location.href = url;
-            }
-        </script>
-        <button class="btn btn-outline-info my-2" onclick="name_form_modif()">{{ _('admin.parcours.modify') }} <i
-                class="fa-solid fa-pen"></i></button>
-        </div>
-    </div>
-    {% endif %}
     <hr>
     {% if parcours_data.editions.count() == 0 %}
         <a href="{{ url_for('admin.parcours.delete_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}"
@@ -59,50 +32,56 @@
         <p class="bg-info rounded">{{ _('admin.parcours.clicknewstand') }}</p>
     {% endif %}
     <div {% if modif_form_type=="new" %} class="modal" id="modal_window" {% endif %}> {# modif form #}
-        <form action="" method="post" id="modif_form">
-            {{ modif_form.hidden_tag() }}
             {% if modif_form_type == "marker" %}
-                {{ form_field(modif_form.name) }}
-                <div class="form-group">{# change position #}
-                    <button class="btn btn-outline-info m-2" type="button" onclick="select_position()">
-                        <p id="latlngbtn" class="d-inline">{{ _('admin.parcours.changepos') }}</p> <i
-                            class="fa-solid fa-location-dot d-inline"></i>
-                    </button>
-                </div>
-                {{ form_field(modif_form.lat, div_class='d-none') }}
-                {{ form_field(modif_form.lng, div_class='d-none') }}
-                {{color_field(modif_form.color, colorpicker)}}
-                {{ boolean_field(modif_form.chrono) }}
-                {{ submit(modif_form) }}
+                <form action="{{ url_for('admin.parcours.modify_stand', event_name=event_data.name, parcours_name=parcours_data.name, stand_id=stand.id) }}" method="post" id="modif_form">
+                    {{ modif_form.hidden_tag() }}
+                    {{ form_field(modif_form.name) }}
+                    <div class="form-group">{# change position #}
+                        <button class="btn btn-outline-info m-2" type="button" onclick="select_position()">
+                            <p id="latlngbtn" class="d-inline">{{ _('admin.parcours.changepos') }}</p> <i
+                                class="fa-solid fa-location-dot d-inline"></i>
+                        </button>
+                    </div>
+                    {{ form_field(modif_form.lat, div_class='d-none') }}
+                    {{ form_field(modif_form.lng, div_class='d-none') }}
+                    {{ color_field(modif_form.color, colorpicker) }}
+                    {{ boolean_field(modif_form.chrono) }}
+                    {{ submit(modif_form) }}
+                </form>
             {% endif %}
             {% if modif_form_type == "trace" %}
-                {{ form_field(modif_form.name) }}
-                {{ form_field(modif_form.path, div_class='d-none') }}
-                <div class="form-group">{# delete #}
-                    <button class="btn btn-outline-danger m-2" type="button" onclick="delete_trace()">
-                        {{ _('admin.parcours.deletape') }}
-                    </button>
-                </div>
-                {{ submit(modif_form) }}
+                <form action="{{url_for('admin.parcours.modify_trace', event_name=event_data.name, parcours_name=parcours_data.name, trace_id=trace.id)}}" method="post" id="modif_form">
+                    {{ modif_form.hidden_tag() }}
+                    {{ form_field(modif_form.name) }}
+                    {{ form_field(modif_form.path, div_class='d-none') }}
+                    {{ submit(modif_form) }}
+                    <div class="form-group">{# delete #}
+                        <button class="btn btn-outline-danger m-2" type="button" onclick="delete_trace()">
+                            {{ _('admin.parcours.deletape') }}
+                        </button>
+                    </div>
+                </form>
             {% endif %}
             {% if modif_form_type == "new" %}
-                <fieldset class="form-group modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">{{ _('admin.parcours.addstand') }}</h4>
-                            <button type="button" class="btn-close" onclick="my_modal.hide()"></button>
+                <form action="{{ url_for('admin.parcours.new_stand', event_name=event_data.name, parcours_name=parcours_data.name, last_marker=last_marker) }}" method="post" id="modif_form">
+                    {{ modif_form.hidden_tag() }}
+                    <fieldset class="form-group modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">{{ _('admin.parcours.addstand') }}</h4>
+                                <button type="button" class="btn-close" onclick="my_modal.hide()"></button>
+                            </div>
+                            <script>error = false</script>
+                            {{ form_field(modif_form.name) }}
+                            {{ form_field(modif_form.lat, div_class='d-none') }}
+                            {{ form_field(modif_form.lng, div_class='d-none') }}
+                            {{color_field(modif_form.color, colorpicker)}}
+                            {{ boolean_field(modif_form.chrono) }}
+                            {{ submit(modif_form) }}
                         </div>
-                        <script>error = false</script>
-                        {{ form_field(modif_form.name) }}
-                        {{ form_field(modif_form.lat, div_class='d-none') }}
-                        {{ form_field(modif_form.lng, div_class='d-none') }}
-                        {{color_field(modif_form.color, colorpicker)}}
-                        {{ boolean_field(modif_form.chrono) }}
-                        {{ submit(modif_form) }}
-                    </div>
-                </fieldset>
+                    </fieldset>
+                </form>
             {% endif %}
-        </form>
     </div>
 {% endif %}
 <div class="w-100 row container-fluid"> {# tracé #}
@@ -139,9 +118,10 @@
             {% endif %}
             {% if modif_form_type == "trace" %}
             function delete_trace() {
-                let url = window.parent.location.href;
-                url += "&delete";
-                window.parent.location.href = url;
+                if(window.confirm("Etes vous sur de vouloir supprimer cette étape ?")) {
+                    let url = "{{url_for('admin.parcours.delete_trace', event_name=event_data.name, parcours_name=parcours_data.name, trace_id=trace.id)}}"
+                    window.parent.location.href = url;
+                }
             }
             function set_form_path_data(data) {
                 var value = "["
@@ -167,11 +147,8 @@
             {% endif %}
             function add_etape(last_marker) {
                 console.log(last_marker)
-                let url = window.parent.location.href;
-                if (url.indexOf("?") > -1) {
-                    url = url.slice(0, url.indexOf("?"))
-                };
-                url += "?new=" + last_marker;
+                let url = "{{url_for('admin.parcours.new_stand', event_name=event_data.name, parcours_name=parcours_data.name, last_marker=0)[:-1]}}";
+                url += last_marker;
                 window.parent.location.href = url;
             }
         </script>
@@ -184,12 +161,12 @@
             <li class="list-group-item list-group-item-action p-1">
                 {% if element.type == "marker" %}
                 <a class="page-link w-100 h-100"
-                    href="{{ url_for('admin.parcours.modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, marker=element.id) }}">
+                    href="{{ url_for('admin.parcours.modify_stand',event_name=event_data.name, parcours_name=parcours_data.name, stand_id=element.id) }}">
                     <h4>{{ element.name }}</h4>
                 </a>
                 {% else %}
                 <a class="page-link w-100 h-100"
-                    href="{{ url_for('admin.parcours.modify_parcours',event_name=event_data.name, parcours_name=parcours_data.name, trace= element.id) }}">
+                    href="{{ url_for('admin.parcours.modify_trace',event_name=event_data.name, parcours_name=parcours_data.name, trace_id= element.id) }}">
                     <p>{{ element.name }}</p>
                 </a>
                 {% endif %}

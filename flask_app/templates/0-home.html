@@ -21,7 +21,7 @@
             </div>
         </div>
     {% endif %}
-    {% if inscriptions %}
+    {% if inscriptions and not user_data.admin %}
         <div class="pb-5">
             <h3 class="w-100 h1 bg-light rounded rounded-3">{{ _('home.inscriptions') }}</h3>
             <div class="d-flex justify-content-center flex-wrap">
@@ -43,7 +43,7 @@
             </div>
         </div>
     {% endif %}
-    {% if events %}
+    {% if events and not user_data.admin %}
         <div>
             <h3 class="w-100 h1 bg-light rounded rounded-3">{{ _('home.nextevent') }}</h3>
             <div class="d-flex justify-content-center flex-wrap">

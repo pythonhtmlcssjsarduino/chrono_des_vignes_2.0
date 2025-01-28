@@ -9,6 +9,7 @@
     />
     <title>{{ _('app.name') }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
     <!-- Bootstrap CSS -->
     <link
@@ -153,12 +154,12 @@
       </nav>
     </header>
 
-    <center class="d-flex w-100" style="margin-top: 70px; min-height: 100vh">
-      <div class="w-side bg-warning">
+    <div class="d-flex w-100 text-center" style="margin-top: 70px; min-height: 100vh">
+      <div class="w-side" style="background-color: #CDCECF;">
         {% if event_data and event_data.name and event_data.createur ==
         user_data and event_modif %} {% include 'sidebar.html' %} {% endif %}
       </div>
-      <div class="w-content bg-body p-4">
+      <div class="w-content p-4" style="background-color: #dcdcdc;">
         {% with messages = get_flashed_messages(with_categories=true) %} {% if
         messages %} {% for category, message in messages %}
         <div class="alert alert-{{ category }}">{{ message }}</div>
@@ -166,10 +167,11 @@
         <hr />
         {% endif %} {% endwith %} {% block content %} {% endblock content %}
       </div>
-      <div class="w-side bg-warning">
-        {% if edition_sidebar %} {% include 'edition-sidebar.html' %} {% endif
+      <div class="w-side" style="background-color: #CDCECF;">
+        
+          {% if edition_sidebar %} {% include 'edition-sidebar.html' %} {% endif
         %}
       </div>
-    </center>
+    </div>
   </body>
 </html>

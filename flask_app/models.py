@@ -122,6 +122,22 @@ class Parcours(db.Model):
                 else:
                     break
 
+    def iter_turn(self, turn_nb:int)->Iterator[Stand|Trace]:
+        start = self.start_stand
+        if start:
+            stand = start
+            yield start
+            while True:
+                trace = stand.start_trace.filter_by(turn_nb=turn_nb).first()
+                if trace is not None:
+                    yield trace
+                    stand=trace.end
+                    yield stand
+                else:
+                    break
+                if stand == start:
+                    break
+
     def iter_chrono_list(self)->Iterator[Stand]:
         for id in eval(self.chronos_list):
             yield Stand.query.get(id)
@@ -136,6 +152,9 @@ class Parcours(db.Model):
             else:
                 dist+=e.get_dist()
         return dist_list
+
+    def get_nb_turns(self)->int:
+        return max([t.turn_nb for t in self.traces])
 
 class Stand(db.Model):
     __allow_unmapped__ = True
@@ -202,7 +221,26 @@ class Trace(db.Model):
             last_point = lat, lng
         dist += calc_points_dist(self.end.lat, self.end.lng, last_point[0], last_point[1])
         return dist
+
+    def is_last_trace(self)->bool:
+        ic(self.end == self.parcours.end_stand and self.end.end_trace.filter_by(turn_nb=self.turn_nb+1).count()==0, self.end , self.parcours.end_stand, self.end.end_trace.filter_by(turn_nb=self.turn_nb+1).count())
+        return self.end == self.parcours.end_stand and self.end.end_trace.filter_by(turn_nb=self.turn_nb+1).count()==0
     
+    def is_first_trace(self)->bool:
+        return self.start == self.parcours.start_stand and self.turn_nb==1
+
+    def get_next_trace(self)->Trace:
+        if self.end == self.parcours.start_stand:
+            return self.end.start_trace.filter_by(turn_nb=self.turn_nb+1).first()
+        else:
+            return self.end.start_trace.filter_by(turn_nb=self.turn_nb).first()
+
+    def get_last_trace(self)->Trace:
+        if self.start == self.parcours.start_stand:
+            return self.start.end_trace.filter_by(turn_nb=self.turn_nb-1).first()
+        else:
+            return self.start.end_trace.filter_by(turn_nb=self.turn_nb).first()
+
     '''def get_points_dist(self, start_dist:float=0)-> list[float]:
         dists = []
         trace = eval(self.trace)
@@ -261,7 +299,7 @@ class Inscription(db.Model):
     
     def get_time(self)->timedelta|None:
         if not self.has_started():
-            return None
+            return ''
         return self.get_last_passage().time_stamp - self.get_first_passage().time_stamp
 
     def get_run(self):
