@@ -8,8 +8,10 @@ from datetime import datetime
 from .form import NewKeyForm, ChronoLoginForm, ChronoLoginForm
 import secrets
 from flask_socketio import join_room, leave_room, emit
+from flask_babel import _
 
 passages = Blueprint('passages', __name__, template_folder='templates')
+
 @login_required
 @admin_required
 @set_route(passages, "/event/<event_name>/editions/<edition_name>/dashboard", methods=['get', 'post'])
@@ -55,6 +57,20 @@ def dashboard(event_name, edition_name):
     passages = Passage.query.filter(Passage.key.has(PassageKey.edition == edition)).all()
 
     return render_template('dashboard.html', event_data=event, edition_data = edition, user_data=user, now = datetime.now(), keys=keys, passages=passages, form=form, event_modif=True, edition_sidebar=True)
+
+@login_required
+@admin_required
+@set_route(passages, '/event/<event_name>/editions/<edition_name>/delete/<key_id>')
+def delete_key(event_name, edition_name, key_id:int):
+    key:PassageKey = PassageKey.query.filter_by(id=key_id).first_or_404()
+    if key.passages.count()==0:
+        db.session.delete(key)
+        db.session.commit()
+        flash(_('flash.key_deleted'), 'success')
+        return redirect(url_for('admin.editions.passages.dashboard', event_name=event_name, edition_name=edition_name))
+    else:
+        flash(_('flash.key_not_deleted'), 'danger')
+        return redirect(url_for('admin.editions.passages.dashboard', event_name=key.event.name, edition_name=key.edition.name))
 
 @set_route(passages, '/chrono', methods=["GET", 'post'])
 def chrono_home():

@@ -5,13 +5,8 @@ repo_url: https://github.com/pythonhtmlcssjsarduino/chrono_des_vignes_2.0
 nav:
   - Home: index.fr.md
   - About: about.fr.md
-
-extra:
-  social:
-    - icon: simple/youtube
-      link: https://youtube.com/@james-willett
-    - icon: simple/linkedin
-      link: https://linkedin.com/in/willettjames
+  - Users: users.fr.md
+  - Organisateurs: organisateurs.fr.md
 
 plugins:
   - search:

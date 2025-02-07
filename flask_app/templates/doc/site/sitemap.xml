@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
         <loc>https://sitename.example/about/</loc>
-        <lastmod>2025-01-18</lastmod>
+        <lastmod>2025-02-01</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/about/"/>
         <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/about/"/>
@@ -10,7 +10,7 @@
     </url>
     <url>
         <loc>https://sitename.example/</loc>
-        <lastmod>2025-01-18</lastmod>
+        <lastmod>2025-02-01</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/"/>
         <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/"/>
@@ -18,7 +18,7 @@
     </url>
     <url>
         <loc>https://sitename.example/en/about/</loc>
-        <lastmod>2025-01-18</lastmod>
+        <lastmod>2025-02-01</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/about/"/>
         <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/about/"/>
@@ -26,7 +26,7 @@
     </url>
     <url>
         <loc>https://sitename.example/en/</loc>
-        <lastmod>2025-01-18</lastmod>
+        <lastmod>2025-02-01</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/"/>
         <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/"/>
@@ -34,7 +34,7 @@
     </url>
     <url>
         <loc>https://sitename.example/de/about/</loc>
-        <lastmod>2025-01-18</lastmod>
+        <lastmod>2025-02-01</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/about/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/about/"/>
@@ -42,7 +42,7 @@
     </url>
     <url>
         <loc>https://sitename.example/de/</loc>
-        <lastmod>2025-01-18</lastmod>
+        <lastmod>2025-02-01</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/"/>

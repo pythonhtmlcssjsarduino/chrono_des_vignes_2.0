@@ -16,24 +16,56 @@
       <ul
         class="navbar-nav w-100 d-flex flex-md-column text-center text-md-end"
       >
-        <li class="nav-item bg-danger btn mb-2">
+        <li class="nav-item btn mb-2" style="background-color: #d0d0d0;">
           <a
             class="nav-link"
             href="{{ url_for('home') }}"
             >{{ event_data.name }}</a
           >
         </li>
-        <li class="nav-item btn-group-justified bg-info my-2"> {# edition #}
-          <a
-            class="nav-link"
+        <li class="nav-item"> {# edition #}
+          <a style="background-color: #d0d0d0;"
+            class="nav-link text-start"
             href="{{ url_for('admin.editions.editions_page', event_name=event_data.name) }}"
             >{{ _('side.editions') }}</a
           >
+          {% if edition_sidebar %}
+            <ul class="navbar-nav w-100 d-flex flex-md-column ps-3" style="background-color: #d0d0d0;">
+              <li class="nav-item">
+                <a class="nav-link text-start"
+                  href="{{ url_for('admin.editions.modify_edition_page', event_name=event_data.name, edition_name=edition_data.name) }}">{{
+                  edition_data.name }}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-start"
+                  href="{{ url_for('admin.editions.passages.dashboard', event_name=event_data.name, edition_name=edition_data.name) }}">{{
+                  _('admin.editions.gererpassage') }}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-start"
+                  href="{{ url_for('admin.editions.dossard.edition_dossards', event_name=event_data.name, edition_name=edition_data.name) }}">{{
+                  _('admin.editions.gererdossard') }}</a>
+              </li>
+              {% if now>edition_data.edition_date %}
+              <li class="nav-item">
+                <a class="nav-link text-start"
+                  href="{{ url_for('admin.editions.parcours.view', event_name=event_data.name, edition_name=edition_data.name) }}">{{
+                  _('admin.editions.gererparcours') }}</a>
+              </li>
+              {% endif %}
+              <li class="nav-item">
+                <a class="nav-link text-start"
+                  href="{{ url_for('admin.editions.result.result_page', event_name=event_data.name, edition_name=edition_data.name) }}">{{
+                  _('admin.editions.result') }}</a>
+              </li>
+            </ul>
+          {% else %}
+          {% endif %}
         </li>
-        <li class="nav-item btn-group-justified bg-info my-2"> {# parcours #}
+        <li class="nav-item text-start" style="background-color: #d0d0d0;"> {# parcours #}
           <a class="nav-link" href="{{ url_for('admin.parcours.parcours_page', event_name=event_data.name) }}">{{ _('side.parcours') }}</a>
         </li>
-        <li class="nav-item btn-group-justified bg-info my-2"> {# inscrit #}
+        <li class="nav-item text-start" style="background-color: #d0d0d0;"> {# inscrit #}
           <a class="nav-link" href="{{ url_for('admin.coureurs.coureurs_page', event_name=event_data.name) }}">{{ _('side.runner') }}</a>
         </li>
       </ul>

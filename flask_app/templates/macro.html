@@ -3,7 +3,7 @@
 
 {% macro form_field(field, input_id='', div_class='') %}
     <div class="mb-3 row {{ div_class }}">
-        {{ field.label(class="col-sm-"+label_span+" col-form-label") }}
+        {{ field.label(class="col-sm-"+label_span+" col-form-label text-start") }}
         <div class="col-sm-{{input_span}}">
             {% if field.errors %}
                 {{ field(class="form-control form-control-lg is-invalid", id=input_id) }}
@@ -21,7 +21,7 @@
 
 {% macro boolean_field(field, input_id='', div_class='') %}
     <div class="mb-3 row {{ div_class }}">
-        {{ field.label(class="col-sm-"+label_span+" col-form-label") }}
+        {{ field.label(class="col-sm-"+label_span+" col-form-label text-start") }}
         <div class="col-sm-{{input_span}}">
             {% if field.errors %}
                 {{ field(class="form-control form-control-lg is-invalid form-check-input form-check-inline", id=input_id) }}
@@ -40,7 +40,7 @@
 {% macro color_field(field, colorpicker, input_id='', div_class='') %}
 
     <div class="mb-3 row {{ div_class }}">
-        {{ field.label(class="col-sm-"+label_span+" col-form-label") }}
+        {{ field.label(class="col-sm-"+label_span+" col-form-label text-start") }}
         <div class="col-sm-{{input_span}}">
             {% if field.errors %}
                 {{ field(class="form-control form-control-lg is-invalid form-check-inline form-control-color", id=input_id) }}
@@ -84,7 +84,7 @@
     </div>
 {% endmacro %}
 
-{% macro map_field(label, lat_field_id, lng_field_id, lat, lng, width='400px', height='400px', start_zoom=12, div_class='') %}
+<!-- #region -->{% macro map_field(label, lat_field_id, lng_field_id, lat, lng, width='400px', height='400px', start_zoom=12, div_class='', disabled=False) %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
         crossorigin=""/>
@@ -93,7 +93,7 @@
         crossorigin=""></script>
 
     <div class="mb-3 row {{ div_class }}">
-        <label class="col-sm-{{label_span}} col-form-label">{{ label }}</label>
+        <label class="col-sm-{{label_span}} col-form-label text-start">{{ label }}</label>
         <div class="col-sm-{{input_span}}">
             <div id="map" style="aspect-ratio: 1;width: 100%" class="form-control form-control-lg"></div>
         </div>
@@ -120,12 +120,14 @@
 
             let marker = L.marker([{{lat}}, {{lng}}]).addTo(map);
 
+            {% if not disabled %}
             map.on('click', 
                 function(e){
                     lat_field.value = e.latlng.lat
                     lng_field.value = e.latlng.lng
                     marker.setLatLng(e.latlng)
                 });
+            {% endif %}
             
             var observer = new IntersectionObserver(function(entries) {
                 if(entries[0].isIntersecting === true) {
@@ -137,4 +139,24 @@
                     }
         window.addEventListener("load", main);
     </script>
+{% endmacro %}
+<!-- #endregion -->
+
+
+{% macro multiple_select_field(field, input_id='', div_class='') %}
+    <div class="mb-3 row">
+        {{ field.label(class="col-sm-"+label_span+" col-form-label text-start") }}
+        <div class="col-sm-{{input_span}}">
+            {% if field.errors %}
+            {{ field(class="form-control form-control-lg is-invalid list-group") }}
+            <div class="invalid-feedback">
+                {% for error in field.errors %}
+                <span>{{ error }}</span>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ field(class="form-control form-control-lg list-group") }}
+            {% endif %}
+        </div>
+    </div>
 {% endmacro %}

@@ -1,33 +1,21 @@
 {% extends 'layout.html' %}
-{% from 'macro.html' import form_field, submit, map_field, label_span, input_span %}
+{% from 'macro.html' import form_field, submit, map_field, label_span, input_span, multiple_select_field %}
 {% block content %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
     {{ form_field(form.name) }}
     {{ form_field(form.edition_date) }}
     {{ form_field(form.description) }}
-    <div class="mb-3 row" id="parcours">{# parcours ne pas remplacer par macro car style different!! #}
-        {{ form.parcours.label(class="col-sm-"+label_span+" col-form-label") }}
-        <div class="col-sm-{{input_span}}">
-            {% if form.parcours.errors %}
-            {{ form.parcours(class="form-control form-control-lg is-invalid list-group") }}
-            <div class="invalid-feedback">
-                {% for error in form.parcours.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% else %}
-            {{ form.parcours(class="form-control form-control-lg list-group") }}
-            {% endif %}
-        </div>
-    </div>
+    {{ multiple_select_field(form.parcours) }}
     {{ form_field(form.first_inscription) }}
     {{ form_field(form.last_inscription) }}
     {{ form_field(form.rdv_lat, input_id='lat_id', div_class='d-none') }}
     {{ form_field(form.rdv_lng, input_id='lng_id', div_class='d-none') }}
-    {{ map_field(_('form.editionrdv'), 'lat_id', 'lng_id', form.rdv_lat.data, form.rdv_lng.data) }}
+    {{ map_field(_('form.editionrdv'), 'lat_id', 'lng_id', form.rdv_lat.data, form.rdv_lng.data, disabled=(form.rdv_lat.render_kw.disabled == 'disabled' or form.rdv_lng.render_kw.disabled == 'disabled')) }}
     {{ submit(form) }}
 </form>
+{{(form.rdv_lat.render_kw.disabled == 'disabled' or form.rdv_lng.render_kw.disabled == 'disabled')}}---
+{{form.rdv_lat.render_kw.disabled}}---{{ form.rdv_lng.render_kw.disabled}}
 
 <!-- Modal -->
 

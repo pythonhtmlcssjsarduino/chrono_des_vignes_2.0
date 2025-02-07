@@ -1,12 +1,14 @@
 from flask import Blueprint, redirect, flash, render_template, request
 from flask_login import login_required, current_user, login_user, logout_user
 from flask_app.models import User, Event, Parcours, Inscription, Edition
+from flask_app import app, DEFAULT_PROFIL_PIC, PICTURE_SIZE
 from .forms import Login_form, Signup_form, Inscription_connected_form, Inscription_form, ModifyForm
 from flask_app import db, set_route, lang_url_for as url_for, bcrypt, DEV_ENABLE
 from sqlalchemy import and_, not_
 from datetime import datetime
-import string, secrets
+import string, secrets, os
 from flask_babel import _
+from PIL import Image
 alphabet = string.ascii_letters + string.digits
 
 users = Blueprint('users', __name__, template_folder='templates')
@@ -19,7 +21,7 @@ def login():
     if form.validate_on_submit():
         user= User.query.filter_by(username=form.username.data).first()
         # ! remove the dev part when done
-        if user and (bcrypt.check_password_hash(user.password, form.password.data) or (form.password.data == user.password and DEV_ENABLE)):
+        if user and ((form.password.data == user.password and DEV_ENABLE) or bcrypt.check_password_hash(user.password, form.password.data)):
             login_user(user)
             flash(_('flash.connected:name').format(name = user.name), 'success')
             if request.args.get('next'):
@@ -139,16 +141,32 @@ def profil():
     user = current_user
     return render_template('profil.html', user_data=user)
 
+def save_avatar(form_picture, old_picture_name=None):
+    random_hex = secrets.token_hex(8)
+    _, f_ext = os.path.splitext(form_picture.filename)
+    picture_name = f'{random_hex}{f_ext}'
+    picture_path = os.path.join(app.root_path, 'static/profil_pics', picture_name)
+
+    i = Image.open(form_picture)
+    i.thumbnail(PICTURE_SIZE)
+    i.save(picture_path)
+
+    if old_picture_name!=DEFAULT_PROFIL_PIC and old_picture_name is not None:
+        os.remove(os.path.join(app.root_path, 'static/profil_pics', old_picture_name))
+
+    return picture_name
+
 @set_route(users, '/profil/update', methods=['get', 'post'])
 @login_required
 def modify_profil():
-    user = current_user
+    user:User = current_user
     form:ModifyForm = ModifyForm(data={'name':user.name,
                             'lastname':user.lastname,
                             'username':user.username,
                             'email':user.email,
                             'phone':user.phone,
-                            'datenaiss':user.datenaiss})
+                            'datenaiss':user.datenaiss,
+                            'profil_pic':user.avatar})
     if form.validate_on_submit():
         if form.username.data == user.name or not User.query.filter_by(name=form.username.data).first():
             # le nom peut etre utilisé
@@ -158,8 +176,11 @@ def modify_profil():
             user.email=form.email.data if form.email.data else None
             user.phone=form.phone.data if form.phone.data else None
             user.datenaiss= form.datenaiss.data
+            ic(form.profil_pic.data)
+            if form.profil_pic.data:
+                user.avatar = save_avatar(form.profil_pic.data, user.avatar)
             db.session.commit()
-            flash('name saved', 'success')
+            flash(_('flash.profilupdated'), 'success')
             return redirect(url_for('users.profil'))
         else:
             form.username.errors = list(form.username.errors)+['ce nom d\'utilisateur est déjà utilisé.']

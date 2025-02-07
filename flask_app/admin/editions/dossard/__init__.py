@@ -8,7 +8,7 @@ from flask_socketio import join_room, leave_room
 from xlsxwriter import Workbook
 from io import BytesIO
 from flask_babel import _
-from flask_app.custom_validators import DataRequired, Length, EqualTo, DonTExist, DbLength
+from flask_app.custom_validators import DataRequired, Length, EqualTo, DonTExist, DbLength, Email
 from .form import NewCoureurForm, ValidateNewCoureurForm
 from sqlalchemy import func, and_, or_, not_
 
@@ -17,7 +17,7 @@ dossard = Blueprint('dossard', __name__, template_folder='templates')
 @set_route(dossard, '/event/<event_name>/editions/<edition_name>/dossard', methods=['POST', 'GET'])
 @login_required
 @admin_required
-def generate_dossard(event_name, edition_name):
+def edition_dossards(event_name, edition_name):
     event : Event = Event.query.filter_by(name=event_name).first_or_404()
     edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
     user = current_user
@@ -39,15 +39,18 @@ def generate_dossard(event_name, edition_name):
                 'name':[DataRequired(), DbLength(User, 'name')],
                 'lastname':[DataRequired(), DbLength(User, 'lastname')],
                 'username':[DataRequired(), DbLength(User, 'username')],
-                'email':[DataRequired(), DbLength(User, 'email')]
+                'email':[DataRequired(), DbLength(User, 'email'), Email()]
             }
             ic('first validation', form.validate(extra_validators=supp_validators), form.parcours.data)
             if form.validate(extra_validators=supp_validators):
                 # create a new user with the form data and add it to all the parcours
-                username=f'{form.name.data}.{form.lastname.data}'
-                nb = User.query.filter(User.username.contains(username)).count()
-                username += str(nb) if nb>0 else ''
-                hash_pwd= 'dev' #! ''.join(secrets.choice(alphabet) for _ in range(10))
+                if form.username.data:
+                    username = form.username.data
+                else:
+                    username = f'{form.name.data}.{form.lastname.data}'
+                    nb = User.query.filter(User.username.contains(username)).count()
+                    username += str(nb) if nb>0 else ''
+                hash_pwd= 'dev' # ! ''.join(secrets.choice(alphabet) for _ in range(10))
 
                 choices = event.parcours.filter(Parcours.name.in_([eval(data)[0] for data in form.parcours.data])).all()
                 user = User(name=form.name.data,
@@ -79,6 +82,9 @@ def generate_dossard(event_name, edition_name):
 @login_required
 @admin_required
 def validate_new_user(event_name, edition_name):
+    '''
+    validate a new user that is already registered in the database
+    '''
     event = Event.query.filter_by(name=event_name).first_or_404()
     edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
     form = ValidateNewCoureurForm()
@@ -101,7 +107,7 @@ def validate_new_user(event_name, edition_name):
 
         flash(_('flash.success.newuser:username:name:lastname').format(username=user.username, name=user.name, lastname=user.lastname), 'success')
 
-        return redirect(url_for('admin.editions.dossard.generate_dossard', event_name=event_name, edition_name=edition_name))
+        return redirect(url_for('admin.editions.dossard.edition_dossards', event_name=event_name, edition_name=edition_name))
     else:
         return {'ok':False}
 
@@ -164,7 +170,7 @@ def generate_all_dossard(event_name, edition_name):
         last_dossard+=1
     db.session.commit()
 
-    return redirect(url_for("admin.editions.dossard.generate_dossard", event_name=event.name, edition_name=edition.name))
+    return redirect(url_for("admin.editions.dossard.edition_dossards", event_name=event.name, edition_name=edition.name))
 
 
 # methode for download dossard as excel

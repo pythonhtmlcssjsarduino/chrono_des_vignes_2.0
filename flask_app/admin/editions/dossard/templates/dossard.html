@@ -33,6 +33,11 @@
     {% endfor %}
   </tbody>
 </table>
+<script>
+  $('table tbody tr').on('click', function() {
+    window.location.href = $(this).data('href');
+  });
+</script>
 
 <a class="btn bg-info" href="{{ url_for('admin.editions.dossard.generate_all_dossard', event_name=event_data.name, edition_name=edition_data.name) }}">{{ _('admin.editions.dossard.generer') }}</a>
 <a class="btn bg-success" href="{{ url_for('admin.editions.dossard.export_dossard', event_name=event_data.name, edition_name=edition_data.name) }}" target="_blank" rel="noopener noreferrer">{{ _('admin.editions.dossard.export_excel') }}</a>

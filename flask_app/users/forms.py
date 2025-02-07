@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_app.models import User
 from wtforms import StringField, PasswordField, SubmitField, EmailField, DateField
+from flask_wtf.file import FileField, FileAllowed
 from flask_app.custom_validators import DataRequired, Length, EqualTo, DonTExist, DbLength
 from flask_app.custom_field import MultiCheckboxFieldWithDescription
 from flask_babel import lazy_gettext as _
@@ -47,4 +48,5 @@ class ModifyForm(FlaskForm):
     email = EmailField(_('form.email'))
     phone = StringField(_('form.tel'))
     datenaiss = DateField(_('form.birth'), validators=[DataRequired()])
+    profil_pic = FileField(_('form.profilpic'), validators=[FileAllowed(['jpg', 'png'])])
     submit_btn = SubmitField(_('form.modifyaccount'))

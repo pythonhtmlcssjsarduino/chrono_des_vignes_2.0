@@ -23,6 +23,7 @@ DEV_ENABLE = True
 LANGAGES = ['de', 'fr', 'en']
 if DEV_ENABLE:
     LANGAGES += ['ids', 'pseudo']
+PICTURE_SIZE = (200, 200)
 
 app = Flask(__name__)
 app.config['SERVER_NAME'] = 'localhost:5000'

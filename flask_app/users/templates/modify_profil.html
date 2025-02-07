@@ -1,7 +1,7 @@
 {% extends 'layout.html' %}
 {% from 'macro.html' import form_field, submit %}
 {% block content %}
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
     {{ form_field(form.name) }}
     {{ form_field(form.lastname) }}
@@ -9,6 +9,7 @@
     {{ form_field(form.email) }}
     {{ form_field(form.phone) }}
     {{ form_field(form.datenaiss) }}
+    {{ form_field(form.profil_pic) }}
     <div class="form-group">
         {{ form.submit_btn(class="btn btn-outline-info") }}
         <a href="{{ url_for('users.profil' ) }}" class="btn btn-outline-info">cancel</a>

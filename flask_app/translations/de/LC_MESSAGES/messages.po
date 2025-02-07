@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-01-26 17:30+0100\n"
+"POT-Creation-Date: 2025-02-05 16:12+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: flask_app/__init__.py:101
+#: flask_app/__init__.py:104
 msgid "flash.error.mustadmin"
 msgstr ""
 
-#: flask_app/__init__.py:104
+#: flask_app/__init__.py:107
 msgid "flash.error.wrongadminevent"
 msgstr ""
 
-#: copy.html:108 flask_app/__init__.py:112 flask_app/templates/layout
-#: flask_app/templates/layout.html:108
+#: copy.html:108 flask_app/__init__.py:115 flask_app/templates/layout
+#: flask_app/templates/layout.html:107
 msgid "app.lang"
 msgstr "de"
 
@@ -397,7 +397,7 @@ msgstr ""
 msgid "admin.editions.newedition"
 msgstr ""
 
-#: flask_app/admin/editions/templates/modify_edition.html:28
+#: flask_app/admin/editions/templates/modify_edition.html:14
 msgid "form.editionrdv"
 msgstr ""
 
@@ -485,11 +485,11 @@ msgstr ""
 msgid "admin.parcours.addstand"
 msgstr ""
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:233
+#: flask_app/admin/parcours/templates/modify_parcours.html:245
 msgid "chart.dist"
 msgstr ""
 
-#: flask_app/admin/parcours/templates/modify_parcours.html:240
+#: flask_app/admin/parcours/templates/modify_parcours.html:252
 msgid "chart.alt"
 msgstr ""
 
@@ -518,68 +518,72 @@ msgstr ""
 msgid "home.events"
 msgstr ""
 
-#: flask_app/templates/0-home.html:16
-msgid "home.modify"
+#: flask_app/templates/0-home.html:10 flask_app/templates/0-home.html:31
+msgid "home.eventname"
 msgstr ""
 
 #: flask_app/templates/0-home.html:26
 msgid "home.inscriptions"
 msgstr ""
 
-#: flask_app/templates/0-home.html:37
+#: flask_app/templates/0-home.html:32
 msgid "home.parcours"
 msgstr ""
 
-#: flask_app/templates/0-home.html:38
-msgid "home.the"
+#: flask_app/templates/0-home.html:33
+msgid "home.edition"
 msgstr ""
 
-#: flask_app/templates/0-home.html:48
+#: flask_app/templates/0-home.html:34
+msgid "home.date"
+msgstr ""
+
+#: flask_app/templates/0-home.html:53
 msgid "home.nextevent"
 msgstr ""
 
 #: copy.html:10 copy.html:71 flask_app/templates/layout
-#: flask_app/templates/layout.html:10 flask_app/templates/layout.html:71
+#: flask_app/templates/layout.html:10 flask_app/templates/layout.html:70
 msgid "app.name"
 msgstr ""
 
-#: copy.html:67 flask_app/templates/layout flask_app/templates/layout.html:67
+#: copy.html:67 flask_app/templates/layout flask_app/templates/layout.html:66
 msgid "app.name.short"
 msgstr ""
 
-#: copy.html:88 flask_app/templates/layout flask_app/templates/layout.html:88
+#: copy.html:88 flask_app/templates/layout flask_app/templates/layout.html:87
 msgid "app.about"
 msgstr ""
 
-#: copy.html:91 flask_app/templates/layout flask_app/templates/layout.html:91
+#: copy.html:91 flask_app/templates/layout flask_app/templates/layout.html:90
 msgid "app.contact"
 msgstr ""
 
-#: copy.html:97 flask_app/templates/layout flask_app/templates/layout.html:97
+#: copy.html:97 flask_app/templates/layout flask_app/templates/layout.html:96
 msgid "app.chrono"
 msgstr ""
 
-#: copy.html:104 flask_app/templates/layout flask_app/templates/layout.html:104
+#: copy.html:104 flask_app/templates/layout flask_app/templates/layout.html:103
 msgid "app.docu"
 msgstr ""
 
-#: copy.html:108 flask_app/templates/layout flask_app/templates/layout.html:108
+#: copy.html:108 flask_app/templates/layout flask_app/templates/layout.html:107
 msgid "app.languages"
 msgstr ""
 
-#: copy.html:121 flask_app/templates/layout flask_app/templates/layout.html:121
+#: copy.html:121 flask_app/templates/layout flask_app/templates/layout.html:120
 msgid "app.logout"
 msgstr ""
 
-#: copy.html:133 flask_app/templates/layout flask_app/templates/layout.html:133
+#: copy.html:133 flask_app/templates/layout flask_app/templates/layout.html:132
 msgid "app.profil"
 msgstr ""
 
-#: copy.html:141 flask_app/templates/layout flask_app/templates/layout.html:141
+#: copy.html:141 flask_app/templates/layout flask_app/templates/layout.html:140
 msgid "app.login"
 msgstr ""
 
-#: copy.html:147 flask_app/templates/layout flask_app/templates/layout.html:147
+#: copy.html:147 flask_app/templates/layout flask_app/templates/layout.html:146
 msgid "app.signup"
 msgstr ""
 
@@ -587,36 +591,40 @@ msgstr ""
 msgid "side.editions"
 msgstr ""
 
-#: copy.html:34 flask_app/templates/sidebar flask_app/templates/sidebar.html:59
+#: copy.html:34 flask_app/templates/sidebar flask_app/templates/sidebar.html:34
 msgid "side.parcours"
 msgstr ""
 
-#: copy.html:37 flask_app/templates/sidebar flask_app/templates/sidebar.html:87
+#: copy.html:37 flask_app/templates/sidebar flask_app/templates/sidebar.html:37
 msgid "side.runner"
 msgstr ""
 
-#: flask_app/users/__init__.py:23
+#: flask_app/users/__init__.py:24
 msgid "flash.connected:name"
 msgstr ""
 
-#: flask_app/users/__init__.py:31
+#: flask_app/users/__init__.py:32
 msgid "flash.error.pwdnotvalid"
 msgstr ""
 
-#: flask_app/users/__init__.py:50
+#: flask_app/users/__init__.py:51
 msgid "flash.accountcreated"
 msgstr ""
 
-#: flask_app/users/__init__.py:59
+#: flask_app/users/__init__.py:60
 msgid "flash.deconected"
 msgstr ""
 
-#: flask_app/users/__init__.py:70
+#: flask_app/users/__init__.py:71
 msgid "flash.warn.inscriptionsnotopen:date"
 msgstr ""
 
-#: flask_app/users/__init__.py:74
+#: flask_app/users/__init__.py:75
 msgid "flash.warn.inscriptionclosed"
+msgstr ""
+
+#: flask_app/users/__init__.py:162
+msgid "flash.profilupdated"
 msgstr ""
 
 #: flask_app/users/forms.py:12 flask_app/users/forms.py:23

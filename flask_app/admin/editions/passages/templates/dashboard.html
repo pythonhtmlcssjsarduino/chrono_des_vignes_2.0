@@ -19,7 +19,12 @@
                                 {% endfor %}
                             </ul>
                         </div>
-                        <span class="badge rounded-pill bg-info">{{ key.key }}</span>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="badge rounded-pill bg-info me-4">{{ key.key }}</span>
+                            <a href="{{ url_for('admin.editions.passages.delete_key', event_name=event_data.name, edition_name=edition_data.name, key_id=key.id) }}">
+                                <i class="fa-regular fa-circle-xmark" style="color: #ff0000;"></i>
+                            </a>
+                        </div>
                     </li>
                 {% endfor %}
             </ul>

@@ -5,18 +5,18 @@
 {% if user_data %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
-    {{ form_field(form.parours, id='parours') }}
+    {{ form_field(form.parcours, input_id='parours') }}
     {{ form.submit_btn(class="btn btn-outline-info") }}
 </form>
 {% else %}
 <form action="" method="post">
     {{ form.hidden_tag() }}
-    {{ form_field(form.name, id='name') }}
-    {{ form_field(form.lastname, id='lastname') }}
-    {{ form_field(form.email, id='email') }}
-    {{ form_field(form.phone, id='phone') }}
-    {{ form_field(form.datenaiss, id='datenaiss') }}
-    {{ form_field(form.parcours, id='parcours') }}
+    {{ form_field(form.name, input_id='name') }}
+    {{ form_field(form.lastname, input_id='lastname') }}
+    {{ form_field(form.email, input_id='email') }}
+    {{ form_field(form.phone, input_id='phone') }}
+    {{ form_field(form.datenaiss, input_id='datenaiss') }}
+    {{ form_field(form.parcours, input_id='parcours') }}
     {{ form.submit_btn(class="btn btn-outline-info") }}
 </form>
 {% endif %}

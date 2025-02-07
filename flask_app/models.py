@@ -47,7 +47,7 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(80), nullable=False)
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(80), nullable=True)
-    phone = db.Column(db.String(15), nullable=True)
+    phone = db.Column(db.String(25), nullable=True)
     datenaiss = db.Column(db.DateTime, nullable=False)
     inscriptions = db.relationship('Inscription', backref='inscrit', lazy='dynamic')
     admin = db.Column(db.Boolean, nullable=False, default=False)

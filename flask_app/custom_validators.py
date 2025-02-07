@@ -2,6 +2,13 @@ from wtforms import validators
 from datetime import datetime
 from flask_app.models import get_column_max_length
 
+class Email(validators.Email):
+    def __init__(self, message=None):
+        super().__init__(message)
+
+    def __call__(self, form, field):
+        super().__call__(form, field)
+
 class DataRequired:
     def __init__(self, message=None):
         self.validator = validators.DataRequired(message)
