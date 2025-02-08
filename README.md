@@ -9,7 +9,7 @@ pour lancer le serveur flask il vous faut d'abord lancer l'environement virtuel(
 
 puis lancer le serveur
 ```bash
-flask --app flask_app run --debug --extra-files flask-app/templates/:flask_app/translations/ 
+flask --app chrono_des_vignes run --debug --extra-files flask-app/templates/:chrono_des_vignes/translations/ 
 ```
 
 ## documentation mkdocs
@@ -19,7 +19,7 @@ commencer par [ouvrire l'environement virtuel](#lancer-le-serveur)
 
 puis rentrer dans le dossier de la documentation 
 ```bash
-cd flask_app/templates/doc
+cd chrono_des_vignes/templates/doc
 ```
 puis lancer le serveur
 ``` bash

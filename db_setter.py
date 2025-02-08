@@ -1,6 +1,6 @@
-from flask_app import db, app
+from chrono_des_vignes import db, app
 from datetime import datetime
-from flask_app.models import User, Event, Edition, Parcours, Inscription, Stand, Trace
+from chrono_des_vignes.models import User, Event, Edition, Parcours, Inscription, Stand, Trace
 with app.app_context():
     db.drop_all()
     db.create_all()

@@ -44,17 +44,17 @@ create a 'babel.cfg' file
 files to compile
 
 ```bash
-pybabel extract -F flask_app/babel.cfg -k lazy_gettext -o flask_app/messages.pot .
+pybabel extract -F chrono_des_vignes/babel.cfg -k lazy_gettext -o chrono_des_vignes/messages.pot .
 ```
 
 create a po file for each language (de in this example)
 ```bash
-pybabel init -i flask_app/messages.pot -d flask_app/translations -l de
+pybabel init -i chrono_des_vignes/messages.pot -d chrono_des_vignes/translations -l de
 ```
 
 after editing this file compile the traslations
 ```bash
-pybabel compile -d flask_app/translations
+pybabel compile -d chrono_des_vignes/translations
 ```
 
 when string change :
@@ -62,16 +62,16 @@ when string change :
 * update the cfg file
 * create a new messages.pot
 ```bash
-pybabel extract -F flask_app/babel.cfg -k lazy_gettext -o flask_app/messages.pot .
+pybabel extract -F chrono_des_vignes/babel.cfg -k lazy_gettext -o chrono_des_vignes/messages.pot .
 ```
 * uptadte all po files and copliled files
 ```bash
-pybabel update -i flask_app/messages.pot -d flask_app/translations
+pybabel update -i chrono_des_vignes/messages.pot -d chrono_des_vignes/translations
 ```
 
 after editing this file compile the traslations
 ```bash
-pybabel compile -d flask_app/translations
+pybabel compile -d chrono_des_vignes/translations
 ```
 
 
