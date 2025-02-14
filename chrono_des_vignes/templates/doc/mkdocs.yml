@@ -6,7 +6,7 @@ nav:
   - Home: index.fr.md
   - About: about.fr.md
   - Users: users.fr.md
-  - Organisateurs: organisateurs.fr.md
+  - Organisateurs: organisateurs/index.fr.md
 
 plugins:
   - search:

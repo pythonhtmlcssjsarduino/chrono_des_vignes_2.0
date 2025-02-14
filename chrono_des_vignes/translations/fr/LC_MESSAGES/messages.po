@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-05 16:12+0100\n"
+"POT-Creation-Date: 2025-02-10 17:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: chrono_des_vignes/__init__.py:104
+#: chrono_des_vignes/__init__.py:102
 msgid "flash.error.mustadmin"
 msgstr "tu doit être admin pour acceder a cette page."
 
-#: chrono_des_vignes/__init__.py:107
+#: chrono_des_vignes/__init__.py:105
 msgid "flash.error.wrongadminevent"
 msgstr "tu doit être admin de cet evenement pour acceder a cette page."
 
-#: copy.html:108 chrono_des_vignes/__init__.py:115 chrono_des_vignes/templates/layout
-#: chrono_des_vignes/templates/layout.html:107
+#: chrono_des_vignes/__init__.py:113
+#: chrono_des_vignes/templates/layout.html:108
 msgid "app.lang"
 msgstr "fr"
 
@@ -34,8 +34,10 @@ msgstr "fr"
 msgid "form.eventdescription"
 msgstr "description de l'évenement"
 
-#: chrono_des_vignes/admin/editions/form.py:16 chrono_des_vignes/admin/form.py:10
-#: chrono_des_vignes/admin/parcours/forms.py:10 chrono_des_vignes/admin/parcours/forms.py:18
+#: chrono_des_vignes/admin/editions/form.py:16
+#: chrono_des_vignes/admin/form.py:10
+#: chrono_des_vignes/admin/parcours/forms.py:10
+#: chrono_des_vignes/admin/parcours/forms.py:18
 #: chrono_des_vignes/admin/parcours/forms.py:23
 msgid "form.save"
 msgstr "sauver"
@@ -144,101 +146,107 @@ msgstr "longitude du depart"
 msgid "form.rdvlat"
 msgstr "latitude du depart"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:102
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:108
 msgid "flash.success.newuser:username:name:lastname"
 msgstr "l'utilisateur {username} a été inscrit avec succes"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:184
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:190
 #: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:10
 msgid "admin.editions.dossard.dossard"
 msgstr "dossard"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:185
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:191
 msgid "admin.editions.dossard.name"
 msgstr "prénom"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:186
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:192
 msgid "admin.editions.dossard.lastname"
 msgstr "nom"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:187
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:193
 msgid "admin.editions.dossard.email"
 msgstr "email"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:188
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:194
 msgid "admin.editions.dossard.phone"
 msgstr "numéro de téléphone"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:189
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:195
 msgid "admin.editions.dossard.datenaiss"
 msgstr "date de naissance"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:190
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:196
 msgid "admin.editions.dossard.username"
 msgstr "nom d'utilisateur"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:191
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:197
 #: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:11
 msgid "admin.editions.dossard.parcours"
 msgstr "parcours"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:192
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:198
 msgid "admin.editions.dossard.edition_date"
 msgstr "date de l'édition"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:193
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:199
 msgid "admin.editions.dossard.edition_name"
 msgstr "nom de l'édition"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:194
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:200
 msgid "admin.editions.dossard.event_name"
 msgstr "nom de l'évenement"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:11
-#: chrono_des_vignes/admin/editions/dossard/form.py:25 chrono_des_vignes/users/forms.py:16
-#: chrono_des_vignes/users/forms.py:33 chrono_des_vignes/users/forms.py:44
+#: chrono_des_vignes/admin/editions/dossard/form.py:25
+#: chrono_des_vignes/users/forms.py:17 chrono_des_vignes/users/forms.py:34
+#: chrono_des_vignes/users/forms.py:45
 msgid "form.name"
 msgstr "prénom"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:12
 #: chrono_des_vignes/admin/editions/dossard/form.py:26
-#: chrono_des_vignes/admin/editions/passages/form.py:7 chrono_des_vignes/users/forms.py:17
-#: chrono_des_vignes/users/forms.py:34 chrono_des_vignes/users/forms.py:45
+#: chrono_des_vignes/admin/editions/passages/form.py:7
+#: chrono_des_vignes/users/forms.py:18 chrono_des_vignes/users/forms.py:35
+#: chrono_des_vignes/users/forms.py:46
 msgid "form.lastname"
 msgstr "nom"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:13
-#: chrono_des_vignes/admin/editions/dossard/form.py:27 chrono_des_vignes/users/forms.py:10
-#: chrono_des_vignes/users/forms.py:18 chrono_des_vignes/users/forms.py:46
+#: chrono_des_vignes/admin/editions/dossard/form.py:27
+#: chrono_des_vignes/users/forms.py:11 chrono_des_vignes/users/forms.py:19
+#: chrono_des_vignes/users/forms.py:47
 msgid "form.username"
 msgstr "username"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:14
-#: chrono_des_vignes/admin/editions/dossard/form.py:28 chrono_des_vignes/users/forms.py:20
-#: chrono_des_vignes/users/forms.py:35 chrono_des_vignes/users/forms.py:47
+#: chrono_des_vignes/admin/editions/dossard/form.py:28
+#: chrono_des_vignes/users/forms.py:21 chrono_des_vignes/users/forms.py:36
+#: chrono_des_vignes/users/forms.py:48
 msgid "form.email"
 msgstr "email"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:15
-#: chrono_des_vignes/admin/editions/dossard/form.py:29 chrono_des_vignes/users/forms.py:21
-#: chrono_des_vignes/users/forms.py:36 chrono_des_vignes/users/forms.py:48
+#: chrono_des_vignes/admin/editions/dossard/form.py:29
+#: chrono_des_vignes/users/forms.py:22 chrono_des_vignes/users/forms.py:37
+#: chrono_des_vignes/users/forms.py:49
 msgid "form.tel"
 msgstr "télephone"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:16
-#: chrono_des_vignes/admin/editions/dossard/form.py:30 chrono_des_vignes/users/forms.py:22
-#: chrono_des_vignes/users/forms.py:37 chrono_des_vignes/users/forms.py:49
+#: chrono_des_vignes/admin/editions/dossard/form.py:30
+#: chrono_des_vignes/users/forms.py:23 chrono_des_vignes/users/forms.py:38
+#: chrono_des_vignes/users/forms.py:50
 msgid "form.birth"
 msgstr "date de naissance"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:18
-#: chrono_des_vignes/admin/editions/dossard/form.py:32 chrono_des_vignes/users/forms.py:28
-#: chrono_des_vignes/users/forms.py:39
+#: chrono_des_vignes/admin/editions/dossard/form.py:32
+#: chrono_des_vignes/users/forms.py:29 chrono_des_vignes/users/forms.py:40
 msgid "form.choosedparcours"
 msgstr "parcours choisis"
 
-#: chrono_des_vignes/admin/editions/dossard/form.py:20 chrono_des_vignes/users/forms.py:30
-#: chrono_des_vignes/users/forms.py:41
+#: chrono_des_vignes/admin/editions/dossard/form.py:20
+#: chrono_des_vignes/users/forms.py:31 chrono_des_vignes/users/forms.py:42
 msgid "form.register"
 msgstr "s'inscrire"
 
@@ -250,15 +258,15 @@ msgstr "coureur"
 msgid "admin.editions.dossard.present"
 msgstr "présents"
 
-#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:37
+#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:42
 msgid "admin.editions.dossard.generer"
 msgstr "générer"
 
-#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:38
+#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:43
 msgid "admin.editions.dossard.export_excel"
 msgstr "exporter au format excel"
 
-#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:40
+#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:45
 #: chrono_des_vignes/admin/editions/dossard/templates/new_coureur_modal.html:8
 msgid "admin.editions.dossard.addnewcoureur"
 msgstr "ajouter un nouveau coureur"
@@ -293,6 +301,14 @@ msgstr "lancer le parcours"
 msgid "admin.editions.parcours.end"
 msgstr "finir le parcours"
 
+#: chrono_des_vignes/admin/editions/passages/__init__.py:69
+msgid "flash.key_deleted"
+msgstr "la clé à bien été supprimée"
+
+#: chrono_des_vignes/admin/editions/passages/__init__.py:72
+msgid "flash.key_not_deleted"
+msgstr "la clé n'as pas été supprimée car elle à déjà enregistré un passage"
+
 #: chrono_des_vignes/admin/editions/passages/form.py:8
 msgid "form.stand"
 msgstr "stand"
@@ -306,7 +322,7 @@ msgid "form.validate"
 msgstr "valider"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:7
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:50
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:55
 msgid "admin.editions.passages.key"
 msgstr "clé"
 
@@ -316,7 +332,7 @@ msgstr "événement"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:11
 #: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:17
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:51
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:56
 msgid "admin.editions.passages.stand"
 msgstr "stand"
 
@@ -329,11 +345,11 @@ msgstr "parcours"
 msgid "admin.editions.passages.enterdossardnb"
 msgstr "entrer le numéro de dossard"
 
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:48
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:53
 msgid "admin.editions.passages.time"
 msgstr "temps"
 
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:49
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:54
 msgid "admin.editions.passages.user"
 msgstr "coureur"
 
@@ -361,22 +377,6 @@ msgstr "dossard"
 msgid "admin.editions.result.temps"
 msgstr "temps"
 
-#: chrono_des_vignes/admin/editions/templates/edition-sidebar.html:11
-msgid "admin.editions.gererpassage"
-msgstr "gérer les passages"
-
-#: chrono_des_vignes/admin/editions/templates/edition-sidebar.html:16
-msgid "admin.editions.gererdossard"
-msgstr "gérer les dossard"
-
-#: chrono_des_vignes/admin/editions/templates/edition-sidebar.html:22
-msgid "admin.editions.gererparcours"
-msgstr "gérer les parcours"
-
-#: chrono_des_vignes/admin/editions/templates/edition-sidebar.html:28
-msgid "admin.editions.result"
-msgstr "résultats"
-
 #: chrono_des_vignes/admin/editions/templates/editions.html:2
 msgid "admin.editions.editions"
 msgstr "éditions"
@@ -401,7 +401,8 @@ msgstr "nouvelle édition"
 msgid "form.editionrdv"
 msgstr "lieu de rendez-vous"
 
-#: chrono_des_vignes/admin/parcours/forms.py:8 chrono_des_vignes/admin/parcours/forms.py:26
+#: chrono_des_vignes/admin/parcours/forms.py:8
+#: chrono_des_vignes/admin/parcours/forms.py:26
 msgid "form.parcoursname"
 msgstr "nom du parcours"
 
@@ -514,11 +515,79 @@ msgstr "créer un nouveau Parcours"
 msgid "admin.parcours.startpoint"
 msgstr "nouveau stand"
 
+#: chrono_des_vignes/livetrack/templates/livetrack.html:8
+msgid "livetrack.date"
+msgstr "date"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:19
+msgid "livetrack.starttime"
+msgstr "heure de départ"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:30
+#: chrono_des_vignes/view/templates/view_edition.html:33
+#: chrono_des_vignes/view/templates/view_inscription.html:28
+#: chrono_des_vignes/view/templates/view_parcours.html:20
+msgid "view.evenement"
+msgstr "évènement"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:39
+#: chrono_des_vignes/view/templates/view_event.html:27
+#: chrono_des_vignes/view/templates/view_inscription.html:37
+#: chrono_des_vignes/view/templates/view_parcours.html:11
+msgid "view.parcours"
+msgstr "parcours"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:48
+msgid "livetrack.name"
+msgstr "prénom"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:59
+msgid "livetrack.lastname"
+msgstr "nom"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:70
+msgid "livetrack.dossard"
+msgstr "dossard"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:81
+msgid "livetrack.status"
+msgstr "status"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:93
+msgid "livetrack.finishtime"
+msgstr "temp"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:104
+msgid "livetrack.rank"
+msgstr "place"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:119
+msgid "livetrack.stand"
+msgstr "stand"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:120
+msgid "livetrack.time"
+msgstr "temps"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:121
+msgid "livetrack.dist"
+msgstr "distance"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:122
+msgid "livetrack.timedelta"
+msgstr "temps depuis dernier stand"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:123
+msgid "livetrack.distdelta"
+msgstr "distance depuis dernier stand"
+
 #: chrono_des_vignes/templates/0-home.html:5
 msgid "home.events"
 msgstr "vos evenement"
 
-#: chrono_des_vignes/templates/0-home.html:10 chrono_des_vignes/templates/0-home.html:31
+#: chrono_des_vignes/templates/0-home.html:10
+#: chrono_des_vignes/templates/0-home.html:31
+#: chrono_des_vignes/templates/0-home.html:88
 msgid "home.eventname"
 msgstr "évènement"
 
@@ -527,14 +596,17 @@ msgid "home.inscriptions"
 msgstr "vos inscriptions"
 
 #: chrono_des_vignes/templates/0-home.html:32
+#: chrono_des_vignes/templates/0-home.html:89
 msgid "home.parcours"
 msgstr "parcours"
 
 #: chrono_des_vignes/templates/0-home.html:33
+#: chrono_des_vignes/templates/0-home.html:90
 msgid "home.edition"
 msgstr "edition"
 
 #: chrono_des_vignes/templates/0-home.html:34
+#: chrono_des_vignes/templates/0-home.html:91
 msgid "home.date"
 msgstr "date"
 
@@ -542,108 +614,132 @@ msgstr "date"
 msgid "home.nextevent"
 msgstr "prochain evenement"
 
-#: copy.html:10 copy.html:71 chrono_des_vignes/templates/layout
-#: chrono_des_vignes/templates/layout.html:10 chrono_des_vignes/templates/layout.html:70
+#: chrono_des_vignes/templates/0-home.html:83
+msgid "home.participations"
+msgstr "vos participations"
+
+#: chrono_des_vignes/templates/layout.html:10
+#: chrono_des_vignes/templates/layout.html:71
 msgid "app.name"
 msgstr "chrono des vignes 2.0"
 
-#: copy.html:67 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:66
+#: chrono_des_vignes/templates/layout.html:67
 msgid "app.name.short"
 msgstr "cdv 2.0"
 
-#: copy.html:88 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:87
+#: chrono_des_vignes/templates/layout.html:88
 msgid "app.about"
 msgstr "about"
 
-#: copy.html:91 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:90
+#: chrono_des_vignes/templates/layout.html:91
 msgid "app.contact"
 msgstr "nous contacter"
 
-#: copy.html:97 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:96
+#: chrono_des_vignes/templates/layout.html:97
 msgid "app.chrono"
 msgstr "chronometrer"
 
-#: copy.html:104 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:103
+#: chrono_des_vignes/templates/layout.html:104
 msgid "app.docu"
 msgstr "documentation"
 
-#: copy.html:108 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:107
+#: chrono_des_vignes/templates/layout.html:108
 msgid "app.languages"
 msgstr "langues"
 
-#: copy.html:121 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:120
+#: chrono_des_vignes/templates/layout.html:121
 msgid "app.logout"
 msgstr "se déconnecter"
 
-#: copy.html:133 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:132
+#: chrono_des_vignes/templates/layout.html:133
 msgid "app.profil"
 msgstr "profil"
 
-#: copy.html:141 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:140
+#: chrono_des_vignes/templates/layout.html:141
 msgid "app.login"
 msgstr "se connecter"
 
-#: copy.html:147 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:146
+#: chrono_des_vignes/templates/layout.html:147
 msgid "app.signup"
 msgstr "créer un compte"
 
-#: copy.html:30 chrono_des_vignes/templates/sidebar chrono_des_vignes/templates/sidebar.html:30
+#: chrono_des_vignes/templates/sidebar.html:30
 msgid "side.editions"
 msgstr "editions"
 
-#: copy.html:34 chrono_des_vignes/templates/sidebar chrono_des_vignes/templates/sidebar.html:34
+#: chrono_des_vignes/templates/sidebar.html:42
+msgid "admin.editions.gererpassage"
+msgstr "gérer les passages"
+
+#: chrono_des_vignes/templates/sidebar.html:47
+msgid "admin.editions.gererdossard"
+msgstr "gérer les dossard"
+
+#: chrono_des_vignes/templates/sidebar.html:53
+msgid "admin.editions.gererparcours"
+msgstr "gérer les parcours"
+
+#: chrono_des_vignes/templates/sidebar.html:59
+msgid "admin.editions.result"
+msgstr "résultats"
+
+#: chrono_des_vignes/templates/sidebar.html:66
 msgid "side.parcours"
 msgstr "parcours"
 
-#: copy.html:37 chrono_des_vignes/templates/sidebar chrono_des_vignes/templates/sidebar.html:37
+#: chrono_des_vignes/templates/sidebar.html:69
 msgid "side.runner"
 msgstr "coureurs"
 
-#: chrono_des_vignes/users/__init__.py:24
+#: chrono_des_vignes/users/__init__.py:26
 msgid "flash.connected:name"
 msgstr "bienvenue {name} tu est bien connecté"
 
-#: chrono_des_vignes/users/__init__.py:32
+#: chrono_des_vignes/users/__init__.py:34
 msgid "flash.error.pwdnotvalid"
 msgstr "le mot de passe ou nom d\\'utilisateur n\\'est pas valide"
 
-#: chrono_des_vignes/users/__init__.py:51
+#: chrono_des_vignes/users/__init__.py:53
 msgid "flash.accountcreated"
 msgstr "votre compte a bien été crée"
 
-#: chrono_des_vignes/users/__init__.py:60
+#: chrono_des_vignes/users/__init__.py:62
 msgid "flash.deconected"
 msgstr "tu es bien déconnecté !"
 
-#: chrono_des_vignes/users/__init__.py:71
+#: chrono_des_vignes/users/__init__.py:73
 msgid "flash.warn.inscriptionsnotopen:date"
 msgstr "Les inscriptions ne sont pas encore ouvertes! Elles ouvrent le {date}"
 
-#: chrono_des_vignes/users/__init__.py:75
+#: chrono_des_vignes/users/__init__.py:77
 msgid "flash.warn.inscriptionclosed"
 msgstr "les inscription sont déjà fermée!"
 
-#: chrono_des_vignes/users/__init__.py:162
+#: chrono_des_vignes/users/__init__.py:183
 msgid "flash.profilupdated"
 msgstr "votre profile à bien été mis à jour"
 
-#: chrono_des_vignes/users/forms.py:12 chrono_des_vignes/users/forms.py:23
+#: chrono_des_vignes/users/forms.py:13 chrono_des_vignes/users/forms.py:24
 msgid "form.pwd"
 msgstr "mot de passe"
 
-#: chrono_des_vignes/users/forms.py:13
+#: chrono_des_vignes/users/forms.py:14
 msgid "form.connect"
 msgstr "se connecter"
 
-#: chrono_des_vignes/users/forms.py:24
+#: chrono_des_vignes/users/forms.py:25
 msgid "form.repetepwd"
 msgstr "répéter le mot de passe"
 
-#: chrono_des_vignes/users/forms.py:25
+#: chrono_des_vignes/users/forms.py:26
 msgid "form.createaccount"
 msgstr "créer un compte"
 
-#: chrono_des_vignes/users/forms.py:50
+#: chrono_des_vignes/users/forms.py:51
+msgid "form.profilpic"
+msgstr "image de profile"
+
+#: chrono_des_vignes/users/forms.py:52
 msgid "form.modifyaccount"
 msgstr "modifier son compte"
 
@@ -671,20 +767,20 @@ msgstr "date de naissance"
 msgid "users.profil.editprofil"
 msgstr "modifier son profile"
 
-#: chrono_des_vignes/view/__init__.py:16 chrono_des_vignes/view/__init__.py:27
+#: chrono_des_vignes/view/__init__.py:16 chrono_des_vignes/view/__init__.py:28
 msgid "view.error.notyourinscription"
 msgstr "ce n\\'est pas votre inscription."
 
-#: chrono_des_vignes/view/__init__.py:54 chrono_des_vignes/view/__init__.py:60
-#: chrono_des_vignes/view/__init__.py:69
+#: chrono_des_vignes/view/__init__.py:55 chrono_des_vignes/view/__init__.py:61
+#: chrono_des_vignes/view/__init__.py:70
 msgid "view.error.eventdontexist:event"
 msgstr "l\\'evenement \"{event}\" n\\'existe pas"
 
-#: chrono_des_vignes/view/__init__.py:61
+#: chrono_des_vignes/view/__init__.py:62
 msgid "view.error.editiondontexist:edition"
 msgstr "l\\'edition \"{edition}\" n\\'existe pas"
 
-#: chrono_des_vignes/view/__init__.py:70
+#: chrono_des_vignes/view/__init__.py:71
 msgid "view.error.parcoursdontexist:parcours"
 msgstr "le parcours \"{parcours}\" n\\'existe pas"
 
@@ -697,12 +793,6 @@ msgstr "date"
 #: chrono_des_vignes/view/templates/view_inscription.html:17
 msgid "view.time"
 msgstr "heure"
-
-#: chrono_des_vignes/view/templates/view_edition.html:33
-#: chrono_des_vignes/view/templates/view_inscription.html:28
-#: chrono_des_vignes/view/templates/view_parcours.html:20
-msgid "view.evenement"
-msgstr "évènement"
 
 #: chrono_des_vignes/view/templates/view_edition.html:42
 #: chrono_des_vignes/view/templates/view_inscription.html:46
@@ -729,19 +819,13 @@ msgstr "Les inscriptions ne sont pas encore ouvertes!"
 msgid "view.editions"
 msgstr "editions"
 
-#: chrono_des_vignes/view/templates/view_event.html:27
-#: chrono_des_vignes/view/templates/view_inscription.html:37
-#: chrono_des_vignes/view/templates/view_parcours.html:11
-msgid "view.parcours"
-msgstr "parcours"
-
-#: chrono_des_vignes/view/templates/view_inscription.html:55
-#: chrono_des_vignes/view/templates/view_inscription.html:66
-#: chrono_des_vignes/view/templates/view_inscription.html:74
+#: chrono_des_vignes/view/templates/view_inscription.html:56
+#: chrono_des_vignes/view/templates/view_inscription.html:67
+#: chrono_des_vignes/view/templates/view_inscription.html:75
 msgid "view.desinscription"
 msgstr "se désinscrire"
 
-#: chrono_des_vignes/view/templates/view_inscription.html:59
+#: chrono_des_vignes/view/templates/view_inscription.html:60
 msgid "view.plusparticiper"
 msgstr "ne plus participer"
 

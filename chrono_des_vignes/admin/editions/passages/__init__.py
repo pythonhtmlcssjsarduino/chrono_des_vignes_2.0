@@ -137,26 +137,26 @@ def get_passage_data(passage:Passage, json=False)->dict:
                 minutes, seconds = divmod(remainder, 60)
                 delta= f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"
                 user_passages.pop(0)
-                succes=True
+                success=True
             elif len(user_passages)>0:
                 delta=None
-                succes=False
+                success=False
             else:
                 if not current:
                     current=True
                     data['parcours'][-1]['current']=True
-                succes=None
+                success=None
                 delta=None
 
-            data['parcours'].append({'stand':stand if not json else {'name':stand.name}, 'dist':round(dist, 3), 'delta':delta, 'succes':succes})
+            data['parcours'].append({'stand':stand if not json else {'name':stand.name}, 'dist':round(dist, 3), 'delta':delta, 'success':success})
         for p in user_passages:
-            succes=None
+            success=None
             delta = p.time_stamp-first_passage.time_stamp
             days = delta.days
             hours, remainder = divmod(delta.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             delta= f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"
-            data['parcours'].append({'stand':p.get_stand() if not json else {'name':p.get_stand().name}, 'dist':None, 'delta':delta, 'succes':succes})
+            data['parcours'].append({'stand':p.get_stand() if not json else {'name':p.get_stand().name}, 'dist':None, 'delta':delta, 'success':success})
         if not current:
             data['parcours'][-1]['current']=True
     return data

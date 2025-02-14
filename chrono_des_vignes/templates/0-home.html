@@ -78,6 +78,33 @@
             </div>
         </div>
     {% endif %}
+    {% if participations and not user_data.admin %}
+        <div class="pb-5">
+            <h3 class="w-100 h1 bg-light rounded rounded-3">{{ _('home.participations') }}</h3>
+            <div class="d-flex justify-content-center flex-wrap">
+                <table class="table table-striped table-hover clickable-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">{{_('home.eventname')}}</th>
+                            <th scope="col">{{_('home.parcours')}}</th>
+                            <th scope="col">{{_('home.edition')}}</th>
+                            <th scope="col">{{_('home.date')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for inscription in participations  | sort(attribute="edition.edition_date") %}
+                        <tr data-href="{{ url_for('livetrack.livetrack_page', inscription_id=inscription.id) }}">
+                            <th scope="row">{{inscription.event.name}}</th>
+                            <th scope="row">{{inscription.parcours.name}}</th>
+                            <th scope="row">{{ inscription.edition.name }}</th>
+                            <th scope="row">{{inscription.edition.edition_date.strftime('%d.%m.%Y')}}</th>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endif %}
 <script>
     $('table tbody tr').on('click', function() {
     window.location.href = $(this).data('href');

@@ -1,0 +1,139 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card mb-4">
+  <div class="card-body">
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('livetrack.date') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">
+          {{inscription.start_time.strftime('%d.%m.%Y')}}
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('livetrack.starttime') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">
+          {{inscription.start_time.strftime('%H:%M')}}
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('view.evenement') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <a class="text-decoration-none link-dark" href="{{ url_for('view.view_event_page', event=inscription.event.name) }}"><p class="text-muted mb-0">{{inscription.event.name}}</p></a>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('view.parcours') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <a class="text-decoration-none link-dark" href="{{ url_for('view.view_parcours_page', event=inscription.event.name, parcours=inscription.parcours.name) }}"><p class="text-muted mb-0">{{inscription.parcours.name}}</p></a>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('livetrack.name') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">
+          {{inscription.inscrit.name}}
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('livetrack.lastname') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">
+          {{inscription.inscrit.lastname}}
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('livetrack.dossard') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">
+          {{inscription.dossard}}
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('livetrack.status') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">
+          {{inscription.status}}
+        </p>
+      </div>
+    </div>
+    {% if inscription.end == "finish"%}
+    <hr />
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('livetrack.finishtime') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">
+          {{inscription.get_time()}}
+        </p>
+      </div>
+    </div>
+    <hr />
+    <div class="row">
+      <div class="col-sm-3">
+        <p class="mb-0">{{ _('livetrack.rank') }}</p>
+      </div>
+      <div class="col-sm-9">
+        <p class="text-muted mb-0">
+          {{inscription.rank}}
+        </p>
+      </div>
+    </div>
+    {% endif %}
+  </div>
+</div>
+<div class="d-flex justify-content-center flex-wrap">
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th scope="col">{{_('livetrack.stand')}}</th>
+            <th scope="col">{{_('livetrack.time')}}</th>
+            <th scope="col">{{_('livetrack.dist')}}</th>
+            <th scope="col">{{_('livetrack.timedelta')}}</th>
+            <th scope="col">{{_('livetrack.distdelta')}}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for passage in run %}
+        <tr>
+            <th {% if not passage.success%}class="text-muted"{% endif%}>{{passage.stand.name}}</th>
+            <th {% if not passage.success%}class="text-muted"{% endif%}>{{passage.time if passage.time else ''}}</th>
+            <th {% if not passage.success%}class="text-muted"{% endif%}>{{passage.dist if passage.dist else ''}}</th>
+            <th {% if not passage.success%}class="text-muted"{% endif%}>{{passage.time_delta if passage.time_delta else ''}}</th>
+            <th {% if not passage.success%}class="text-muted"{% endif%}>{{passage.dist_delta if passage.dist_delta else ''}}</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endblock %}

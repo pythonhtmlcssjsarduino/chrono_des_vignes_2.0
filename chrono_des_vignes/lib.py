@@ -1,7 +1,7 @@
 import requests
 from math import acos, sin, radians, cos
 from time import time
-
+from datetime import timedelta
 
 def midpoint(latlng1, latlng2):
     lat = (latlng1[0]+latlng2[0])/2
@@ -50,3 +50,10 @@ def deg_to_dms(deg):
         d = -d
     d, m = int(d), int(m)
     return d, m, s
+
+def format_timedelta(delta: timedelta) -> str:
+    hours, remainder = divmod(delta.seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    days = delta.days
+
+    return f"{f'{days} jours, ' if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"

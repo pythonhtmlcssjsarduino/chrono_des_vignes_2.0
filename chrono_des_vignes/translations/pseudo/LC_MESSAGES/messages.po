@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-05 16:12+0100\n"
+"POT-Creation-Date: 2025-02-10 17:26+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,16 +17,16 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.16.0\n"
 
-#: chrono_des_vignes/__init__.py:104
+#: chrono_des_vignes/__init__.py:102
 msgid "flash.error.mustadmin"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/__init__.py:107
+#: chrono_des_vignes/__init__.py:105
 msgid "flash.error.wrongadminevent"
 msgstr "XXXXXXXX"
 
-#: copy.html:108 chrono_des_vignes/__init__.py:115 chrono_des_vignes/templates/layout
-#: chrono_des_vignes/templates/layout.html:107
+#: chrono_des_vignes/__init__.py:113
+#: chrono_des_vignes/templates/layout.html:108
 msgid "app.lang"
 msgstr "XXXXXXXX"
 
@@ -34,8 +34,10 @@ msgstr "XXXXXXXX"
 msgid "form.eventdescription"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/form.py:16 chrono_des_vignes/admin/form.py:10
-#: chrono_des_vignes/admin/parcours/forms.py:10 chrono_des_vignes/admin/parcours/forms.py:18
+#: chrono_des_vignes/admin/editions/form.py:16
+#: chrono_des_vignes/admin/form.py:10
+#: chrono_des_vignes/admin/parcours/forms.py:10
+#: chrono_des_vignes/admin/parcours/forms.py:18
 #: chrono_des_vignes/admin/parcours/forms.py:23
 msgid "form.save"
 msgstr "XXXXXXXX"
@@ -144,101 +146,107 @@ msgstr "XXXXXXXX"
 msgid "form.rdvlat"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:102
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:108
 msgid "flash.success.newuser:username:name:lastname"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:184
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:190
 #: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:10
 msgid "admin.editions.dossard.dossard"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:185
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:191
 msgid "admin.editions.dossard.name"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:186
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:192
 msgid "admin.editions.dossard.lastname"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:187
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:193
 msgid "admin.editions.dossard.email"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:188
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:194
 msgid "admin.editions.dossard.phone"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:189
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:195
 msgid "admin.editions.dossard.datenaiss"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:190
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:196
 msgid "admin.editions.dossard.username"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:191
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:197
 #: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:11
 msgid "admin.editions.dossard.parcours"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:192
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:198
 msgid "admin.editions.dossard.edition_date"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:193
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:199
 msgid "admin.editions.dossard.edition_name"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:194
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:200
 msgid "admin.editions.dossard.event_name"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:11
-#: chrono_des_vignes/admin/editions/dossard/form.py:25 chrono_des_vignes/users/forms.py:16
-#: chrono_des_vignes/users/forms.py:33 chrono_des_vignes/users/forms.py:44
+#: chrono_des_vignes/admin/editions/dossard/form.py:25
+#: chrono_des_vignes/users/forms.py:17 chrono_des_vignes/users/forms.py:34
+#: chrono_des_vignes/users/forms.py:45
 msgid "form.name"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:12
 #: chrono_des_vignes/admin/editions/dossard/form.py:26
-#: chrono_des_vignes/admin/editions/passages/form.py:7 chrono_des_vignes/users/forms.py:17
-#: chrono_des_vignes/users/forms.py:34 chrono_des_vignes/users/forms.py:45
+#: chrono_des_vignes/admin/editions/passages/form.py:7
+#: chrono_des_vignes/users/forms.py:18 chrono_des_vignes/users/forms.py:35
+#: chrono_des_vignes/users/forms.py:46
 msgid "form.lastname"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:13
-#: chrono_des_vignes/admin/editions/dossard/form.py:27 chrono_des_vignes/users/forms.py:10
-#: chrono_des_vignes/users/forms.py:18 chrono_des_vignes/users/forms.py:46
+#: chrono_des_vignes/admin/editions/dossard/form.py:27
+#: chrono_des_vignes/users/forms.py:11 chrono_des_vignes/users/forms.py:19
+#: chrono_des_vignes/users/forms.py:47
 msgid "form.username"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:14
-#: chrono_des_vignes/admin/editions/dossard/form.py:28 chrono_des_vignes/users/forms.py:20
-#: chrono_des_vignes/users/forms.py:35 chrono_des_vignes/users/forms.py:47
+#: chrono_des_vignes/admin/editions/dossard/form.py:28
+#: chrono_des_vignes/users/forms.py:21 chrono_des_vignes/users/forms.py:36
+#: chrono_des_vignes/users/forms.py:48
 msgid "form.email"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:15
-#: chrono_des_vignes/admin/editions/dossard/form.py:29 chrono_des_vignes/users/forms.py:21
-#: chrono_des_vignes/users/forms.py:36 chrono_des_vignes/users/forms.py:48
+#: chrono_des_vignes/admin/editions/dossard/form.py:29
+#: chrono_des_vignes/users/forms.py:22 chrono_des_vignes/users/forms.py:37
+#: chrono_des_vignes/users/forms.py:49
 msgid "form.tel"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:16
-#: chrono_des_vignes/admin/editions/dossard/form.py:30 chrono_des_vignes/users/forms.py:22
-#: chrono_des_vignes/users/forms.py:37 chrono_des_vignes/users/forms.py:49
+#: chrono_des_vignes/admin/editions/dossard/form.py:30
+#: chrono_des_vignes/users/forms.py:23 chrono_des_vignes/users/forms.py:38
+#: chrono_des_vignes/users/forms.py:50
 msgid "form.birth"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:18
-#: chrono_des_vignes/admin/editions/dossard/form.py:32 chrono_des_vignes/users/forms.py:28
-#: chrono_des_vignes/users/forms.py:39
+#: chrono_des_vignes/admin/editions/dossard/form.py:32
+#: chrono_des_vignes/users/forms.py:29 chrono_des_vignes/users/forms.py:40
 msgid "form.choosedparcours"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/form.py:20 chrono_des_vignes/users/forms.py:30
-#: chrono_des_vignes/users/forms.py:41
+#: chrono_des_vignes/admin/editions/dossard/form.py:20
+#: chrono_des_vignes/users/forms.py:31 chrono_des_vignes/users/forms.py:42
 msgid "form.register"
 msgstr "XXXXXXXX"
 
@@ -250,15 +258,15 @@ msgstr "XXXXXXXX"
 msgid "admin.editions.dossard.present"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:37
+#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:42
 msgid "admin.editions.dossard.generer"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:38
+#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:43
 msgid "admin.editions.dossard.export_excel"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:40
+#: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:45
 #: chrono_des_vignes/admin/editions/dossard/templates/new_coureur_modal.html:8
 msgid "admin.editions.dossard.addnewcoureur"
 msgstr "XXXXXXXX"
@@ -293,6 +301,14 @@ msgstr "XXXXXXXX"
 msgid "admin.editions.parcours.end"
 msgstr "XXXXXXXX"
 
+#: chrono_des_vignes/admin/editions/passages/__init__.py:69
+msgid "flash.key_deleted"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/admin/editions/passages/__init__.py:72
+msgid "flash.key_not_deleted"
+msgstr "XXXXXXXX"
+
 #: chrono_des_vignes/admin/editions/passages/form.py:8
 msgid "form.stand"
 msgstr "XXXXXXXX"
@@ -306,7 +322,7 @@ msgid "form.validate"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:7
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:50
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:55
 msgid "admin.editions.passages.key"
 msgstr "XXXXXXXX"
 
@@ -316,7 +332,7 @@ msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:11
 #: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:17
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:51
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:56
 msgid "admin.editions.passages.stand"
 msgstr "XXXXXXXX"
 
@@ -329,11 +345,11 @@ msgstr "XXXXXXXX"
 msgid "admin.editions.passages.enterdossardnb"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:48
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:53
 msgid "admin.editions.passages.time"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:49
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:54
 msgid "admin.editions.passages.user"
 msgstr "XXXXXXXX"
 
@@ -361,22 +377,6 @@ msgstr "XXXXXXXX"
 msgid "admin.editions.result.temps"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/templates/edition-sidebar.html:11
-msgid "admin.editions.gererpassage"
-msgstr "XXXXXXXX"
-
-#: chrono_des_vignes/admin/editions/templates/edition-sidebar.html:16
-msgid "admin.editions.gererdossard"
-msgstr "XXXXXXXX"
-
-#: chrono_des_vignes/admin/editions/templates/edition-sidebar.html:22
-msgid "admin.editions.gererparcours"
-msgstr "XXXXXXXX"
-
-#: chrono_des_vignes/admin/editions/templates/edition-sidebar.html:28
-msgid "admin.editions.result"
-msgstr "XXXXXXXX"
-
 #: chrono_des_vignes/admin/editions/templates/editions.html:2
 msgid "admin.editions.editions"
 msgstr "XXXXXXXX"
@@ -401,7 +401,8 @@ msgstr "XXXXXXXX"
 msgid "form.editionrdv"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/parcours/forms.py:8 chrono_des_vignes/admin/parcours/forms.py:26
+#: chrono_des_vignes/admin/parcours/forms.py:8
+#: chrono_des_vignes/admin/parcours/forms.py:26
 msgid "form.parcoursname"
 msgstr "XXXXXXXX"
 
@@ -514,11 +515,79 @@ msgstr "XXXXXXXX"
 msgid "admin.parcours.startpoint"
 msgstr "XXXXXXXX"
 
+#: chrono_des_vignes/livetrack/templates/livetrack.html:8
+msgid "livetrack.date"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:19
+msgid "livetrack.starttime"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:30
+#: chrono_des_vignes/view/templates/view_edition.html:33
+#: chrono_des_vignes/view/templates/view_inscription.html:28
+#: chrono_des_vignes/view/templates/view_parcours.html:20
+msgid "view.evenement"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:39
+#: chrono_des_vignes/view/templates/view_event.html:27
+#: chrono_des_vignes/view/templates/view_inscription.html:37
+#: chrono_des_vignes/view/templates/view_parcours.html:11
+msgid "view.parcours"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:48
+msgid "livetrack.name"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:59
+msgid "livetrack.lastname"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:70
+msgid "livetrack.dossard"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:81
+msgid "livetrack.status"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:93
+msgid "livetrack.finishtime"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:104
+msgid "livetrack.rank"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:119
+msgid "livetrack.stand"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:120
+msgid "livetrack.time"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:121
+msgid "livetrack.dist"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:122
+msgid "livetrack.timedelta"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/livetrack/templates/livetrack.html:123
+msgid "livetrack.distdelta"
+msgstr "XXXXXXXX"
+
 #: chrono_des_vignes/templates/0-home.html:5
 msgid "home.events"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/templates/0-home.html:10 chrono_des_vignes/templates/0-home.html:31
+#: chrono_des_vignes/templates/0-home.html:10
+#: chrono_des_vignes/templates/0-home.html:31
+#: chrono_des_vignes/templates/0-home.html:88
 msgid "home.eventname"
 msgstr "XXXXXXXX"
 
@@ -527,14 +596,17 @@ msgid "home.inscriptions"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/templates/0-home.html:32
+#: chrono_des_vignes/templates/0-home.html:89
 msgid "home.parcours"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/templates/0-home.html:33
+#: chrono_des_vignes/templates/0-home.html:90
 msgid "home.edition"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/templates/0-home.html:34
+#: chrono_des_vignes/templates/0-home.html:91
 msgid "home.date"
 msgstr "XXXXXXXX"
 
@@ -542,108 +614,132 @@ msgstr "XXXXXXXX"
 msgid "home.nextevent"
 msgstr "XXXXXXXX"
 
-#: copy.html:10 copy.html:71 chrono_des_vignes/templates/layout
-#: chrono_des_vignes/templates/layout.html:10 chrono_des_vignes/templates/layout.html:70
+#: chrono_des_vignes/templates/0-home.html:83
+msgid "home.participations"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/templates/layout.html:10
+#: chrono_des_vignes/templates/layout.html:71
 msgid "app.name"
 msgstr "XXXXXXXX"
 
-#: copy.html:67 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:66
+#: chrono_des_vignes/templates/layout.html:67
 msgid "app.name.short"
 msgstr "XXXXXXXX"
 
-#: copy.html:88 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:87
+#: chrono_des_vignes/templates/layout.html:88
 msgid "app.about"
 msgstr "XXXXXXXX"
 
-#: copy.html:91 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:90
+#: chrono_des_vignes/templates/layout.html:91
 msgid "app.contact"
 msgstr "XXXXXXXX"
 
-#: copy.html:97 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:96
+#: chrono_des_vignes/templates/layout.html:97
 msgid "app.chrono"
 msgstr "XXXXXXXX"
 
-#: copy.html:104 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:103
+#: chrono_des_vignes/templates/layout.html:104
 msgid "app.docu"
 msgstr "XXXXXXXX"
 
-#: copy.html:108 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:107
+#: chrono_des_vignes/templates/layout.html:108
 msgid "app.languages"
 msgstr "XXXXXXXX"
 
-#: copy.html:121 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:120
+#: chrono_des_vignes/templates/layout.html:121
 msgid "app.logout"
 msgstr "XXXXXXXX"
 
-#: copy.html:133 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:132
+#: chrono_des_vignes/templates/layout.html:133
 msgid "app.profil"
 msgstr "XXXXXXXX"
 
-#: copy.html:141 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:140
+#: chrono_des_vignes/templates/layout.html:141
 msgid "app.login"
 msgstr "XXXXXXXX"
 
-#: copy.html:147 chrono_des_vignes/templates/layout chrono_des_vignes/templates/layout.html:146
+#: chrono_des_vignes/templates/layout.html:147
 msgid "app.signup"
 msgstr "XXXXXXXX"
 
-#: copy.html:30 chrono_des_vignes/templates/sidebar chrono_des_vignes/templates/sidebar.html:30
+#: chrono_des_vignes/templates/sidebar.html:30
 msgid "side.editions"
 msgstr "XXXXXXXX"
 
-#: copy.html:34 chrono_des_vignes/templates/sidebar chrono_des_vignes/templates/sidebar.html:34
+#: chrono_des_vignes/templates/sidebar.html:42
+msgid "admin.editions.gererpassage"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/templates/sidebar.html:47
+msgid "admin.editions.gererdossard"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/templates/sidebar.html:53
+msgid "admin.editions.gererparcours"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/templates/sidebar.html:59
+msgid "admin.editions.result"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/templates/sidebar.html:66
 msgid "side.parcours"
 msgstr "XXXXXXXX"
 
-#: copy.html:37 chrono_des_vignes/templates/sidebar chrono_des_vignes/templates/sidebar.html:37
+#: chrono_des_vignes/templates/sidebar.html:69
 msgid "side.runner"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/__init__.py:24
+#: chrono_des_vignes/users/__init__.py:26
 msgid "flash.connected:name"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/__init__.py:32
+#: chrono_des_vignes/users/__init__.py:34
 msgid "flash.error.pwdnotvalid"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/__init__.py:51
+#: chrono_des_vignes/users/__init__.py:53
 msgid "flash.accountcreated"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/__init__.py:60
+#: chrono_des_vignes/users/__init__.py:62
 msgid "flash.deconected"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/__init__.py:71
+#: chrono_des_vignes/users/__init__.py:73
 msgid "flash.warn.inscriptionsnotopen:date"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/__init__.py:75
+#: chrono_des_vignes/users/__init__.py:77
 msgid "flash.warn.inscriptionclosed"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/__init__.py:162
+#: chrono_des_vignes/users/__init__.py:183
 msgid "flash.profilupdated"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/forms.py:12 chrono_des_vignes/users/forms.py:23
+#: chrono_des_vignes/users/forms.py:13 chrono_des_vignes/users/forms.py:24
 msgid "form.pwd"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/forms.py:13
+#: chrono_des_vignes/users/forms.py:14
 msgid "form.connect"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/forms.py:24
+#: chrono_des_vignes/users/forms.py:25
 msgid "form.repetepwd"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/forms.py:25
+#: chrono_des_vignes/users/forms.py:26
 msgid "form.createaccount"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/users/forms.py:50
+#: chrono_des_vignes/users/forms.py:51
+msgid "form.profilpic"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/users/forms.py:52
 msgid "form.modifyaccount"
 msgstr "XXXXXXXX"
 
@@ -671,20 +767,20 @@ msgstr "XXXXXXXX"
 msgid "users.profil.editprofil"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/view/__init__.py:16 chrono_des_vignes/view/__init__.py:27
+#: chrono_des_vignes/view/__init__.py:16 chrono_des_vignes/view/__init__.py:28
 msgid "view.error.notyourinscription"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/view/__init__.py:54 chrono_des_vignes/view/__init__.py:60
-#: chrono_des_vignes/view/__init__.py:69
+#: chrono_des_vignes/view/__init__.py:55 chrono_des_vignes/view/__init__.py:61
+#: chrono_des_vignes/view/__init__.py:70
 msgid "view.error.eventdontexist:event"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/view/__init__.py:61
+#: chrono_des_vignes/view/__init__.py:62
 msgid "view.error.editiondontexist:edition"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/view/__init__.py:70
+#: chrono_des_vignes/view/__init__.py:71
 msgid "view.error.parcoursdontexist:parcours"
 msgstr "XXXXXXXX"
 
@@ -696,12 +792,6 @@ msgstr "XXXXXXXX"
 #: chrono_des_vignes/view/templates/view_edition.html:22
 #: chrono_des_vignes/view/templates/view_inscription.html:17
 msgid "view.time"
-msgstr "XXXXXXXX"
-
-#: chrono_des_vignes/view/templates/view_edition.html:33
-#: chrono_des_vignes/view/templates/view_inscription.html:28
-#: chrono_des_vignes/view/templates/view_parcours.html:20
-msgid "view.evenement"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/view/templates/view_edition.html:42
@@ -729,19 +819,13 @@ msgstr "XXXXXXXX"
 msgid "view.editions"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/view/templates/view_event.html:27
-#: chrono_des_vignes/view/templates/view_inscription.html:37
-#: chrono_des_vignes/view/templates/view_parcours.html:11
-msgid "view.parcours"
-msgstr "XXXXXXXX"
-
-#: chrono_des_vignes/view/templates/view_inscription.html:55
-#: chrono_des_vignes/view/templates/view_inscription.html:66
-#: chrono_des_vignes/view/templates/view_inscription.html:74
+#: chrono_des_vignes/view/templates/view_inscription.html:56
+#: chrono_des_vignes/view/templates/view_inscription.html:67
+#: chrono_des_vignes/view/templates/view_inscription.html:75
 msgid "view.desinscription"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/view/templates/view_inscription.html:59
+#: chrono_des_vignes/view/templates/view_inscription.html:60
 msgid "view.plusparticiper"
 msgstr "XXXXXXXX"
 

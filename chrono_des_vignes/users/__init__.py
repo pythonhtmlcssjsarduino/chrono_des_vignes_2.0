@@ -9,6 +9,7 @@ from datetime import datetime
 import string, secrets, os
 from flask_babel import _
 from PIL import Image
+from werkzeug.datastructures import FileStorage
 alphabet = string.ascii_letters + string.digits
 
 users = Blueprint('users', __name__, template_folder='templates')
@@ -141,7 +142,7 @@ def profil():
     user = current_user
     return render_template('profil.html', user_data=user)
 
-def save_avatar(form_picture, old_picture_name=None):
+def save_avatar(form_picture:FileStorage, old_picture_name=None):
     random_hex = secrets.token_hex(8)
     _, f_ext = os.path.splitext(form_picture.filename)
     picture_name = f'{random_hex}{f_ext}'
@@ -176,8 +177,7 @@ def modify_profil():
             user.email=form.email.data if form.email.data else None
             user.phone=form.phone.data if form.phone.data else None
             user.datenaiss= form.datenaiss.data
-            ic(form.profil_pic.data)
-            if form.profil_pic.data:
+            if form.profil_pic.data and isinstance(form.profil_pic.data, FileStorage):
                 user.avatar = save_avatar(form.profil_pic.data, user.avatar)
             db.session.commit()
             flash(_('flash.profilupdated'), 'success')

@@ -44,7 +44,7 @@ def get_parcours_passages(parcours):
         else:
             pass_data = {'parcours':[], 'started':False, 'id':coureur.id, 'dossard':coureur.dossard, 'name':coureur.inscrit.name}
             for stand, dist in zip(coureur.parcours.iter_chrono_list(), coureur.parcours.get_chrono_dists()):
-                pass_data['parcours'].append({'stand':{'name':stand.name}, 'dist':round(dist, 3), 'delta':'', 'succes':None})
+                pass_data['parcours'].append({'stand':{'name':stand.name}, 'dist':round(dist, 3), 'delta':'', 'success':None})
             data.append(pass_data)
     return data
 
@@ -68,7 +68,7 @@ def launch_parcours(data):
                 pass_data.update({'started':True, 'parcours_id':inscription.parcours.id, 'start_time':first_passage.time_stamp.timestamp() , 'id':inscription.id, 'finish':inscription.has_finish(), 'all_right':inscription.has_all_right(), 'end':inscription.end})
                 emit('new_passage', pass_data, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
-@socketio.on('launch_parcours', namespace='/edition/parcours')
+@socketio.on('stop_parcours', namespace='/edition/parcours')
 def stop_parcours(data):
     parcours = Parcours.query.get(data.get('parcours_id'))
     edition = Edition.query.get(session['room'].split('-')[3])

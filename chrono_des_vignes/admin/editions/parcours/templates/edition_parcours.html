@@ -59,7 +59,7 @@
                                     <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
                                     <td class="pe-3">${passage.stand.name}</td>
                                     <td class="pe-3">`+
-                                        (passage.succes==true?passage.delta:(passage.succes==false?'<i class="fa-solid fa-xmark"></i>':''))+
+                                        (passage.success==true?passage.delta:(passage.success==false?'<i class="fa-solid fa-xmark"></i>':''))+
                                     `</td>
                                     <td>
                                         ${ passage.dist !=null?passage.dist+' km':'' }
@@ -138,7 +138,7 @@
                                 <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
                                 <td class="pe-3">${passage.stand.name}</td>
                                 <td class="pe-3">`+
-                                    (passage.succes==true||passage.succes==null?passage.delta:(passage.succes==false?'<i class="fa-solid fa-xmark"></i>':''))+
+                                    (passage.success==true||passage.success==null?passage.delta:(passage.success==false?'<i class="fa-solid fa-xmark"></i>':''))+
                                 `</td>
                                 <td>
                                     ${ passage.dist !=null?passage.dist+' km':'' }
@@ -283,7 +283,7 @@
                 document.getElementById("end-parcours-{{ parcours.id }}").addEventListener('click', function(event){
                     let button = event.target
                     let start_time = Date.now()
-                    socket.emit('launch_parcours', {'parcours_id':{{ parcours.id }}, 'start_time': start_time})
+                    socket.emit('stop_parcours', {'parcours_id':{{ parcours.id }}, 'start_time': start_time})
                 }, { once: true })
             }
 

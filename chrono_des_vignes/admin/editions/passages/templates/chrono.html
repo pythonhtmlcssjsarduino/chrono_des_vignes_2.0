@@ -175,7 +175,7 @@
                                         <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
                                         <td class="pe-3">${passage.stand.name}</td>
                                         <td class="pe-3">`+
-                                            (passage.succes==true||passage.succes==null?passage.delta:(passage.succes==false?'<i class="fa-solid fa-xmark"></i>':''))+
+                                            (passage.success==true||passage.success==null?passage.delta:(passage.success==false?'<i class="fa-solid fa-xmark"></i>':''))+
                                         `</td>
                                         <td>
                                             ${ passage.dist !=null?passage.dist+' km':'' }

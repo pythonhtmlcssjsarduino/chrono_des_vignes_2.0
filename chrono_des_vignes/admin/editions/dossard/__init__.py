@@ -11,6 +11,7 @@ from flask_babel import _
 from chrono_des_vignes.custom_validators import DataRequired, Length, EqualTo, DonTExist, DbLength, Email
 from .form import NewCoureurForm, ValidateNewCoureurForm
 from sqlalchemy import func, and_, or_, not_
+from wtforms.validators import Optional
 
 dossard = Blueprint('dossard', __name__, template_folder='templates')
 
@@ -39,7 +40,7 @@ def edition_dossards(event_name, edition_name):
                 'name':[DataRequired(), DbLength(User, 'name')],
                 'lastname':[DataRequired(), DbLength(User, 'lastname')],
                 'username':[DataRequired(), DbLength(User, 'username')],
-                'email':[DataRequired(), DbLength(User, 'email'), Email()]
+                'email':[Optional(), DbLength(User, 'email'), Email()]
             }
             ic('first validation', form.validate(extra_validators=supp_validators), form.parcours.data)
             if form.validate(extra_validators=supp_validators):

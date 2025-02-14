@@ -13,12 +13,13 @@ view = Blueprint('view', __name__, template_folder='templates')
 @login_required
 def delete_inscription(inscription):
     user = current_user
-    inscription = user.inscriptions.filter_by(id=inscription).first_or_404(_('view.error.notyourinscription'))
+    inscription:Inscription = user.inscriptions.filter_by(id=inscription).first_or_404(_('view.error.notyourinscription'))
+    if inscription.edition.edition_date < datetime.now() or inscription.passages.count() > 0:
+        return redirect(url_for('view.view_inscription_page', inscription= inscription.id))
     db.session.delete(inscription)
     db.session.commit()
 
     return redirect(url_for('home'))
-
 
 @set_route(view, '/view/inscription/<inscription>')
 @login_required

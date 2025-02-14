@@ -6,9 +6,10 @@ from colour import Color
 from flask_login import UserMixin
 from datetime import datetime, timedelta
 from chrono_des_vignes.lib import calc_points_dist
-from typing import Iterator, Iterable
+from typing import Iterator, Iterable, Literal
 from collections import namedtuple
 from markdown import markdown
+from sqlalchemy import func, not_
 
 md_extentions = ['admonition', 'tables']
 def get_html_from_markdown(markdown_text):
@@ -283,7 +284,7 @@ class Inscription(db.Model):
     dossard=db.Column(db.Integer)
     passages=db.relationship('Passage', backref='inscription', lazy='dynamic')
     present=db.Column(db.Boolean, nullable=False, default=False)
-    end=db.Column(db.String(10)) # abandon, disqual, absent, finish
+    end=db.Column(db.String(10)) # abandon, disqual, absent, finish or None
 
     def __repr__(self) -> str:
         return f'<Inscription id:{self.id} dossard:{self.dossard} >'
@@ -296,11 +297,36 @@ class Inscription(db.Model):
     
     def get_first_passage(self)->Passage:
         return self.passages.order_by(Passage.time_stamp.asc()).first()
+
+    @property
+    def status(self)->str:
+        if not self.has_started():
+            return 'pas partit'
+        else:
+            match self.end:
+                case 'abandon':
+                    return 'abandon'
+                case 'disqual':
+                    return 'disqualifié'
+                case 'absent':
+                    return 'absent'
+                case 'finish':
+                    return 'arrivé'
+                case _:
+                    return 'en cours'
+
+    @property
+    def start_time(self)->datetime:
+        return self.get_first_passage().time_stamp
+
+    @property
+    def last_time(self)->datetime:
+        return self.get_last_passage().time_stamp
     
-    def get_time(self)->timedelta|None:
+    def get_time(self)->timedelta|Literal['']:
         if not self.has_started():
             return ''
-        return self.get_last_passage().time_stamp - self.get_first_passage().time_stamp
+        return self.last_time - self.start_time
 
     def get_run(self):
         user_passages:list[Passage] = self.passages.filter(Passage.time_stamp<=self.get_last_passage().time_stamp).all()
@@ -327,6 +353,18 @@ class Inscription(db.Model):
             return False
         run = self.get_run()
         return run[-1]!=None
+
+    @property
+    def rank(self)->int:
+        if self.end != 'finish':
+            return {'abandon':'abandon', 'disqual':'disqualifié', 'absent':'absent'}.get(self.end, None)
+        # all inscriptions that are in the same parcours and edition
+        inscriptions = Inscription.query.filter(Inscription.parcours==self.parcours, Inscription.edition==self.edition)
+        # get all the inscription that there last time is smaller than this one
+        inscriptions = inscriptions.filter(not_(Inscription.passages.any(Passage.time_stamp>self.get_time())))
+        # get only those that have finished
+        inscriptions = inscriptions.filter(Inscription.end=='finish')
+        return inscriptions.count()+1
 
 class PassageKey(db.Model):
     __allow_unmapped__ = True

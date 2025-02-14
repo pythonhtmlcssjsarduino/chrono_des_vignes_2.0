@@ -49,6 +49,7 @@
         <a href="{{rdv_url}}" target="_blank" rel="noopener noreferrer" class="text-muted mb-0">google maps</a>
       </div>
     </div>
+    {% if inscription.edition.edition_date >= now and inscription.passages.count() == 0%}
     <hr />
     <div class="row">
       <div class="col-sm-3">
@@ -77,6 +78,7 @@
         </div>
       </div>
     </div>
+    {% endif %}
   </div>
 </div>
 <div style="height: 450px">

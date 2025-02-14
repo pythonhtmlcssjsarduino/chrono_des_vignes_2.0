@@ -11,6 +11,7 @@ from sqlalchemy import URL
 from flask_bcrypt import Bcrypt
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 install()
 load_dotenv()
 from sqlalchemy import make_url
@@ -28,7 +29,7 @@ PICTURE_SIZE = (200, 200)
 app = Flask(__name__)
 app.config['SERVER_NAME'] = 'localhost:5000'
 password= os.environ.get('db_password')
-app.config['SECRET_KEY'] = password #! change that for deployment
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') #! change that for deployment
 url_object = URL.create(
     "mysql+pymysql",
     username="root",
@@ -84,10 +85,6 @@ def get_timezone():
 
 babel = Babel(app, locale_selector=get_locale, timezone_selector=get_timezone)
 
-@app.context_processor
-def inject_babel():
-    return dict(_=gettext)
-
 from chrono_des_vignes.models import User
 @login_manager.user_loader
 def load_user(user_id:str ):
@@ -119,8 +116,8 @@ def lang_url_for(*args, **kwargs):
     return url_for(*args, lang=lang, **kwargs)
 
 @app.context_processor
-def inject_lang_url_for():
-    return dict(url_for=lang_url_for)
+def jinja_context():
+    return dict(_=gettext, url_for=lang_url_for, now=datetime.now())
 
 def set_route(blueprint, path, **options):
     def decorator(func):
@@ -141,8 +138,10 @@ from chrono_des_vignes.users import users
 from chrono_des_vignes.admin import admin
 from chrono_des_vignes.view import view
 from chrono_des_vignes.dev import dev
+from chrono_des_vignes.livetrack import livetrack
 app.register_blueprint(users)
 app.register_blueprint(admin)
 app.register_blueprint(view)
 app.register_blueprint(dev)
+app.register_blueprint(livetrack)
 from chrono_des_vignes import routes
