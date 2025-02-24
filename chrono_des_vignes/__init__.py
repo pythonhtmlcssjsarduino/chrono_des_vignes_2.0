@@ -1,4 +1,24 @@
-from flask import Flask, redirect, flash, request, session, url_for, render_template
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
+from flask import Flask, redirect, flash, request, session, url_for, render_template, Blueprint, abort
 from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -15,16 +35,12 @@ from datetime import datetime
 install()
 load_dotenv()
 from sqlalchemy import make_url
+from werkzeug import exceptions
+from sentry_sdk import init
+from sentry_sdk.integrations.flask import FlaskIntegration
 # met la langue en francais pour le formatage des dates
 import locale
 locale.setlocale(locale.LC_TIME,'')
-
-DEFAULT_PROFIL_PIC = 'icone.png'
-DEV_ENABLE = True
-LANGAGES = ['de', 'fr', 'en']
-if DEV_ENABLE:
-    LANGAGES += ['ids', 'pseudo']
-PICTURE_SIZE = (200, 200)
 
 app = Flask(__name__)
 app.config['SERVER_NAME'] = 'localhost:5000'
@@ -41,6 +57,24 @@ app.config["SQLALCHEMY_DATABASE_URI"] = url_object
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = f'{app.root_path}/translations'
 app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 app.url_map.default_subdomain = ''
+
+DEFAULT_PROFIL_PIC = 'icone.png'
+LANGAGES = ['de', 'fr', 'en']
+if app.debug:
+    LANGAGES += ['ids', 'pseudo']
+PICTURE_SIZE = (200, 200)
+
+if not app.debug:
+    ic('init sentry')
+    init(
+        dsn=os.environ.get('SANTRY_DSN'),
+        send_default_pii=True,
+        traces_sample_rate=1.0,
+        profiles_sample_rate=1.0,
+        integrations=[FlaskIntegration(
+            transaction_style='endpoint'
+        )],
+    )
 
 db = SQLAlchemy(app)
 
@@ -98,10 +132,11 @@ def admin_required(func):
 
     @wraps(func)
     def decorated_view(*args, **kwargs):
+        #ic(current_user, current_user.admin, args, kwargs)
         if not current_user.admin:
             flash(_('flash.error.mustadmin'), 'danger')
             return redirect(url_for('home'))
-        if not current_user.creations.filter_by(name=kwargs.get('event_name')).first():
+        if kwargs.get('event_name') and not current_user.creations.filter_by(name=kwargs.get('event_name')).first():
             flash(_('flash.error.wrongadminevent'), 'danger')
             return redirect(url_for('home'))
         return func(*args, **kwargs)
@@ -117,21 +152,36 @@ def lang_url_for(*args, **kwargs):
 
 @app.context_processor
 def jinja_context():
-    return dict(_=gettext, url_for=lang_url_for, now=datetime.now())
+    return dict(_=gettext, url_for=lang_url_for, now=datetime.now(), date=datetime.now().replace(hour=0, minute=0, second=0, microsecond=0))
 
-def set_route(blueprint, path, **options):
+def set_route(blueprint:Flask|Blueprint, path, **options):
     def decorator(func):
-        @blueprint.route(path, **options)
         @blueprint.route(f'/<lang>{path}', **options)
+        @blueprint.route(path, **options)
         @wraps(func)
         def wrap(*args, **kwargs):
             lang = kwargs.pop('lang', 'fr')
-            if lang in LANGAGES:
-                session['lang'] = lang
+            #ic('hey', lang, path, func.__name__)
+            if lang not in LANGAGES:
+                return abort(404)
+            session['lang'] = lang
             return func(*args, **kwargs)
         return wrap
     
     return decorator
+
+# ? error Handling
+
+@app.errorhandler(exceptions.Forbidden)
+@app.errorhandler(exceptions.InternalServerError)
+@app.errorhandler(exceptions.MethodNotAllowed)
+@app.errorhandler(exceptions.NotFound)
+@app.errorhandler(exceptions.TooManyRequests)
+@app.errorhandler(exceptions.ImATeapot)
+def http_error(error:exceptions.HTTPException):
+    return render_template('error/simple_error.html', error=error), error.code
+
+# ? end error Handling
 
 # defini les pages du site web
 from chrono_des_vignes.users import users

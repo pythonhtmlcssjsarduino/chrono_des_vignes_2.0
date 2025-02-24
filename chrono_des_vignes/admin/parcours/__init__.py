@@ -1,6 +1,26 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 from flask import Blueprint, flash, redirect, render_template, request, abort
 from chrono_des_vignes import admin_required, db, set_route, lang_url_for as url_for
-from chrono_des_vignes.admin.parcours.forms import  Parcours_name_form, Etape_modif_form, Stand_modif_form, New_parcours_form
+from .form import  Parcours_name_form, Etape_modif_form, Stand_modif_form, New_parcours_form
 from flask_login import login_required, current_user
 from chrono_des_vignes.models import Event, Stand, Trace, Parcours
 from folium import Map, Marker, Icon, PolyLine, Popup, LayerControl, TileLayer
@@ -92,8 +112,8 @@ def parcours_page(event_name):
             p = Parcours(name=form.name.data, event=event)
             db.session.add(p)
             db.session.commit()
-            p=Parcours.query.filter_by(name=form.name.data).first()
-            s= Stand(name=f'debut-{form.name.data}'[:36], parcours_id=p.id, lat=form.start_lat.data, lng=form.start_lng.data, chrono=1, start_stand=p.id)
+            db.session.refresh(p)
+            s= Stand(name=f'debut-{form.name.data}'[:36], parcours_id=p.id, lat=form.start_lat.data, lng=form.start_lng.data, chrono=1, start_stand=p.id, end_stand=p.id)
             db.session.add(s)
             db.session.commit()
 
@@ -438,14 +458,15 @@ def new_stand(event_name, parcours_name, last_marker):
     turn_nb = 1
     stand : Stand = parcours.start_stand
     for i in range(last_marker):
-        stand = stand.start_trace.filter_by(turn_nb=turn_nb).first().end
+        stand:Stand = stand.start_trace.filter_by(turn_nb=turn_nb).first().end
         if stand == parcours.start_stand:
             turn_nb += 1
     ic(stand, turn_nb)
 
     # ! creer le modif_form
     modif_form= Stand_modif_form()
-    if last_marker == -1 or not stand.start_trace.filter_by(turn_nb=turn_nb).first():
+    ic(stand.start_trace.filter_by(turn_nb=turn_nb).count())
+    if last_marker == -1 or not stand.start_trace.filter_by(turn_nb=turn_nb).count():
         modif_form.chrono.data=1
         modif_form.chrono.render_kw  = {'disabled':''}
 
@@ -474,7 +495,7 @@ def new_stand(event_name, parcours_name, last_marker):
         db.session.add(new_trace)
 
         ic(stand.start_trace.filter_by(turn_nb=turn_nb+1).all(), stand.start_trace.filter_by(turn_nb=turn_nb+1).all())
-        if stand.start_trace.filter_by(turn_nb=turn_nb+1).count()==0: # c'est le dernier
+        if stand.end_stand: # c'est le dernier
             ic('dernier')
             parcours.end_stand.end_stand = None
             new_stand.end_stand = parcours.id
@@ -484,7 +505,7 @@ def new_stand(event_name, parcours_name, last_marker):
         db.session.commit()
 
         return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
-
+    ic(modif_form.errors)
     return render_modify_parcours(event, parcours, 'new', modif_form, last_marker=last_marker)
 
 @set_route(parcours_bp, '/event/<event_name>/parcours/<parcours_name>/new/<int:last_marker>/<int:stand_id>', methods=['POST', 'GET'])

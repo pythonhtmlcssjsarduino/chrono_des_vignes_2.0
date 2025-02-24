@@ -1,19 +1,52 @@
+<!--
+ * Chrono Des Vignes
+ * a timing system for sports events
+ * 
+ * Copyright © 2024-2025 Romain Maurer
+ * This file is part of Chrono Des Vignes
+ * 
+ * Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with Foobar.
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * You may contact me at chrono-des-vignes@ikmail.com
+-->
+
 {% set label_span='3' %}
 {% set input_span= (12-(label_span|int))|string %}
+
+{% macro simple_input(field, input_id='', error=False) %}
+    {% if field.type ==  'PasswordField'%}
+        <div class="input-group form-control p-0{% if error %} is-invalid{% endif %}">
+            {{ field(class="form-control form-control-lg password", id=input_id) }}
+            <span class="bg-white input-group-text togglePassword">
+                <i class="fa-solid fa-eye eye"></i>
+            </span>
+        </div>
+    {% else %}
+        {{ field(class="form-control form-control-lg"+(" is-invalid" if error else ""), id=input_id) }}
+    {% endif %}
+{% endmacro %}
 
 {% macro form_field(field, input_id='', div_class='') %}
     <div class="mb-3 row {{ div_class }}">
         {{ field.label(class="col-sm-"+label_span+" col-form-label text-start") }}
         <div class="col-sm-{{input_span}}">
             {% if field.errors %}
-                {{ field(class="form-control form-control-lg is-invalid", id=input_id) }}
+                {{ field(class="form-control form-control-lg"+(" is-invalid" if error else ""), id=input_id) }}
                 <div class="invalid-feedback">
                     {% for error in field.errors %}
                         <span>{{ error }}</span>
                     {% endfor %}
                 </div>
             {% else %}
-                {{ field(class="form-control form-control-lg", id=input_id) }}
+                {{ field(class="form-control form-control-lg"+(" is-invalid" if error else ""), id=input_id) }}
             {% endif %}
         </div>
     </div>
@@ -38,7 +71,6 @@
 {% endmacro %}
 
 {% macro color_field(field, colorpicker, input_id='', div_class='') %}
-
     <div class="mb-3 row {{ div_class }}">
         {{ field.label(class="col-sm-"+label_span+" col-form-label text-start") }}
         <div class="col-sm-{{input_span}}">
@@ -54,34 +86,10 @@
             {% endif %}
         </div>
     </div>
-
-    {# todo: https://getbootstrap.com/docs/5.0/forms/form-control/#color #}
-    <!--<div class="mb-3 row {{ div_class }}">
-
-        {{ colorpicker.loader() }}
-        {{ colorpicker.picker(ids=['#color'], color_format='hex') }}
-
-        {{ field.label(class="col-sm-"+label_span+" col-form-label") }}
-        <div class="col-sm-{{input_span}}">
-            {% if field.errors %}
-            <script>error = true</script>
-            {{ field(class="form-control form-control-lg is-invalid", id="color") }}
-            <div class="invalid-feedback">
-                {% for error in field.errors %}
-                <span>{{ error }}</span>
-                {% endfor %}
-            </div>
-            {% else %}
-            {{ field(class="form-control form-control-lg", id="color") }}
-            {% endif %}
-        </div>
-    </div>-->
 {% endmacro %}
 
 {% macro submit(form) %}
-    <div class="form-group">
         {{ form.submit_btn(class="btn btn-outline-info") }}
-    </div>
 {% endmacro %}
 
 <!-- #region -->{% macro map_field(label, lat_field_id, lng_field_id, lat, lng, width='400px', height='400px', start_zoom=12, div_class='', disabled=False) %}
@@ -142,7 +150,6 @@
 {% endmacro %}
 <!-- #endregion -->
 
-
 {% macro multiple_select_field(field, input_id='', div_class='') %}
     <div class="mb-3 row">
         {{ field.label(class="col-sm-"+label_span+" col-form-label text-start") }}
@@ -159,4 +166,130 @@
             {% endif %}
         </div>
     </div>
+{% endmacro %}
+
+{% macro simple_field(field, input_macro, div_class='', input_id=None) %}
+    <div class="mb-3 row {{ div_class }}">
+        {{ field.label(class="col-sm-"+label_span+" col-form-label text-start") }}
+        <div class="col-sm-{{input_span}}">
+            {% if field.errors %}
+                {{ input_macro(field, input_id, error=True) }}
+                <div class="invalid-feedback">
+                    {% for error in field.errors %}
+                        <span>{{ error }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                {{ input_macro(field, input_id, error=False) }}
+            {% endif %}
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro string_input(field, id=None, error=False)%}
+    {{ field(class="form-control form-control-lg"+(" is-invalid" if error else ""), id=id) }}
+{% endmacro%}
+
+{% macro multi_checkbox_input(field, id=None, error=False)%}
+    {{ field(class="form-control form-control-lg list-group"+(" is-invalid" if error else ""), id=id) }}
+{% endmacro%}
+
+{% macro checkbox_input(field, id=None, error=False)%}
+    {{ field(class="form-control form-control-lg form-check-input form-check-inline"+(" is-invalid" if error else ""), id=id) }}
+{% endmacro%}
+
+{% macro color_input(field, id=None, error=False)%}
+    {{ field(class="form-control form-control-lg form-check-inline form-control-color"+(" is-invalid" if error else ""), id=id) }}
+{% endmacro%}
+
+{% macro password_input(field, id=None, error=False)%}
+    <div class="input-group form-control p-0{% if error %} is-invalid{% endif %}">
+        {{ field(class="form-control form-control-lg password", id=id) }}
+        <span class="bg-white input-group-text togglePassword">
+            <i class="fa-solid fa-eye eye"></i>
+        </span>
+    </div>
+{% endmacro%}
+
+{% macro render_form(form, submit=True, action='', id=None, map_label='map') %}
+    <form {%if action%}action="{{action}}" {%endif%} method="post" {%if id%}id="{{id}}"{%endif%}>
+        {% set vars=namespace(password=False) %}
+
+        {% for field in form %}
+            {% if field.type=='CSRFTokenField' %}
+                {{ field() }}
+            {% elif field.type=='StringField' %}
+                {{ simple_field(field, string_input) }}
+            {% elif field.type=='EmailField' %}
+                {{ simple_field(field, string_input) }}
+            {% elif field.type=='DateField' %}
+                {{ simple_field(field, string_input) }}
+            {% elif field.type=='FloatField'%}
+                {% if 'lat' in field.name or 'lng' in field.name %}
+                    {% set nb = namespace(lat=0, lng=0, lat_field=None, lng_field=None)%}
+                    {% for lat_field in form %}
+                        {% if 'lat' in lat_field.name %}
+                            {% set nb.lat =1+nb.lat %}
+                            {% set nb.lat_field = lat_field%}
+                        {% elif 'lng' in lat_field.name %}
+                            {% set nb.lng =1+nb.lng %}
+                            {% set nb.lng_field = lat_field%}
+                        {% endif %}
+                    {% endfor%}
+                    {% if nb.lat==1 and nb.lng==1 %}
+                        {% if 'lat' in field.name %}
+                            {{ simple_field(field, string_input, 'd-none', 'lat_input') }}
+                            {{ map_field(map_label, 'lat_input', 'lng_input', nb.lat_field.data, nb.lng_field.data, disabled=(nb.lat_field.render_kw.disabled == 'disabled' or nb.lng_field.render_kw.disabled == 'disabled')) }}
+                        {% elif 'lng' in field.name %}
+                            {{ simple_field(field, string_input, 'd-none', 'lng_input') }}
+                        {% endif %}
+                    {% else %}
+                        {{ simple_field(field, string_input) }}
+                    {% endif %}
+                {% else %}
+                    {{ simple_field(field, string_input) }}
+                {% endif %}
+            {% elif field.type=='DateTimeLocalField'%}
+                {{ simple_field(field, string_input) }}
+            {% elif field.type=='MultiCheckboxFieldWithDescription'%}
+                {{ simple_field(field, multi_checkbox_input) }}
+            {% elif field.type=='PasswordField'%}
+                {% set vars.password=True %}
+                {{ simple_field(field, password_input) }}
+            {% elif field.type=='TextAreaField'%}
+                {{ simple_field(field, multi_checkbox_input) }}
+            {% elif field.type=='BooleanField'%}
+                {{ simple_field(field, checkbox_input) }}
+            {% elif field.type=='ColorField'%}
+                {{ simple_field(field, color_input) }}
+            {% elif field.type=='SubmitField'%}
+                {% if submit %}
+                    {{ field(class="btn btn-outline-info") }}
+                {% endif %}
+            {% else %}
+                {{ simple_field(field, string_input) }}
+                not implemented '{{field.type}}'
+            {% endif %}
+        {% endfor%}
+
+        {% if vars.password %}
+            <script>
+            $(".togglePassword").click(function(e) {
+                e.preventDefault();
+                var type = $(this).parent().find(".password").attr("type");
+
+                if (type == "password") {
+                    $(this).find(".eye").removeClass('fa-eye')
+                    $(this).find(".eye").addClass('fa-eye-slash')
+                    $(this).parent().find(".password").get(0).type = "text"
+                } else if (type == "text") {
+                    $(this).find(".eye").removeClass('fa-eye-slash')
+                    $(this).find(".eye").addClass('fa-eye')
+                    $(this).parent().find(".password").get(0).type = "password"
+                }
+            });
+            </script>
+        {% endif %}
+    </form>
+
 {% endmacro %}

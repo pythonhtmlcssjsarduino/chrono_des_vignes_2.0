@@ -1,3 +1,23 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 from datetime import datetime
 from flask import Blueprint, redirect, render_template, flash, request, jsonify, session
 from chrono_des_vignes import admin_required, db, set_route, lang_url_for as url_for, socketio
@@ -29,8 +49,8 @@ def parcours_disconnect():
     del session['room']
 
 @socketio.on('get_parcours_passage', namespace='/edition/parcours')
-def get_parcours_passages(parcours):
-    parcours = Parcours.query.get(parcours)
+def get_parcours_passages(parcours_id):
+    parcours = Parcours.query.get(parcours_id)
     edition = Edition.query.get(session['room'].split('-')[3])
     inscriptions:list[Inscription] = Inscription.query.filter_by(edition=edition, parcours=parcours).all()
     data = []
@@ -54,18 +74,32 @@ def launch_parcours(data):
     edition = Edition.query.get(session['room'].split('-')[3])
     if parcours is not None and data.get('start_time'):
         start_time =datetime.fromtimestamp(data['start_time']/1000)
+        ic('start', start_time)
         inscription:Inscription
         for inscription in edition.inscriptions.filter(Inscription.parcours==parcours).all():
-            if inscription.has_started() and inscription.present:
+            ic(inscription, inscription.has_started(), inscription.present)
+            if not inscription.has_started() and inscription.present:
+                ic('to start')
                 passage = Passage(time_stamp=start_time, inscription_id = inscription.id)
                 db.session.add(passage)
                 db.session.commit()
                 db.session.refresh(passage)
-                emit('new_passage', {'time':str(start_time), 'user':inscription.inscrit.username, 'dossard':inscription.dossard,'key':'', 'stand':passage.get_stand().name}, namespace='/dashboard', to=f'{passage.key.event.id}-{passage.key.edition.id}')
+                emit('new_passage', {'time':str(start_time),
+                                    'user':inscription.inscrit.username,
+                                    'dossard':inscription.dossard,
+                                    'key':'',
+                                    'stand':passage.get_stand().name},
+                                    namespace='/dashboard', to=f'{edition.event.id}-{edition.id}')
                 
                 first_passage:Passage = inscription.passages.order_by(Passage.time_stamp.asc()).first()
                 pass_data = get_passage_data(passage, json=True)
-                pass_data.update({'started':True, 'parcours_id':inscription.parcours.id, 'start_time':first_passage.time_stamp.timestamp() , 'id':inscription.id, 'finish':inscription.has_finish(), 'all_right':inscription.has_all_right(), 'end':inscription.end})
+                pass_data.update({'started':True,
+                                    'parcours_id':inscription.parcours.id,
+                                    'start_time':first_passage.time_stamp.timestamp() ,
+                                    'id':inscription.id,
+                                    'finish':inscription.has_finish(),
+                                    'all_right':inscription.has_all_right(),
+                                    'end':inscription.end})
                 emit('new_passage', pass_data, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
 @socketio.on('stop_parcours', namespace='/edition/parcours')
@@ -94,29 +128,31 @@ def stop_parcours(data):
 
 @socketio.on('disqualify', namespace='/edition/parcours')
 def disqualify(data):
-    inscription = Inscription.query.get(data.get('inscription_id'))
-    if inscription:
-        inscription.end = 'disqual'
-        db.session.commit()
-        emit('stop', {'type':'disqual', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
+    if data.get('inscription_id'):
+        inscription = Inscription.query.get(data.get('inscription_id'))
+        if inscription.end is None:
+            inscription.end = 'disqual'
+            db.session.commit()
+            emit('stop', {'type':'disqual', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
 @socketio.on('abandon', namespace='/edition/parcours')
 def abandon(data):
     if data.get('inscription_id'):
         inscription = Inscription.query.get(data['inscription_id'])
-        inscription.end = 'abandon'
-        db.session.commit()
-        emit('stop', {'type':'abandon', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
+        if inscription.end is None:
+            inscription.end = 'abandon'
+            db.session.commit()
+            emit('stop', {'type':'abandon', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
 @socketio.on('finish', namespace='/edition/parcours')
 def finish(data):
+    ic('finish', data)
     if data.get('inscription_id'):
         inscription:Inscription = Inscription.query.get(data['inscription_id'])
-        if not inscription.has_finish():
-            return False
-        inscription.end = 'finish'
-        db.session.commit()
-        emit('stop', {'type':'finish', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
+        if inscription.end is None:
+            inscription.end = 'finish'
+            db.session.commit()
+            emit('stop', {'type':'finish', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
 @set_route(parcours, '/event/<event_name>/editions/<edition_name>/parcours')
 @login_required

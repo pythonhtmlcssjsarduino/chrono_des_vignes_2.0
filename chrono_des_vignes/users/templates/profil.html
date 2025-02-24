@@ -1,3 +1,23 @@
+<!--
+ * Chrono Des Vignes
+ * a timing system for sports events
+ * 
+ * Copyright © 2024-2025 Romain Maurer
+ * This file is part of Chrono Des Vignes
+ * 
+ * Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with Foobar.
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * You may contact me at chrono-des-vignes@ikmail.com
+-->
+
 {% extends 'layout.html' %} 
 {% block content %}
 <div class="container py-5">
@@ -135,8 +155,9 @@
                 </div>
             </div> #}
             <div class="card mb-4 mb-lg-0">
-                <div class="d-flex justify-content-center my-2">
+                <div class="d-flex justify-content-around my-2">
                     <a href="{{ url_for('users.modify_profil' ) }}" type="button" class="btn btn-primary">{{ _('users.profil.editprofil') }}</a>
+                    <a href="{{ url_for('users.modify_password' ) }}" type="button" class="btn btn-primary">{{ _('users.profil.editpassword') }}</a>
                 </div>
             </div>
         </div>

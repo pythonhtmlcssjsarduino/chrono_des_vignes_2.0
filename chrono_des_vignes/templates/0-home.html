@@ -1,4 +1,25 @@
+<!--
+ * Chrono Des Vignes
+ * a timing system for sports events
+ * 
+ * Copyright © 2024-2025 Romain Maurer
+ * This file is part of Chrono Des Vignes
+ * 
+ * Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with Foobar.
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * You may contact me at chrono-des-vignes@ikmail.com
+-->
+
 {% extends 'layout.html' %}
+{% from 'macro.html' import render_form %}
 {% block content %}
     {% if user_data.admin %}
         <div class="pb-5">
@@ -18,6 +39,22 @@
                     {% endfor %}
                     </tbody>
                 </table>
+                <div class="d-inline-flex card m-1">
+                    <a type="button" onclick="new_event()" class="text-decoration-none link-dark card-body d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-circle-plus"></i>
+                    </a>
+                    <div class="d-none">
+                        {{ render_form(form, id='new_event', submit=False, action=url_for("admin.new_event")) }}
+                    </div>
+                    <script>
+                        async function new_event() {
+                            let name = window.prompt("{{_('home.entereventname')}}");
+                            let form = document.getElementById('new_event');
+                            form.name.value = name;
+                            form.submit();
+                        }
+                    </script>
+                </div>
             </div>
         </div>
     {% endif %}
@@ -59,7 +96,7 @@
                         </div>
                         <div class="card-body">
                             {% for edition in event.editions %}
-                                {% if edition.edition_date > time %}
+                                {% if edition.edition_date > date %}
                                     <a href="{{ url_for('view.view_edition_page', event=event.name, edition=edition.name) }}" class="text-decoration-none link-dark">
                                         <div class="card-group card d-flex align-items-center justify-content-center">
                                             {{edition.name}}

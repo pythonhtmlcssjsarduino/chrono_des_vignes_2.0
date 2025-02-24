@@ -1,15 +1,36 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 from flask import Blueprint, redirect, flash, render_template, request
 from flask_login import login_required, current_user, login_user, logout_user
 from chrono_des_vignes.models import User, Event, Parcours, Inscription, Edition
 from chrono_des_vignes import app, DEFAULT_PROFIL_PIC, PICTURE_SIZE
-from .forms import Login_form, Signup_form, Inscription_connected_form, Inscription_form, ModifyForm
-from chrono_des_vignes import db, set_route, lang_url_for as url_for, bcrypt, DEV_ENABLE
+from .form import Login_form, Signup_form, Inscription_connected_form, Inscription_form, ModifyForm, ModifyPwdForm
+from chrono_des_vignes import db, set_route, lang_url_for as url_for, bcrypt
 from sqlalchemy import and_, not_
 from datetime import datetime
 import string, secrets, os
 from flask_babel import _
 from PIL import Image
 from werkzeug.datastructures import FileStorage
+from wtforms.validators import ValidationError
 alphabet = string.ascii_letters + string.digits
 
 users = Blueprint('users', __name__, template_folder='templates')
@@ -21,15 +42,13 @@ def login():
     form = Login_form()
     if form.validate_on_submit():
         user= User.query.filter_by(username=form.username.data).first()
-        # ! remove the dev part when done
-        if user and ((form.password.data == user.password and DEV_ENABLE) or bcrypt.check_password_hash(user.password, form.password.data)):
+
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
             flash(_('flash.connected:name').format(name = user.name), 'success')
             if request.args.get('next'):
                 return redirect(request.args.get('next'))
             else:
-                #if user.admin:
-                #    return redirect(url_for('admin.home_event', event_name='course des vignes'))
                 return redirect(url_for('home'))
         else:
             flash(_('flash.error.pwdnotvalid'), 'warning')
@@ -186,3 +205,23 @@ def modify_profil():
             form.username.errors = list(form.username.errors)+['ce nom d\'utilisateur est déjà utilisé.']
 
     return render_template('modify_profil.html', user_data=user, form=form)
+
+
+@set_route(users, '/profil/updatepwd', methods=['get', 'post'])
+@login_required
+def modify_password():
+    user:User = current_user
+    form:ModifyPwdForm = ModifyPwdForm()
+
+    def right_pwd(form, field):
+        if bcrypt.check_password_hash(user.password, field.data):
+            return
+        raise ValidationError('wrong password')
+
+    if form.validate_on_submit(extra_validators={'old_pwd':[right_pwd]}):
+        hash_pwd= bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hash_pwd
+        db.session.commit()
+        return redirect(url_for('users.profil'))
+
+    return render_template('modify_password.html', user_data=user, form=form)

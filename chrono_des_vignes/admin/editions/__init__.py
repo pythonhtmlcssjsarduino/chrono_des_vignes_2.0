@@ -1,3 +1,23 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 from flask import Blueprint, flash, render_template, redirect, request
 from chrono_des_vignes import admin_required, db, set_route, lang_url_for as url_for
 from chrono_des_vignes.admin.editions.form import Edition_form
@@ -28,11 +48,13 @@ def editions_page(event_name):
     if form.validate_on_submit():
         if not event.editions.filter_by(name=form.name.data).first():
             #ok nom pas utilisé
+            parcours = [eval(p)[0] for p in form.parcours.data]
+            parcours = event.parcours.filter(Parcours.name.in_(parcours)).all()
             edition = Edition(name = form.name.data,
                               event_id=event.id,
-                              parcours=event.parcours.filter(Parcours.name.in_(form.parcours.data)).all(),
+                              parcours=parcours,
                               edition_date=form.edition_date.data,
-                              description = form.description,
+                              description = form.description.data,
                               first_inscription=form.first_inscription.data,
                               last_inscription=form.last_inscription.data,
                               rdv_lat=form.rdv_lat.data,

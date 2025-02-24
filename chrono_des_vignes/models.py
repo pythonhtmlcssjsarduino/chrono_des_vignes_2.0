@@ -1,3 +1,23 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 from __future__ import annotations
 from html import escape
 from chrono_des_vignes import db, DEFAULT_PROFIL_PIC
@@ -9,11 +29,17 @@ from chrono_des_vignes.lib import calc_points_dist
 from typing import Iterator, Iterable, Literal
 from collections import namedtuple
 from markdown import markdown
+from markdown.extensions.tables import TableExtension
 from sqlalchemy import func, not_
 
-md_extentions = ['admonition', 'tables']
+md_extentions = ['admonition', 'markdown.extensions.tables']
 def get_html_from_markdown(markdown_text):
-    return markdown(escape(markdown_text), extensions=md_extentions)
+    return markdown(
+        escape(markdown_text),
+        extensions=md_extentions,
+        extension_configs={},
+        output_format='html'
+    )
 
 def get_column_max_length(table, column_name):
     for column in table.__table__.columns:
@@ -44,9 +70,9 @@ class User(UserMixin, db.Model):
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.now)
     avatar = db.Column(db.String(80), nullable=False, default=DEFAULT_PROFIL_PIC)
     name= db.Column(db.String(40), nullable=False)
-    lastname = db.Column(db.String(20), nullable=False)
+    lastname = db.Column(db.String(40), nullable=False)
     password = db.Column(db.String(80), nullable=False)
-    username = db.Column(db.String(20), nullable=False, unique=True)
+    username = db.Column(db.String(40), nullable=False, unique=True)
     email = db.Column(db.String(80), nullable=True)
     phone = db.Column(db.String(25), nullable=True)
     datenaiss = db.Column(db.DateTime, nullable=False)

@@ -1,4 +1,25 @@
-{% extends 'layout.html' %} {% from 'macro.html' import map_field, form_field %} {% block content %}
+<!--
+ * Chrono Des Vignes
+ * a timing system for sports events
+ * 
+ * Copyright © 2024-2025 Romain Maurer
+ * This file is part of Chrono Des Vignes
+ * 
+ * Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with Foobar.
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * You may contact me at chrono-des-vignes@ikmail.com
+-->
+
+{% extends 'layout.html' %} {% from 'macro.html' import render_form %}
+{% block content %}
 <h3>{{ _('admin.editions.editions') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
   <table class="table table-striped table-hover clickable-table">
@@ -35,42 +56,33 @@
       window.location.href = $(this).data('href');
     });
   </script>
+</div>
 
-  <!-- Modal -->
-  <div class="modal fade show" id="new_edition_modal" tabindex="-1" aria-labelledby="new_edition_label"
-    aria-hidden='true'>
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="new_edition_label">{{ _('admin.editions.newedition') }}</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form action="" method="post" id="new_edition_form">
-            {{ form.hidden_tag() }}
-            {{ form_field(form.name) }}
-            {{ form_field(form.edition_date) }}
-            {{ form_field(form.description) }}
-            {{ form_field(form.parcours) }}
-            {{ form_field(form.first_inscription) }}
-            {{ form_field(form.last_inscription) }}
-            {{ form_field(form.rdv_lat, input_id='rdv_lat', div_class='d-none') }}
-            {{ form_field(form.rdv_lng, input_id='rdv_lng', div_class='d-none') }}
-            {{ map_field('rendez vous pour cette edition', 'rdv_lat', 'rdv_lng', form.rdv_lng.data, form.rdv_lng.data)}}
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-            Close
-          </button>
-          {{ form.submit_btn(class="btn btn-primary", type='submit', form='new_edition_form') }}
-        </div>
+
+<!-- Modal -->
+<div class="modal fade show" id="new_edition_modal" tabindex="-1" aria-labelledby="new_edition_label"
+  aria-hidden='true'>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="new_edition_label">{{ _('admin.editions.newedition') }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{render_form(form, id='new_edition_form', submit=False, map_label='rendez vous pour cette edition')}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        {{ form.submit_btn(class="btn btn-primary", type='submit', form='new_edition_form') }}
       </div>
     </div>
-    <script>
-      modal = new bootstrap.Modal(document.getElementById('new_edition_modal'))
-      {% if form.errors | length %} modal.show(){% endif %}
-    </script>
   </div>
+  <script>
+    modal = new bootstrap.Modal(document.getElementById('new_edition_modal'))
+    {% if form.errors | length %} modal.show(){% endif %}
+  </script>
 </div>
+
 {% endblock content %}

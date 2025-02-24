@@ -7,6 +7,12 @@
 ## modifier un évenement
 chaque événement dispose d'une description personalisable en markdown pour voire les styles possible voire la section [markdown](#description-en-markdown)
 
+l'edition d'un évenement est separé en 3 section:
+
+- [les éditions](edition.md)
+- [les parcours](parcours.md)
+- [les coureurs](coureurs.md)
+
 ## description en markdown
 ### heading
 la description suporte les heading de 1 à 6

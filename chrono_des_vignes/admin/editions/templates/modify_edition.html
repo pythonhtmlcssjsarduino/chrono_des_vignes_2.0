@@ -1,21 +1,27 @@
+<!--
+ * Chrono Des Vignes
+ * a timing system for sports events
+ * 
+ * Copyright © 2024-2025 Romain Maurer
+ * This file is part of Chrono Des Vignes
+ * 
+ * Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with Foobar.
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * You may contact me at chrono-des-vignes@ikmail.com
+-->
+
 {% extends 'layout.html' %}
-{% from 'macro.html' import form_field, submit, map_field, label_span, input_span, multiple_select_field %}
+{% from 'macro.html' import render_form %}
 {% block content %}
-<form action="" method="post">
-    {{ form.hidden_tag() }}
-    {{ form_field(form.name) }}
-    {{ form_field(form.edition_date) }}
-    {{ form_field(form.description) }}
-    {{ multiple_select_field(form.parcours) }}
-    {{ form_field(form.first_inscription) }}
-    {{ form_field(form.last_inscription) }}
-    {{ form_field(form.rdv_lat, input_id='lat_id', div_class='d-none') }}
-    {{ form_field(form.rdv_lng, input_id='lng_id', div_class='d-none') }}
-    {{ map_field(_('form.editionrdv'), 'lat_id', 'lng_id', form.rdv_lat.data, form.rdv_lng.data, disabled=(form.rdv_lat.render_kw.disabled == 'disabled' or form.rdv_lng.render_kw.disabled == 'disabled')) }}
-    {{ submit(form) }}
-</form>
-{{(form.rdv_lat.render_kw.disabled == 'disabled' or form.rdv_lng.render_kw.disabled == 'disabled')}}---
-{{form.rdv_lat.render_kw.disabled}}---{{ form.rdv_lng.render_kw.disabled}}
+{{ render_form(form, map_label=_('form.editionrdv'))}}
 
 <!-- Modal -->
 

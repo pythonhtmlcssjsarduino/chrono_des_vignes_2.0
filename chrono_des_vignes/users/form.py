@@ -1,3 +1,23 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 from flask_wtf import FlaskForm
 from chrono_des_vignes.models import User
 from wtforms import StringField, PasswordField, SubmitField, EmailField, DateField
@@ -50,3 +70,9 @@ class ModifyForm(FlaskForm):
     datenaiss = DateField(_('form.birth'), validators=[DataRequired()])
     profil_pic = FileField(_('form.profilpic'), validators=[FileAllowed(['jpg', 'png'])])
     submit_btn = SubmitField(_('form.modifyaccount'))
+
+class ModifyPwdForm(FlaskForm):
+    old_pwd = PasswordField(_('form.oldpwd'), validators=[DataRequired()])
+    password = PasswordField(_('form.newpwd'), validators=[DataRequired(), DbLength(table=User, column='password')])
+    repeatpassword = PasswordField(_('form.repetenewpwd'), validators=[EqualTo('password')])
+    submit_btn = SubmitField(_('form.modifypassword'))

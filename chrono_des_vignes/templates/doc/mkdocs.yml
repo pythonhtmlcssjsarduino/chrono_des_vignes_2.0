@@ -1,12 +1,16 @@
 site_name: Chrono Des Vignes Documentation
 site_url: https://sitename.example
 
+
 repo_url: https://github.com/pythonhtmlcssjsarduino/chrono_des_vignes_2.0
 nav:
-  - Home: index.fr.md
-  - About: about.fr.md
-  - Users: users.fr.md
-  - Organisateurs: organisateurs/index.fr.md
+  - Home: index.md
+  - Users: users.md
+  - Organisateurs:
+    - organisateurs/index.md
+    - Parcours: organisateurs/parcours.md
+    - Edition: organisateurs/edition.md
+    - Coureurs: organisateurs/coureurs.md
 
 plugins:
   - search:

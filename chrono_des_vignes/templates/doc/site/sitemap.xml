@@ -1,51 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
-        <loc>https://sitename.example/about/</loc>
-        <lastmod>2025-02-01</lastmod>
-        <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/about/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/about/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/about/"/>
-    </url>
-    <url>
         <loc>https://sitename.example/</loc>
-        <lastmod>2025-02-01</lastmod>
+        <lastmod>2025-02-24</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/"/>
         <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/"/>
     </url>
     <url>
-        <loc>https://sitename.example/en/about/</loc>
-        <lastmod>2025-02-01</lastmod>
+        <loc>https://sitename.example/users/</loc>
+        <lastmod>2025-02-24</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/about/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/about/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/about/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/users/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/users/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/users/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/organisateurs/coureurs/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/coureurs/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/organisateurs/edition/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/edition/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/organisateurs/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/organisateurs/parcours/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/parcours/"/>
     </url>
     <url>
         <loc>https://sitename.example/en/</loc>
-        <lastmod>2025-02-01</lastmod>
+        <lastmod>2025-02-24</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/"/>
         <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/"/>
     </url>
     <url>
-        <loc>https://sitename.example/de/about/</loc>
-        <lastmod>2025-02-01</lastmod>
+        <loc>https://sitename.example/en/users/</loc>
+        <lastmod>2025-02-24</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/about/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/about/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/about/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/users/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/users/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/users/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/en/organisateurs/coureurs/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/coureurs/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/en/organisateurs/edition/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/edition/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/en/organisateurs/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/en/organisateurs/parcours/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/parcours/"/>
     </url>
     <url>
         <loc>https://sitename.example/de/</loc>
-        <lastmod>2025-02-01</lastmod>
+        <lastmod>2025-02-24</lastmod>
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/"/>
         <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/"/>
         <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/de/users/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/users/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/users/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/users/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/de/organisateurs/coureurs/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/coureurs/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/de/organisateurs/edition/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/edition/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/de/organisateurs/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/"/>
+    </url>
+    <url>
+        <loc>https://sitename.example/de/organisateurs/parcours/</loc>
+        <lastmod>2025-02-24</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/parcours/"/>
     </url>
 </urlset>

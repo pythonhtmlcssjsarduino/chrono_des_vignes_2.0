@@ -1,3 +1,23 @@
+<!--
+ * Chrono Des Vignes
+ * a timing system for sports events
+ * 
+ * Copyright © 2024-2025 Romain Maurer
+ * This file is part of Chrono Des Vignes
+ * 
+ * Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with Foobar.
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * You may contact me at chrono-des-vignes@ikmail.com
+-->
+
 {% extends 'layout.html' %}
 {% block import %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
@@ -13,75 +33,10 @@
 <script>
     var socket = io('/edition/parcours', {auth: {'edition_id':{{ edition_data.id }}, 'event_id':{{ event_data.id }} } } );
     var intervals = {}
-
-    socket.on('stop', function(data){
-        let id = data.inscription_id
-        let chrono_div = document.getElementById(`chrono-passage-${id}`)
-        let diqualify_btn = document.getElementById(`disqualify-passage-${id}`)
-        let abandon_btn = document.getElementById(`abandon-passage-${id}`)
-        let finish_btn = document.getElementById(`finish-passage-${id}`)
-
-        clearInterval(intervals[id])
-        chrono_div.innerText = data.type
-        diqualify_btn.classList.add('disabled')
-        abandon_btn.classList.add('disabled')
-        finish_btn.classList.add('disabled')
     
-        let color = get_color({'end':data.type })
-        let div = document.getElementById('passage-' + id)
-        div.classList.remove('bg-success')
-        div.classList.remove('bg-primary')
-        div.classList.remove('bg-danger')
-        div.classList.remove('bg-warning')
-        div.classList.remove('bg-info')
-        div.classList.add(color)
-        console.log(data, color)
-    
-    })
-
-    socket.on('new_passage', function new_passage(data){
-        let node = document.getElementById("detail-table-passage-"+data.id)
-        console.log(data.parcours.length, data)
-        if ( data.parcours.length==1){
-            let div = document.getElementById('pills-content-' + data.parcours_id)
-            node = document.getElementById('passage-'+data.id)
-            console.log(node);
-            
-            create_passage(data, div, node)
-        }else{
-
-            let html = `
-                    <table>
-                        <tbody>`
-                            data.parcours.forEach(passage => {
-                                html+=
-                                `<tr>
-                                    <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
-                                    <td class="pe-3">${passage.stand.name}</td>
-                                    <td class="pe-3">`+
-                                        (passage.success==true?passage.delta:(passage.success==false?'<i class="fa-solid fa-xmark"></i>':''))+
-                                    `</td>
-                                    <td>
-                                        ${ passage.dist !=null?passage.dist+' km':'' }
-                                    </td>
-                                </tr>`
-                            });
-            html+=          `</tbody>
-                    </table>`
-            let color = get_color(data)
-            let div = document.getElementById('passage-' + data.id)
-            div.classList.remove('bg-success')
-            div.classList.remove('bg-primary')
-            div.classList.remove('bg-danger')
-            div.classList.remove('bg-warning')
-            div.classList.remove('bg-info')
-            div.classList.add(color)
-            node.innerHTML = html
-        }
-    })
-
     function get_color(data){
         let color
+        console.log(data)
         if (data.end!='finish'&&data.end!=null){
             // disqualifié ou abandon
             color = 'bg-danger'
@@ -115,6 +70,16 @@
         return time_string
     }
 
+    function toggleDetails(detailId, button) {
+        const detailDiv = document.getElementById(`detail-${detailId}`);
+        const icon = document.getElementById(`icon-${detailId}`);
+
+        detailDiv.classList.toggle('show'); // Toggle the 'show' class for smooth transition
+        icon.innerHTML = detailDiv.classList.contains('show') ? 
+            '<i class="fas fa-chevron-down"></i>' : 
+            '<i class="fas fa-chevron-right"></i>'; // Change icon based on state
+    }
+
     function create_passage(data, div, node=null) {
         let id = 'passage-' + data.id
         
@@ -138,7 +103,7 @@
                                 <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
                                 <td class="pe-3">${passage.stand.name}</td>
                                 <td class="pe-3">`+
-                                    (passage.success==true||passage.success==null?passage.delta:(passage.success==false?'<i class="fa-solid fa-xmark"></i>':''))+
+                                    (passage.success==true?passage.delta:(passage.success==false?'<i class="fa-solid fa-xmark"></i>':''))+
                                 `</td>
                                 <td>
                                     ${ passage.dist !=null?passage.dist+' km':'' }
@@ -227,15 +192,71 @@
         }
     }
 
-    function toggleDetails(detailId, button) {
-        const detailDiv = document.getElementById(`detail-${detailId}`);
-        const icon = document.getElementById(`icon-${detailId}`);
+    socket.on('stop', function(data){
+        let id = data.inscription_id
+        let chrono_div = document.getElementById(`chrono-passage-${id}`)
+        let diqualify_btn = document.getElementById(`disqualify-passage-${id}`)
+        let abandon_btn = document.getElementById(`abandon-passage-${id}`)
+        let finish_btn = document.getElementById(`finish-passage-${id}`)
 
-        detailDiv.classList.toggle('show'); // Toggle the 'show' class for smooth transition
-        icon.innerHTML = detailDiv.classList.contains('show') ? 
-            '<i class="fas fa-chevron-down"></i>' : 
-            '<i class="fas fa-chevron-right"></i>'; // Change icon based on state
-    }
+        clearInterval(intervals[id])
+        chrono_div.innerText = data.type
+        diqualify_btn.classList.add('disabled')
+        abandon_btn.classList.add('disabled')
+        finish_btn.classList.add('disabled')
+    
+        let color = get_color({'end':data.type })
+        let div = document.getElementById('passage-' + id)
+        div.classList.remove('bg-success')
+        div.classList.remove('bg-primary')
+        div.classList.remove('bg-danger')
+        div.classList.remove('bg-warning')
+        div.classList.remove('bg-info')
+        div.classList.add(color)
+        console.log(data, color)
+    
+    })
+
+    socket.on('new_passage', function new_passage(data){
+        let node = document.getElementById("detail-table-passage-"+data.id)
+        console.log(data.parcours.length, data)
+        if ( data.parcours.length==1){
+            let div = document.getElementById('pills-content-' + data.parcours_id)
+            node = document.getElementById('passage-'+data.id)
+            console.log(node);
+            
+            create_passage(data, div, node)
+        }else{
+
+            let html = `
+                    <table>
+                        <tbody>`
+                            data.parcours.forEach(passage => {
+                                html+=
+                                `<tr>
+                                    <th class="text-center pe-1"> <i class="`+(passage.current?'fa-solid fa-circle fa-l':'fa-regular fa-circle fa-xs')+`"></i></th>
+                                    <td class="pe-3">${passage.stand.name}</td>
+                                    <td class="pe-3">`+
+                                        (passage.success==true?passage.delta:(passage.success==false?'<i class="fa-solid fa-xmark"></i>':''))+
+                                    `</td>
+                                    <td>
+                                        ${ passage.dist !=null?passage.dist+' km':'' }
+                                    </td>
+                                </tr>`
+                            });
+            html+=          `</tbody>
+                    </table>`
+            let color = get_color(data)
+            let div = document.getElementById('passage-' + data.id)
+            div.classList.remove('bg-success')
+            div.classList.remove('bg-primary')
+            div.classList.remove('bg-danger')
+            div.classList.remove('bg-warning')
+            div.classList.remove('bg-info')
+            div.classList.add(color)
+            node.innerHTML = html
+        }
+    })
 
 </script>
 <div class="tab-content" id="pills-tabContent">
@@ -249,6 +270,7 @@
     <script>
         socket.emit('get_parcours_passage', {{parcours.id}}, function(data){
             let launched = Boolean(data.length)
+            console.log(data, launched)
             div = document.getElementById("pills-content-{{ parcours.id }}")
             data.forEach(function(passage){
                 create_passage(passage, div)
@@ -271,14 +293,14 @@
                                 let start_time = Date.now()
                                 button.innerText='go'
                                 socket.emit('launch_parcours', {'parcours_id':{{ parcours.id }}, 'start_time': start_time}, function(){
-
+                                    button.classList.add('d-none')
                                 })
                             }, 1000);
                         }, 1000);
                     }, 1000);
                 }, { once: true })
             } else {
-                header.innerHTML = '<button style="min-width: 150px;" id="end-parcours-{{ parcours.id }}" class="btn btn-info">{{ _('admin.editions.parcours.end') }}</button>'
+                header.innerHTML = '<button style="min-width: 150px;" id="end-parcours-{{ parcours.id }}" class="btn btn-info">{{ _("admin.editions.parcours.end") }}</button>'
                 
                 document.getElementById("end-parcours-{{ parcours.id }}").addEventListener('click', function(event){
                     let button = event.target
