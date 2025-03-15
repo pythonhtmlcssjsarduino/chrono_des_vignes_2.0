@@ -49,9 +49,10 @@
                     <script>
                         async function new_event() {
                             let name = window.prompt("{{_('home.entereventname')}}");
-                            let form = document.getElementById('new_event');
-                            form.name.value = name;
-                            form.submit();
+                            if (name != undefined){ 
+                                let form = document.getElementById('new_event');
+                                form.name.value = name;
+                                form.submit();}
                         }
                     </script>
                 </div>

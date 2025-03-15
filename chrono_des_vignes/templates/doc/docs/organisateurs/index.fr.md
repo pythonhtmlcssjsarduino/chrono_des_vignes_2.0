@@ -1,17 +1,27 @@
-# Organisateurs
-
 ## obtenir l'accès organisateur
+pour l'instant il n'est pas possible d'avoir l'accès organisateur automatiquement le seul moyens est de m'envoyer un mail à [chrono-des-vignes@ikmail.com](mailto://chrono-des-vignes@ikmail.com)
 
 ## créer un évenement
+- se connecter avec votre compte organisateur.
+- cliquer sur le plus a la fin de la list de vos événements.
+- entrer le nom du nouvel événement.
+- presser enter pour créer l'événement.
 
 ## modifier un évenement
 chaque événement dispose d'une description personalisable en markdown pour voire les styles possible voire la section [markdown](#description-en-markdown)
 
 l'edition d'un évenement est separé en 3 section:
 
-- [les éditions](edition.md)
 - [les parcours](parcours.md)
+- [les éditions](edition.md)
 - [les coureurs](coureurs.md)
+
+## supprimer un événement
+!!! warning "attention"
+    la suppression d'événement n'est possible que si vous n'avez pas encore créer ni de parcours ni d'édition.
+- entrer sur la page de l'événement.
+- en bas de la page cliquer sur "supprimer l'événement".
+- cliquer sur le bouton du même nom dans la pop-up.
 
 ## description en markdown
 ### heading

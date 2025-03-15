@@ -18,7 +18,7 @@
 # You may contact me at chrono-des-vignes@ikmail.com
 '''
 
-from flask import render_template, request, session, redirect, send_file, send_from_directory
+from flask import render_template, request, session, redirect, send_file, send_from_directory, url_for
 from chrono_des_vignes import app, LANGAGES, set_route
 from flask_login import current_user
 from chrono_des_vignes.models import Edition, Inscription, Event, User
@@ -44,33 +44,40 @@ def home():
     next_events = Event.query.filter(Event.editions.any(and_(Edition.edition_date>=date,Edition.last_inscription>=date))).all()
     return render_template("0-home.html", user_data=user, inscriptions=inscriptions, events = next_events, participations=participations, form=form)
 
-@app.route('/lang/<lang>/<path:next>')
-def change_lang(lang, next:str):
-    lang_index = next.find(app.config['SERVER_NAME']) + len(app.config['SERVER_NAME'])
-    first = next[lang_index+1:].split('/')[0]
-    if first in LANGAGES:
-        if lang == request.accept_languages.best_match(LANGAGES):
-            return redirect(f'{next[:lang_index]}{next[lang_index+len(lang)+1:]}')
+@app.route('/lang/<lang>')
+def change_lang(lang):
+    next = request.args.get('next')
+    ic(next)
+    ic(next.split('/')[1])
+    next = next.split('/')
+    if next[1] in LANGAGES:
+        if lang==request.accept_languages.best_match(LANGAGES):
+            next.pop(1)
         else:
-            return redirect(f'{next[:lang_index]}/{lang}{next[lang_index+len(lang)+1::]}')
+            next[1]=lang
     else:
-        if lang == request.accept_languages.best_match(LANGAGES):
-            return redirect(next)
-        else:
-            return redirect(f'{next[:lang_index]}/{lang}{next[lang_index:]}')
+        if lang!=request.accept_languages.best_match(LANGAGES):
+            next.insert(1, lang)
+    next = '/'.join(next)
+    ic(next)
+    return redirect(next)
 
-@app.route('/<path:path>', subdomain='doc')
-@app.route('/', subdomain='doc')
+@app.route('/doc/<path:path>')
+@app.route('/doc/')
 def doc(path=''):
-    return render_template('doc/site/index.html' if path == '' else f'doc/site/{path}/index.html')
+    return render_template('doc/site/index.html' if path == '' else f'doc/site/{path}index.html')
 
-@app.route('/assets/<path:path>', subdomain='doc')
+@app.route('/doc/assets/<path:path>')
 def assets_doc_files(path):
     return doc_file('assets', path)
 
-@app.route('/search/<path:path>', subdomain='doc')
+@app.route('/doc/search/<path:path>')
 def search_doc_files(path):
     return doc_file('search', path)
 
 def doc_file(dir, path:str):
     return send_from_directory(app.template_folder, f'doc/site/{dir}/{path}', download_name=path.split('/')[-1])
+
+@app.route('/error')
+def error():
+    return 1/0

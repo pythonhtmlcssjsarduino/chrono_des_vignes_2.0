@@ -29,11 +29,11 @@ from chrono_des_vignes.lib import calc_points_dist
 from typing import Iterator, Iterable, Literal
 from collections import namedtuple
 from markdown import markdown
-from markdown.extensions.tables import TableExtension
 from sqlalchemy import func, not_
+from flask_sqlalchemy.model import Model
 
-md_extentions = ['admonition', 'markdown.extensions.tables']
-def get_html_from_markdown(markdown_text):
+md_extentions:list[str] = ['admonition', 'markdown.extensions.tables']
+def get_html_from_markdown(markdown_text: str) -> str:
     return markdown(
         escape(markdown_text),
         extensions=md_extentions,
@@ -41,7 +41,7 @@ def get_html_from_markdown(markdown_text):
         output_format='html'
     )
 
-def get_column_max_length(table, column_name):
+def get_column_max_length(table:db.Model, column_name:str) -> int |None:
     for column in table.__table__.columns:
         if column.name == column_name:
             return column.type.length
@@ -50,15 +50,15 @@ def get_column_max_length(table, column_name):
 class ColorType(ColorType_sql_utils):
     STORE_FORMAT='hex_l'
 
-TracePoint = namedtuple('TracePoint', ['lat', 'lng', 'alt'], defaults=[None])
+TracePoint: namedtuple = namedtuple('TracePoint', ['lat', 'lng', 'alt'], defaults=[None])
 
-editions_parcours = db.Table(
+editions_parcours: db.Table = db.Table(
     'editions_parcours',
     db.Column('edition_id', db.Integer, db.ForeignKey('edition.id')),
     db.Column('parcours_id', db.Integer, db.ForeignKey('parcours.id')),
 )
 
-passagekey_stand = db.Table(
+passagekey_stand:db.Table = db.Table(
     'passagekey_stand',
     db.Column('passage_key_id', db.Integer, db.ForeignKey('passage_key.id')),
     db.Column('stand_id', db.Integer, db.ForeignKey('stand.id')),
@@ -404,7 +404,7 @@ class PassageKey(db.Model):
     name=db.Column(db.String(40), nullable=False)
 
     def __repr__(self) -> str:
-        return f'<PassageKey edition:{self.edition.name} stands={', '.join([str(stand) for stand in self.stands.all()])}'
+        return f"<PassageKey edition:{self.edition.name} stands={', '.join(str(stand) for stand in self.stands.all())}>"
 
 class Passage(db.Model):
     __allow_unmapped__ = True

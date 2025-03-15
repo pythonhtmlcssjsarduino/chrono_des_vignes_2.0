@@ -1,147 +1,171 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
-        <loc>https://sitename.example/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/example/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/example/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/example/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/example/"/>
     </url>
     <url>
-        <loc>https://sitename.example/users/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/users/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/users/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/users/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/"/>
     </url>
     <url>
-        <loc>https://sitename.example/organisateurs/coureurs/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/users/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/coureurs/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/coureurs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/users/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/users/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/users/"/>
     </url>
     <url>
-        <loc>https://sitename.example/organisateurs/edition/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/coureurs/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/edition/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/edition/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/coureurs/"/>
     </url>
     <url>
-        <loc>https://sitename.example/organisateurs/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/edition/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/edition/"/>
     </url>
     <url>
-        <loc>https://sitename.example/organisateurs/parcours/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/parcours/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/parcours/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/"/>
     </url>
     <url>
-        <loc>https://sitename.example/en/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/parcours/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/parcours/"/>
     </url>
     <url>
-        <loc>https://sitename.example/en/users/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/en/example/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/users/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/users/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/users/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/example/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/example/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/example/"/>
     </url>
     <url>
-        <loc>https://sitename.example/en/organisateurs/coureurs/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/en/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/coureurs/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/coureurs/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/"/>
     </url>
     <url>
-        <loc>https://sitename.example/en/organisateurs/edition/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/en/users/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/edition/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/edition/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/users/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/users/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/users/"/>
     </url>
     <url>
-        <loc>https://sitename.example/en/organisateurs/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/coureurs/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/coureurs/"/>
     </url>
     <url>
-        <loc>https://sitename.example/en/organisateurs/parcours/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/edition/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/parcours/"/>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/parcours/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/edition/"/>
     </url>
     <url>
-        <loc>https://sitename.example/de/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/"/>
     </url>
     <url>
-        <loc>https://sitename.example/de/users/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/parcours/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/users/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/users/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/users/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/parcours/"/>
     </url>
     <url>
-        <loc>https://sitename.example/de/organisateurs/coureurs/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/de/example/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/coureurs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/coureurs/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/example/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/example/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/example/"/>
     </url>
     <url>
-        <loc>https://sitename.example/de/organisateurs/edition/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/de/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/edition/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/edition/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/"/>
     </url>
     <url>
-        <loc>https://sitename.example/de/organisateurs/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/de/users/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/users/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/users/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/users/"/>
     </url>
     <url>
-        <loc>https://sitename.example/de/organisateurs/parcours/</loc>
-        <lastmod>2025-02-24</lastmod>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/coureurs/</loc>
+        <lastmod>2025-03-10</lastmod>
         <changefreq>daily</changefreq>
-        <xhtml:link rel="alternate" hreflang="de" href="https://sitename.example/de/organisateurs/parcours/"/>
-        <xhtml:link rel="alternate" hreflang="en" href="https://sitename.example/en/organisateurs/parcours/"/>
-        <xhtml:link rel="alternate" hreflang="fr" href="https://sitename.example/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/coureurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/coureurs/"/>
+    </url>
+    <url>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/edition/</loc>
+        <lastmod>2025-03-10</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/edition/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/edition/"/>
+    </url>
+    <url>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/</loc>
+        <lastmod>2025-03-10</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/"/>
+    </url>
+    <url>
+        <loc>https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/parcours/</loc>
+        <lastmod>2025-03-10</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="de" href="https://chronodesvignes.eu.pythonanywhere.com/doc/de/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://chronodesvignes.eu.pythonanywhere.com/doc/en/organisateurs/parcours/"/>
+        <xhtml:link rel="alternate" hreflang="fr" href="https://chronodesvignes.eu.pythonanywhere.com/doc/organisateurs/parcours/"/>
     </url>
 </urlset>

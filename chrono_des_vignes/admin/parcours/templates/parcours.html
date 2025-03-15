@@ -1,5 +1,25 @@
+<!--
+ * Chrono Des Vignes
+ * a timing system for sports events
+ * 
+ * Copyright © 2024-2025 Romain Maurer
+ * This file is part of Chrono Des Vignes
+ * 
+ * Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with Foobar.
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * You may contact me at chrono-des-vignes@ikmail.com
+-->
+
 {% extends 'layout.html' %}
-{% from 'macro.html' import form_field, submit, map_field %}
+{% from 'macro.html' import render_form %}
 {% block content %}
 <h3>{{ _('admin.parcours.parcours') }}</h3>
 <div class="d-flex justify-content-center flex-wrap">
@@ -61,11 +81,7 @@
             </div>
             <div class="modal-body">
                 <form action="" method="post" id="new_edition_form">
-                    {{ form.hidden_tag() }}
-                    {{ form_field(form.name) }}
-                    {{ form_field(form.start_lat, input_id='start_lat', div_class='d-none') }}
-                    {{ form_field(form.start_lng, input_id='start_lng', div_class='d-none') }}
-                    {{ map_field(_('admin.parcours.startpoint'), 'start_lat', 'start_lng', 0,0) }}
+                    {{ render_form(form) }}
                 </form>
             </div>
             <div class="modal-footer">

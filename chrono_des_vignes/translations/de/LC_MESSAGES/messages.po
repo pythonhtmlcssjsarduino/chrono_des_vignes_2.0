@@ -8,27 +8,27 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-23 12:29+0100\n"
+"POT-Creation-Date: 2025-02-25 20:48+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.16.0\n"
+"Generated-By: Babel 2.10.1\n"
 
-#: chrono_des_vignes/__init__.py:123
+#: chrono_des_vignes/__init__.py:134
 msgid "flash.error.mustadmin"
 msgstr "Sie müssen Administrator sein, um auf diese Seite zuzugreifen."
 
-#: chrono_des_vignes/__init__.py:126
+#: chrono_des_vignes/__init__.py:137
 msgid "flash.error.wrongadminevent"
 msgstr ""
 "Sie müssen Administrator dieser Veranstaltung sein, um auf diese Seite "
 "zuzugreifen."
 
-#: chrono_des_vignes/__init__.py:134
-#: chrono_des_vignes/templates/layout.html:108
+#: chrono_des_vignes/__init__.py:145
+#: chrono_des_vignes/templates/layout.html:128
 msgid "app.lang"
 msgstr "de"
 
@@ -637,48 +637,48 @@ msgstr "nächstes Event"
 msgid "home.participations"
 msgstr "Ihre Registrierungen"
 
-#: chrono_des_vignes/templates/layout.html:10
-#: chrono_des_vignes/templates/layout.html:71
+#: chrono_des_vignes/templates/layout.html:30
+#: chrono_des_vignes/templates/layout.html:91
 msgid "app.name"
 msgstr "course des vignes 2.0"
 
-#: chrono_des_vignes/templates/layout.html:67
+#: chrono_des_vignes/templates/layout.html:87
 msgid "app.name.short"
 msgstr "cdv 2.0"
 
-#: chrono_des_vignes/templates/layout.html:88
+#: chrono_des_vignes/templates/layout.html:108
 msgid "app.about"
 msgstr "über uns"
 
-#: chrono_des_vignes/templates/layout.html:91
+#: chrono_des_vignes/templates/layout.html:111
 msgid "app.contact"
 msgstr "Kontakt"
 
-#: chrono_des_vignes/templates/layout.html:97
+#: chrono_des_vignes/templates/layout.html:117
 msgid "app.chrono"
 msgstr "Stoppuhr"
 
-#: chrono_des_vignes/templates/layout.html:104
+#: chrono_des_vignes/templates/layout.html:124
 msgid "app.docu"
 msgstr "Dokumentation"
 
-#: chrono_des_vignes/templates/layout.html:108
+#: chrono_des_vignes/templates/layout.html:128
 msgid "app.languages"
 msgstr "Sprache"
 
-#: chrono_des_vignes/templates/layout.html:121
+#: chrono_des_vignes/templates/layout.html:141
 msgid "app.logout"
 msgstr "Abmelden"
 
-#: chrono_des_vignes/templates/layout.html:133
+#: chrono_des_vignes/templates/layout.html:153
 msgid "app.profil"
 msgstr "Profil"
 
-#: chrono_des_vignes/templates/layout.html:141
+#: chrono_des_vignes/templates/layout.html:161
 msgid "app.login"
 msgstr "Einloggen"
 
-#: chrono_des_vignes/templates/layout.html:147
+#: chrono_des_vignes/templates/layout.html:167
 msgid "app.signup"
 msgstr "Registrieren"
 

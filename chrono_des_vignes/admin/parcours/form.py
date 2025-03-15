@@ -44,7 +44,7 @@ class Etape_modif_form(FlaskForm):
 
 class New_parcours_form(FlaskForm):
     name = StringField(_('form.parcoursname'), validators=[DataRequired(), Length(max=40)])
-    start_lat = FloatField(_('form.startlat'), validators=[InputRequired()])
-    start_lng = FloatField(_('form.startlng'), validators=[InputRequired()])
+    start_lat = FloatField(_('form.startlat'), validators=[InputRequired()], default=46.54685605692591)
+    start_lng = FloatField(_('form.startlng'), validators=[InputRequired()], default=6.449900437449806)
 
     submit_btn = SubmitField(_('form.create'))

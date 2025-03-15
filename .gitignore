@@ -1,3 +1,10 @@
+# custom
+.venv_3.12
+sql-dumps
+.vscode
+.gitignore
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -136,7 +143,7 @@ venv.bak/
 .ropeproject
 
 # mkdocs documentation
-/site
+**/doc/site/
 
 # mypy
 .mypy_cache/

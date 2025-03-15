@@ -23,58 +23,47 @@ from flask_login import LoginManager, current_user
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from functools import wraps
-from flask_colorpicker import colorpicker
 from icecream import install
 from flask_babel import Babel, lazy_gettext, gettext, _
 from flask_socketio import SocketIO
-from sqlalchemy import URL
 from flask_bcrypt import Bcrypt
-import os
+import os, logging, json
+from logging.handlers import SMTPHandler
 from dotenv import load_dotenv
 from datetime import datetime
 install()
 load_dotenv()
-from sqlalchemy import make_url
+from urllib.parse import quote
 from werkzeug import exceptions
-from sentry_sdk import init
-from sentry_sdk.integrations.flask import FlaskIntegration
+#from sentry_sdk import init
+#from sentry_sdk.integrations.flask import FlaskIntegration
 # met la langue en francais pour le formatage des dates
 import locale
 locale.setlocale(locale.LC_TIME,'')
 
 app = Flask(__name__)
-app.config['SERVER_NAME'] = 'localhost:5000'
-password= os.environ.get('db_password')
+app.subdomain_matching = True
+app.config['SERVER_NAME'] = os.getenv('SERVER_NAME')
 app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY') #! change that for deployment
-url_object = URL.create(
-    "mysql+pymysql",
-    username="root",
-    password=password,  # plain (unescaped) text
-    host="localhost",
-    database="site",
-)
-app.config["SQLALCHEMY_DATABASE_URI"] = url_object
+
+password= os.environ.get('db_password')
+username= os.environ.get('db_user')
+hostname= os.environ.get('db_host')
+databasename= os.environ.get('db_name')
+
+url = f"mysql+pymysql://{username}:{quote(password)}@{hostname}/{databasename}"
+app.config["SQLALCHEMY_DATABASE_URI"] = url
 app.config['BABEL_TRANSLATION_DIRECTORIES'] = f'{app.root_path}/translations'
 app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 app.url_map.default_subdomain = ''
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config["SQLALCHEMY_POOL_RECYCLE"] = 280
 
 DEFAULT_PROFIL_PIC = 'icone.png'
 LANGAGES = ['de', 'fr', 'en']
 if app.debug:
     LANGAGES += ['ids', 'pseudo']
 PICTURE_SIZE = (200, 200)
-
-if not app.debug:
-    ic('init sentry')
-    init(
-        dsn=os.environ.get('SANTRY_DSN'),
-        send_default_pii=True,
-        traces_sample_rate=1.0,
-        profiles_sample_rate=1.0,
-        integrations=[FlaskIntegration(
-            transaction_style='endpoint'
-        )],
-    )
 
 db = SQLAlchemy(app)
 
@@ -89,22 +78,68 @@ login_manager.init_app(app)
 login_manager.login_view = 'users.login'
 login_manager.login_message_category = 'info'
 
-colorpicker(app)
+# ? error report
+mail_host= tuple(json.loads(os.getenv('mail_host')))
+from_addr= os.getenv('from_addr')
+mail_token= os.getenv('mail_token')
+to_addrs= json.loads(os.getenv('to_addrs'))
+ic(mail_host, from_addr, mail_token, to_addrs)
+
+class MailFormatter(logging.Formatter):
+    def format(self, record):
+        #region
+        try:    post_data = "\n\t".join([f'"{k}": "{v}"' if v else f'"{k}"' for k, v in request.get_json().items()])
+        except: post_data = request.get_data() if request.get_data()!=b'' else ''
+        args = "\n\t".join([f'"{k}": "{v}"' if v else f'"{k}"' for k, v in request.args.to_dict().items()])
+        user = f"""\
+username:   {current_user.username}
+id:         {current_user.id}
+name:       {current_user.name}""" if current_user.is_authenticated else "anonymous"
+        message = f'''\
+an error occurred in the chrono des vignes:
+
+{record.message} - {record.levelname}
+it occured on the {self.formatTime(record, "%A, %d %B %Y %H:%M:%S")}
+[user]
+{user}
+
+[request]
+url:    {request.url}
+endpoint:{request.endpoint}
+route:  {request.url_rule}
+method: {request.method}
+args:   {args}
+post:   {post_data}
+
+[traceback]
+{record.exc_text}
+
+        '''
+        return message
+        #endregion
+
+smtp_handeler = SMTPHandler(mailhost=mail_host, fromaddr=to_addrs, toaddrs=to_addrs, subject='server error', credentials=(from_addr, mail_token))
+smtp_handeler.setFormatter(MailFormatter())
+smtp_handeler.setLevel(logging.WARNING)
+
+app.logger.addHandler(smtp_handeler)
 
 #? instansiate flask babel
-old = '.venv/Lib/site-packages/babel/locale-data/fr_CH.dat'
-new = ('.venv/Lib/site-packages/babel/locale-data/pseudo.dat', '.venv/Lib/site-packages/babel/locale-data/ids.dat')
-for file in new:
-    if not os.path.exists(file):
-        with open(old, 'rb') as file1:
-            with open(file, '+wb') as file2:
-                file2.write(file1.read())
+if app.debug:
+    old = '.venv/Lib/site-packages/babel/locale-data/fr_CH.dat'
+    new = ('.venv/Lib/site-packages/babel/locale-data/pseudo.dat', '.venv/Lib/site-packages/babel/locale-data/ids.dat')
+    for file in new:
+        if not os.path.exists(file):
+            with open(old, 'rb') as file1:
+                with open(file, '+wb') as file2:
+                    file2.write(file1.read())
 
-from babel.core import LOCALE_ALIASES
-LOCALE_ALIASES['pseudo'] ='pseudo'
-LOCALE_ALIASES['ids'] ='ids'
+    from babel.core import LOCALE_ALIASES
+    LOCALE_ALIASES['pseudo'] ='pseudo'
+    LOCALE_ALIASES['ids'] ='ids'
 
-
+babel = Babel(app)
+@babel.localeselector
 def get_locale():
     # if a user is logged in, use the locale from the user settings
     if session.get('lang') :
@@ -113,11 +148,6 @@ def get_locale():
     # header the browser transmits.  We support de/fr/en in this
     # example.  The best match wins.
     return request.accept_languages.best_match(LANGAGES)
-
-def get_timezone():
-    pass
-
-babel = Babel(app, locale_selector=get_locale, timezone_selector=get_timezone)
 
 from chrono_des_vignes.models import User
 @login_manager.user_loader

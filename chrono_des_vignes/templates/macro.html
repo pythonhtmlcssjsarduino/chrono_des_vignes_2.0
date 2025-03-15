@@ -212,7 +212,7 @@
 {% endmacro%}
 
 {% macro render_form(form, submit=True, action='', id=None, map_label='map') %}
-    <form {%if action%}action="{{action}}" {%endif%} method="post" {%if id%}id="{{id}}"{%endif%}>
+    <form action="{{action}}" method="post" {%if id%}id="{{id}}"{%endif%}>
         {% set vars=namespace(password=False) %}
 
         {% for field in form %}

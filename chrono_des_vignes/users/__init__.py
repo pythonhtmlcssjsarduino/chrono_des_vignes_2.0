@@ -124,9 +124,9 @@ def inscription_page(event, edition):
         if form.validate_on_submit():
             pwd= 'dev' #! ''.join(secrets.choice(alphabet) for _ in range(10))
             hash_pwd = bcrypt.generate_password_hash(pwd).decode('utf-8')
-            username=f'{form.name.data}.{form.lastname.data}'
-            nb = User.query.filter(User.username.contains(username)).count()
-            username += str(nb) if nb>0 else ''
+            username=f'{form.name.data[:10]}.{form.lastname.data[:10]}'
+            nb = User.query.filter(User.username==username).count()
+            username += f'({nb})' if nb>0 else ''
             user = User(name=form.name.data,
                         lastname=form.lastname.data,
                         username=username,
@@ -138,7 +138,7 @@ def inscription_page(event, edition):
             db.session.commit()
             db.session.refresh(user)
             login_user(user)
-            print(user, form.parcours.data)
+            #print(user, form.parcours.data)
             choices = event.parcours.filter(Parcours.name.in_([eval(data)[0] for data in form.parcours.data])).all()
 
             inscriptions = []
@@ -213,15 +213,13 @@ def modify_password():
     user:User = current_user
     form:ModifyPwdForm = ModifyPwdForm()
 
-    def right_pwd(form, field):
+    if form.validate_on_submit():
         if bcrypt.check_password_hash(user.password, field.data):
-            return
-        raise ValidationError('wrong password')
-
-    if form.validate_on_submit(extra_validators={'old_pwd':[right_pwd]}):
-        hash_pwd= bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user.password = hash_pwd
-        db.session.commit()
-        return redirect(url_for('users.profil'))
+            hash_pwd= bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            user.password = hash_pwd
+            db.session.commit()
+            return redirect(url_for('users.profil'))
+        else:
+            form.old_pwd.errors = list(form.old_pwd.errors)+['wrong password']
 
     return render_template('modify_password.html', user_data=user, form=form)
