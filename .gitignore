@@ -2,7 +2,6 @@
 .venv_3.12
 sql-dumps
 .vscode
-.gitignore
 
 
 # Byte-compiled / optimized / DLL files
