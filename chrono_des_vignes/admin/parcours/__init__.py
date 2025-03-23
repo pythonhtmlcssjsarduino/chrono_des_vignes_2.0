@@ -126,6 +126,8 @@ def parcours_page(event_name):
     return render_template("parcours.html", user_data=user, event_data=event, archived_parcours=archived_parcours, active_parcours=active_parcours, event_modif=True, form=form)
 
 def build_alt_graph(graph_data):
+    return None
+    
     points = []
     to_request=[]
     last_point=None
