@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-02-25 20:48+0100\n"
+"POT-Creation-Date: 2025-03-22 15:36+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: chrono_des_vignes/__init__.py:134
+#: chrono_des_vignes/__init__.py:167
 msgid "flash.error.mustadmin"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/__init__.py:137
+#: chrono_des_vignes/__init__.py:170
 msgid "flash.error.wrongadminevent"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/__init__.py:145
+#: chrono_des_vignes/__init__.py:178
 #: chrono_des_vignes/templates/layout.html:128
 msgid "app.lang"
 msgstr "XXXXXXXX"
@@ -277,7 +277,7 @@ msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/dossard/templates/new_coureur_modal.html:26
 #: chrono_des_vignes/admin/editions/dossard/templates/new_coureur_modal.html:65
-#: chrono_des_vignes/admin/parcours/templates/parcours.html:73
+#: chrono_des_vignes/admin/parcours/templates/parcours.html:89
 msgid "admin.parcours.close"
 msgstr "XXXXXXXX"
 
@@ -498,25 +498,25 @@ msgstr "XXXXXXXX"
 msgid "chart.alt"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/parcours/templates/parcours.html:4
+#: chrono_des_vignes/admin/parcours/templates/parcours.html:24
 msgid "admin.parcours.parcours"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/parcours/templates/parcours.html:9
-#: chrono_des_vignes/admin/parcours/templates/parcours.html:33
+#: chrono_des_vignes/admin/parcours/templates/parcours.html:29
+#: chrono_des_vignes/admin/parcours/templates/parcours.html:53
 msgid "admin.parcours.name"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/parcours/templates/parcours.html:28
+#: chrono_des_vignes/admin/parcours/templates/parcours.html:48
 msgid "admin.parcours.archivedparcours"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/parcours/templates/parcours.html:59
+#: chrono_des_vignes/admin/parcours/templates/parcours.html:79
 msgid "admin.parcours.createnewparcours"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/parcours/templates/parcours.html:68
-msgid "admin.parcours.startpoint"
+#: chrono_des_vignes/admin/parcours/templates/parcours.html:84
+msgid "form.start"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/templates/home_event.html:32
@@ -595,8 +595,8 @@ msgid "home.events"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/templates/0-home.html:31
-#: chrono_des_vignes/templates/0-home.html:68
-#: chrono_des_vignes/templates/0-home.html:125
+#: chrono_des_vignes/templates/0-home.html:69
+#: chrono_des_vignes/templates/0-home.html:126
 msgid "home.eventname"
 msgstr "XXXXXXXX"
 
@@ -604,30 +604,30 @@ msgstr "XXXXXXXX"
 msgid "home.entereventname"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/templates/0-home.html:63
+#: chrono_des_vignes/templates/0-home.html:64
 msgid "home.inscriptions"
-msgstr "XXXXXXXX"
-
-#: chrono_des_vignes/templates/0-home.html:69
-#: chrono_des_vignes/templates/0-home.html:126
-msgid "home.parcours"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/templates/0-home.html:70
 #: chrono_des_vignes/templates/0-home.html:127
-msgid "home.edition"
+msgid "home.parcours"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/templates/0-home.html:71
 #: chrono_des_vignes/templates/0-home.html:128
+msgid "home.edition"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/templates/0-home.html:72
+#: chrono_des_vignes/templates/0-home.html:129
 msgid "home.date"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/templates/0-home.html:90
+#: chrono_des_vignes/templates/0-home.html:91
 msgid "home.nextevent"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/templates/0-home.html:120
+#: chrono_des_vignes/templates/0-home.html:121
 msgid "home.participations"
 msgstr "XXXXXXXX"
 

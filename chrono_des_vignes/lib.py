@@ -48,6 +48,8 @@ def get_points_elevation(points:list[tuple[float, float]]) -> list[dict[str, flo
     except requests.exceptions.ReadTimeout as e:
         ic(e)
         ic(time() - start, 'get_points_elevation')
+    except Exception as e:
+        ic(e, 'get_points_elevation', 'post error')
     else:
         ic(response.status_code, response)
         ic(time() - start, 'get_points_elevation')
