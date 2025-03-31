@@ -122,7 +122,7 @@ def modify_edition_page(event_name, edition_name):
     #? fin desactivation des champs
 
     if form.validate_on_submit():
-        ic(edition.rdv_lat, form.rdv_lat.data, edition.rdv_lng, form.rdv_lng.data)
+        #ic(edition.rdv_lat, form.rdv_lat.data, edition.rdv_lng, form.rdv_lng.data)
         if form.name.data == edition.name or not event.editions.filter_by(name=form.name.data).first():
             edition.name = form.name.data
             edition.edition_date = form.edition_date.data

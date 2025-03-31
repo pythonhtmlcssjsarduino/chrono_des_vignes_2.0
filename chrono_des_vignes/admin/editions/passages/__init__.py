@@ -1,3 +1,23 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 import time
 from flask import Blueprint, redirect, render_template, flash, request, jsonify, session
 from chrono_des_vignes import admin_required, db, set_route, lang_url_for as url_for, socketio
@@ -63,7 +83,10 @@ def dashboard(event_name, edition_name):
 @set_route(passages, '/event/<event_name>/editions/<edition_name>/delete/<key_id>')
 def delete_key(event_name, edition_name, key_id:int):
     key:PassageKey = PassageKey.query.filter_by(id=key_id).first_or_404()
-    if key.passages.count()==0:
+    if  key.edition.edition_date <= datetime.now():
+        flash(_('flash.key_not_deleted_edition_passed'), 'danger')
+        return redirect(url_for('admin.editions.passages.dashboard', event_name=event_name, edition_name=edition_name))
+    elif key.passages.count()==0:
         db.session.delete(key)
         db.session.commit()
         flash(_('flash.key_deleted'), 'success')

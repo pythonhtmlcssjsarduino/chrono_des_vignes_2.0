@@ -52,11 +52,11 @@ def new_event():
 
     user = current_user
     form = NewEventForm()
-    ic('coucou')
+    #ic('coucou')
 
     if form.validate_on_submit():
         name=form.name.data
-        ic(name)
+        #ic(name)
 
         event = Event(name=name, createur_id=user.id)
         db.session.add(event)
@@ -64,7 +64,7 @@ def new_event():
 
         return redirect(url_for('admin.home_event', event_name=event.name))
     else:
-        ic(form.errors)
+        #ic(form.errors)
         for error in form.name.errors:
             flash(error, 'danger')
         return redirect(url_for('home'))

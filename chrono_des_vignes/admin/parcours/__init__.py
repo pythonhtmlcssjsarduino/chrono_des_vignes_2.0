@@ -173,19 +173,20 @@ def build_alt_graph(graph_data):
 
 def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_stand_id=None, current_trace_id=None):
      #! create the map
-    map_style = 'satelite'
-    map_styles={'map':{'tiles':'OpenStreetMap',
-                        'attr':None,
-                        'name':None,
-                        'max_zoom':20},
-                'satelite':{'tiles':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    map_style = request.args.get('map', 'osm')
+    map_styles={'topo':{'tiles':'https://tile.opentopomap.org/{z}/{x}/{y}.png',
+                        'attr':'opentopomap',
+                        'name':'topographie',
+                        'max_zoom':17},
+                'sat':{'tiles':'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
                             'attr':'Esri',
                             'name':'Satellite',
                             'max_zoom':20},
-                'topographie':{'tiles':'https://tile.opentopomap.org/{z}/{x}/{y}.png',
-                        'attr':'opentopomap',
-                        'name':'topographie',
-                        'max_zoom':17}}
+                'osm':{'tiles':'OpenStreetMap',
+                        'attr':None,
+                        'name':None,
+                        'max_zoom':20}}
+    map_styles = {k:v if k==map_style else {**v, 'show':False} for k,v in map_styles.items()}
 
     program_list=[]
     part_list = []
@@ -198,11 +199,8 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
     start = parcours.start_stand
     map = Map(max_zoom=22,
             location=(0,0),
-            zoom_start=1,
-            tiles = None,
-            attr = map_styles[map_style]['attr'],
-            name = map_styles[map_style]['name'])
-    new_stand=start
+            zoom_start=1)
+    new_stand:Stand=start
     # si aucun depart alors ne mettre aucun stand
     if start:
         if modif:
@@ -241,7 +239,7 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
                                 """%new_stand.id)
                     last_m=Marker((new_stand.lat, new_stand.lng),
                         tooltip=new_stand.name,
-                        icon=Icon(icon_color=new_stand.color.hex),
+                        icon=Icon(icon_color=new_stand.color.hex, prefix='fa', icon='stopwatch' if new_stand.chrono else 'circle-info'),
                         popup=popup if modif else None).add_to(map)
                     if current_stand_id != None and new_stand.id == current_stand_id :
                         last_m.icon.options['markerColor']='green'
@@ -338,7 +336,7 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
     lats, lngs = set([i[0] for i in marker_coordonee]), set([i[1] for i in marker_coordonee])
     marker_coordonee = [[la, lo] for la, lo in marker_coordonee]
     if len(lats)!=0 or len(lngs)!=0:
-        map.fit_bounds([min(marker_coordonee), max(marker_coordonee)])
+        map.fit_bounds([min(marker_coordonee), max(marker_coordonee)], max_zoom=19)
     # ? ajout different layer
     #TileLayer('OpenStreetMap', max_zoom=20).add_to(map)
     #TileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr='Esri', name='satelite', max_zoom=20).add_to(map)
@@ -463,11 +461,11 @@ def new_stand(event_name, parcours_name, last_marker):
         stand:Stand = stand.start_trace.filter_by(turn_nb=turn_nb).first().end
         if stand == parcours.start_stand:
             turn_nb += 1
-    ic(stand, turn_nb)
+   #ic(stand, turn_nb)
 
     # ! creer le modif_form
     modif_form= Stand_modif_form()
-    ic(stand.start_trace.filter_by(turn_nb=turn_nb).count())
+   #ic(stand.start_trace.filter_by(turn_nb=turn_nb).count())
     if last_marker == -1 or not stand.start_trace.filter_by(turn_nb=turn_nb).count():
         modif_form.chrono.data=1
         modif_form.chrono.render_kw  = {'disabled':''}
@@ -496,18 +494,18 @@ def new_stand(event_name, parcours_name, last_marker):
                         turn_nb=turn_nb)
         db.session.add(new_trace)
 
-        ic(stand.start_trace.filter_by(turn_nb=turn_nb+1).all(), stand.start_trace.filter_by(turn_nb=turn_nb+1).all())
+       #ic(stand.start_trace.filter_by(turn_nb=turn_nb+1).all(), stand.start_trace.filter_by(turn_nb=turn_nb+1).all())
         if stand.end_stand: # c'est le dernier
-            ic('dernier')
+           #ic('dernier')
             parcours.end_stand.end_stand = None
             new_stand.end_stand = parcours.id
         else:
-            ic('pas dernier')
+           #ic('pas dernier')
             old_trace.start_id = new_stand.id
         db.session.commit()
 
         return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
-    ic(modif_form.errors)
+   #ic(modif_form.errors)
     return render_modify_parcours(event, parcours, 'new', modif_form, last_marker=last_marker)
 
 @set_route(parcours_bp, '/event/<event_name>/parcours/<parcours_name>/new/<int:last_marker>/<int:stand_id>', methods=['POST', 'GET'])
@@ -526,7 +524,7 @@ def new_step(event_name, parcours_name, last_marker, stand_id):
         start_stand = start_stand.start_trace.filter_by(turn_nb=turn_nb).first().end
         if start_stand == parcours.start_stand:
             turn_nb += 1
-    ic(start_stand, turn_nb)
+   #ic(start_stand, turn_nb)
 
     nb_name = Trace.query.filter(Trace.name.contains(f'{start_stand.name} - {end_stand.name}'[:36])).count()
     old_trace = Trace.query.filter_by(start_id = start_stand.id, turn_nb=turn_nb).first()
@@ -543,7 +541,7 @@ def new_step(event_name, parcours_name, last_marker, stand_id):
             for trace in parcours.traces.filter_by(turn_nb=nb).all():
                 trace.turn_nb += 1
     else:
-        ic(parcours.traces.filter_by(turn_nb=turn_nb).all(), end_stand)
+       #ic(parcours.traces.filter_by(turn_nb=turn_nb).all(), end_stand)
         if parcours.traces.filter_by(turn_nb=turn_nb).filter(or_(Trace.start_id==end_stand.id, Trace.end_id==end_stand.id)).count()!=0:
             flash('ce stand ne peut pas etre utilisé car il est deja utilise pour cette etape', 'warning')
             return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
@@ -566,16 +564,16 @@ def delete_trace(event_name, parcours_name, trace_id):
     event = Event.query.filter_by(name=event_name).first_or_404()
     parcours:Parcours= event.parcours.filter_by(name=parcours_name).first_or_404()
     trace = parcours.traces.filter_by(id=trace_id).first()
-    ic(trace, trace.end, parcours.start_stand, trace.end == parcours.start_stand, bool(trace))
+   #ic(trace, trace.end, parcours.start_stand, trace.end == parcours.start_stand, bool(trace))
 
     if trace == None:
-        ic('trace == None')
+       #ic('trace == None')
         return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
 
     if trace.end == parcours.start_stand:
-        ic('fin de la trace -> debut du parcours')
+       #ic('fin de la trace -> debut du parcours')
         if trace.is_last_trace():
-            ic('derniere du parcours')
+           #ic('derniere du parcours')
             parcours.end_stand.end_stand = None
             trace.start.end_stand = parcours.id
             db.session.delete(trace)
@@ -593,21 +591,21 @@ def delete_trace(event_name, parcours_name, trace_id):
                 flash('cette etape n\'est pas supprimable car elle créerais une boucle hors du parcours', 'danger')
                 return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
             
-            ic('pas la derniere du parcours')
-            ic(trace.get_next_trace())
+           #ic('pas la derniere du parcours')
+           #ic(trace.get_next_trace())
             next = trace.get_next_trace()
             next.start_id = trace.start_id
-            ic(next, trace.start_id)
+           #ic(next, trace.start_id)
             db.session.commit()
             db.session.delete(trace)
             db.session.commit()
-            ic(trace.turn_nb+1,parcours.get_nb_turns()+1)
+           #ic(trace.turn_nb+1,parcours.get_nb_turns()+1)
             for nb in range(trace.turn_nb+1,parcours.get_nb_turns()+1):
                 for trace in parcours.traces.filter_by(turn_nb=nb).all():
                     trace.turn_nb -= 1
             db.session.commit()
     elif trace.end == parcours.end_stand:
-        ic('fin de la trace -> fin du parcours')
+       #ic('fin de la trace -> fin du parcours')
         trace.end.end_stand = None
         trace.start.end_stand = parcours.id
         if trace.end.start_trace.filter_by(turn_nb=trace.turn_nb).count() == 0:
@@ -615,12 +613,12 @@ def delete_trace(event_name, parcours_name, trace_id):
         db.session.delete(trace)
         db.session.commit()
     elif trace.get_next_trace().end == parcours.start_stand:
-        ic('allée d\'un allée retour')
+       #ic('allée d\'un allée retour')
         next_trace = trace.get_next_trace()
-        ic(next_trace)
+       #ic(next_trace)
         if trace.end.start_trace.filter_by(turn_nb=trace.turn_nb).count() == 1: # un seul : la trace à supprimer
             db.session.delete(trace.end)
-        ic(next_trace, trace)
+       #ic(next_trace, trace)
         db.session.delete(next_trace)
         db.session.delete(trace)
         for nb in range(trace.turn_nb+1,parcours.get_nb_turns()+1):
@@ -629,12 +627,12 @@ def delete_trace(event_name, parcours_name, trace_id):
         
         db.session.commit()
     else:
-        ic('allée normale')
+       #ic('allée normale')
         trace.get_next_trace().start_id = trace.start_id
 
-        ic(trace.end.start_trace.filter_by(turn_nb=trace.turn_nb+1).all(), trace.end.start_trace.filter_by(turn_nb=trace.turn_nb).all())
+       #ic(trace.end.start_trace.filter_by(turn_nb=trace.turn_nb+1).all(), trace.end.start_trace.filter_by(turn_nb=trace.turn_nb).all())
         if trace.end.start_trace.filter_by(turn_nb=trace.turn_nb).count() == 0: # un seul : la trace à supprimer
-            ic('delete the stand')
+           #ic('delete the stand')
             db.session.delete(trace.end)
 
         db.session.delete(trace)

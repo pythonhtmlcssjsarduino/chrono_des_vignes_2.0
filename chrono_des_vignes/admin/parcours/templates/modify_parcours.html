@@ -30,19 +30,26 @@
     </form>
     <hr>
     {% if parcours_data.editions.count() == 0 %}
-        <a href="{{ url_for('admin.parcours.delete_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}"
+        <script>
+            function delete_parcours(){
+                if(window.confirm('{{_('admin.parcous.deleteparcours')}}')){
+                    window.location.href="{{ url_for('admin.parcours.delete_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}"
+                }
+            }
+        </script>
+        <a onclick="delete_parcours()"
             class="btn btn-outline-danger">{{ _('admin.parcours.supprimer') }}</a>
     {% else %}
         <p>{{ _('admin.parcours.parcoursunmodifyablealreadyused') }}</p>
-        {% if parcours_data.archived %}
-            <a href="{{ url_for('admin.parcours.unarchive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}"
-                class="btn btn-outline-danger">{{ _('admin.parcours.desarchiver') }}</a>
-        {% else %}
-            <a href="{{ url_for('admin.parcours.archive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}"
-                class="btn btn-outline-danger">{{ _('admin.parcours.archiver') }}</a>
-        {% endif %}
     {% endif %}
-    <br>
+    {% if parcours_data.archived %}
+        <a href="{{ url_for('admin.parcours.unarchive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}"
+            class="btn btn-outline-danger">{{ _('admin.parcours.desarchiver') }}</a>
+    {% else %}
+        <a href="{{ url_for('admin.parcours.archive_parcours_page', event_name=event_data.name, parcours_name=parcours_data.name) }}"
+            class="btn btn-outline-danger">{{ _('admin.parcours.archiver') }}</a>
+    {% endif %}
+<br>
     <a href="{{ url_for('admin.parcours.copy_parcours', event_name=event_data.name, parcours_name=parcours_data.name) }}"
         class="btn btn-outline-success">{{ _('admin.parcours.dupliquer') }}</a>
     <hr>
@@ -119,7 +126,7 @@
                 }
             }
             function form_submit() {
-                console.log(form)
+                //console.log(form)
                 form.submit()
             }
             {% if modif_form_type == "marker" %}
@@ -154,9 +161,9 @@
                 var data = form.elements["path"].value.replace(" ", "").slice(0, -1);
                 data = data.split("]").slice(0, -1);
                 var new_data = [];
-                console.log(data, new_data)
-                data.forEach(latlngs => { latlng = latlngs.slice(2).replace("[", "").split(","), console.log(latlng); new_data.push({ "lat": parseFloat(latlng[0]), "lng": parseFloat(latlng[1]) }) });
-                console.log(new_data)
+                //console.log(data, new_data)
+                data.forEach(latlngs => { latlng = latlngs.slice(2).replace("[", "").split(","); new_data.push({ "lat": parseFloat(latlng[0]), "lng": parseFloat(latlng[1]) }) });
+                //console.log(new_data)
                 return new_data
             }
             {% endif %}
@@ -166,7 +173,7 @@
             var modal_form = document.getElementById("modif_form")
             {% endif %}
             function add_etape(last_marker) {
-                console.log(last_marker)
+                //console.log(last_marker)
                 let url = "{{url_for('admin.parcours.new_stand', event_name=event_data.name, parcours_name=parcours_data.name, last_marker=0)[:-1]}}";
                 url += last_marker;
                 window.parent.location.href = url;

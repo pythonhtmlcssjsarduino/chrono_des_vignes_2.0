@@ -74,9 +74,6 @@ def export_strings(source='en', target=None):
     source_catalog = read_po(source_str)
     for_tron = {message.id: {source: message.string}
                  for message in source_catalog if message.id}
-    
-    # Assuming ic() is a function you defined somewhere
-    #ic(source_catalog, for_tron, source, target)
 
     for locale in target:
         if locale != source:
@@ -98,7 +95,7 @@ def lang_json(lang_id):
 
 def save_translations(translations):
     if not translations:
-        ic("No translations provided.")
+       #ic("No translations provided.")
         return
     with open(f'{app.root_path}/messages.pot', 'r', encoding='utf-8') as file:
         template = read_po(StringIO(file.read()))

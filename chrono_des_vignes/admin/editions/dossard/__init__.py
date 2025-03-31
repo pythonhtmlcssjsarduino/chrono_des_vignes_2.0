@@ -1,3 +1,23 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 from flask import Blueprint, flash, render_template, redirect, url_for, request, session, send_file
 from chrono_des_vignes import admin_required, db, set_route, socketio
 from chrono_des_vignes.admin.editions.form import Edition_form
@@ -42,7 +62,7 @@ def edition_dossards(event_name, edition_name):
                 'username':[DataRequired(), DbLength(User, 'username')],
                 'email':[Optional(), DbLength(User, 'email'), Email()]
             }
-            ic('first validation', form.validate(extra_validators=supp_validators), form.parcours.data)
+            #ic('first validation', form.validate(extra_validators=supp_validators), form.parcours.data)
             if form.validate(extra_validators=supp_validators):
                 # create a new user with the form data and add it to all the parcours
                 if form.username.data:
@@ -90,7 +110,7 @@ def validate_new_user(event_name, edition_name):
     edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
     form = ValidateNewCoureurForm()
     form.parcours.choices = [str((p.name, p.description)) for p in edition.parcours]
-    ic(form.parcours.data)
+    #ic(form.parcours.data)
     if form.validate_on_submit():
         user = User.query.get_or_404(form.user_id.data)
 
@@ -185,7 +205,7 @@ def export_dossard(event_name, edition_name):
 
     buffer = BytesIO()
 
-    workbook = Workbook(buffer)
+    workbook = Workbook(buffer, {'default_date_format':'dd/mm/yy'})
     worksheet = workbook.add_worksheet()
 
     headers = [_('admin.editions.dossard.dossard'),
@@ -199,24 +219,32 @@ def export_dossard(event_name, edition_name):
                 _('admin.editions.dossard.edition_date'), 
                 _('admin.editions.dossard.edition_name'), 
                 _('admin.editions.dossard.event_name')]
+    col_width = [len(h) for h in headers]
+    get_data = lambda inscription:(inscription.dossard,
+                                inscription.inscrit.name,
+                                inscription.inscrit.lastname,
+                                inscription.inscrit.email,
+                                inscription.inscrit.phone,
+                                inscription.inscrit.datenaiss,
+                                inscription.inscrit.username,
+                                inscription.parcours.name,
+                                inscription.edition.edition_date,
+                                inscription.edition.name,
+                                inscription.event.name)
 
     row :int
     for row, inscription in enumerate(edition.inscriptions.all(), 1):
         # dossard, name, lastname, email, phone, datenaiss, username, parcours, edition_date, edition_name, event_name
-        worksheet.write(row, 0, inscription.dossard)
-        worksheet.write(row, 1, inscription.inscrit.name)
-        worksheet.write(row, 2, inscription.inscrit.lastname)
-        worksheet.write(row, 3, inscription.inscrit.email)
-        worksheet.write(row, 4, inscription.inscrit.phone)
-        worksheet.write(row, 5, inscription.inscrit.datenaiss)
-        worksheet.write(row, 6, inscription.inscrit.username)
-        worksheet.write(row, 7, inscription.parcours.name)
-        worksheet.write(row, 8, inscription.edition.edition_date)
-        worksheet.write(row, 9, inscription.edition.name)
-        worksheet.write(row, 10, inscription.event.name)
+        line = get_data(inscription)
+        for col, cell in enumerate(line):
+            worksheet.write(row, col, cell)
+            col_width[col] = max(col_width[col], len(str(cell)))
 
     worksheet.add_table(0,0,max(edition.inscriptions.count(), 1),len(headers)-1, {'columns': [{'header': h} for h in headers], 'autofilter': False})
-    worksheet.autofit()
+
+    for col_num, max_length in enumerate(col_width):
+        worksheet.set_column(col_num, col_num, max_length + 2)
+
     workbook.close()
 
     buffer.seek(0)

@@ -83,7 +83,7 @@ mail_host= tuple(json.loads(os.getenv('mail_host')))
 from_addr= os.getenv('from_addr')
 mail_token= os.getenv('mail_token')
 to_addrs= json.loads(os.getenv('to_addrs'))
-ic(mail_host, from_addr, mail_token, to_addrs)
+#ic(mail_host, from_addr, mail_token, to_addrs)
 
 class MailFormatter(logging.Formatter):
     def format(self, record):
@@ -142,6 +142,7 @@ babel = Babel(app)
 @babel.localeselector
 def get_locale():
     # if a user is logged in, use the locale from the user settings
+    #ic(session.get('lang'), request.accept_languages.best_match(LANGAGES))
     if session.get('lang') :
         return session['lang']
     # otherwise try to guess the language from the user accept
@@ -190,8 +191,10 @@ def set_route(blueprint:Flask|Blueprint, path, **options):
         @blueprint.route(path, **options)
         @wraps(func)
         def wrap(*args, **kwargs):
-            lang = kwargs.pop('lang', 'fr')
+            lang = kwargs.pop('lang', None)
             #ic('hey', lang, path, func.__name__)
+            if lang == None:
+                lang = request.accept_languages.best_match(LANGAGES)
             if lang not in LANGAGES:
                 return abort(404)
             session['lang'] = lang

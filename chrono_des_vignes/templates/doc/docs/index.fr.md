@@ -1,2 +1,5 @@
-# bienvenue sur la documentation du chrono des vignes
-pour tester le site: [chrono des vignes](http://localhost:5000/)
+# Bienvenue sur la documentation du Chrono des Vignes
+
+[Chrono des Vignes](http://localhost:5000/)
+
+Pour tester le site: 

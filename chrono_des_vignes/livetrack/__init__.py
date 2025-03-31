@@ -71,6 +71,6 @@ def get_run_result(inscription:Inscription, json=False)->list[dict]:
 def livetrack_page(inscription_id):
     inscription:Inscription = Inscription.query.get_or_404(inscription_id)
 
-    ic(get_run_result(inscription))
+    #ic(get_run_result(inscription))
 
     return render_template('livetrack.html', inscription=inscription, run=get_run_result(inscription))

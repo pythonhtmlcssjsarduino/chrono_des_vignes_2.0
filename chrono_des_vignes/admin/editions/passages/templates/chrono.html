@@ -1,3 +1,23 @@
+<!--
+ * Chrono Des Vignes
+ * a timing system for sports events
+ * 
+ * Copyright © 2024-2025 Romain Maurer
+ * This file is part of Chrono Des Vignes
+ * 
+ * Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with Foobar.
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * You may contact me at chrono-des-vignes@ikmail.com
+-->
+
 {% extends 'layout.html' %}
 {% block import %}
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js" integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA==" crossorigin="anonymous"></script>
@@ -104,10 +124,10 @@
             };
 
             function modify_passage(dossard, time) {
-                console.log(dossard, time);
+                //console.log(dossard, time);
                 let node = document.getElementById(`event_list_${dossard}-${time}`)
                 let new_dossard = window.prompt('enter new dossard')
-                console.log(node, new_dossard);
+                //console.log(node, new_dossard);
                 node.id = `event_list_${new_dossard}-${time}`
                 socket.emit('set_passage', {'time':time, 'dossard':new_dossard})
             }
@@ -149,7 +169,7 @@
             }
 
             function create_passage(data, node=null) {
-                console.log(data);
+                //console.log(data);
                 let id = data.dossard+'-'+data.time_stamp
                 let time = new Date(data.time_stamp * 1000)
                 

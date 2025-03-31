@@ -1,0 +1,3 @@
+- Dans la page des coureurs, vous avez accès aux informations de tous les coureurs qui ont participé à votre événement.
+- En cliquant sur la ligne du coureur, vous accédez à sa page d'informations.
+- Depuis sa page, vous avez accès aux données de participation du coureur.

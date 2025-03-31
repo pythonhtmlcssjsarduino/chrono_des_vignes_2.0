@@ -18,7 +18,7 @@
 # You may contact me at chrono-des-vignes@ikmail.com
 '''
 
-from flask import render_template, request, session, redirect, send_file, send_from_directory, url_for
+from flask import render_template, request, session, redirect, send_file, send_from_directory, url_for, abort
 from chrono_des_vignes import app, LANGAGES, set_route
 from flask_login import current_user
 from chrono_des_vignes.models import Edition, Inscription, Event, User
@@ -26,6 +26,7 @@ from sqlalchemy import and_
 from datetime import datetime
 from flask_babel import gettext, force_locale, get_locale, lazy_gettext
 from chrono_des_vignes.admin import NewEventForm
+import os
 
 @set_route(app, '/')
 def home():
@@ -47,8 +48,8 @@ def home():
 @app.route('/lang/<lang>')
 def change_lang(lang):
     next = request.args.get('next')
-    ic(next)
-    ic(next.split('/')[1])
+    #ic(next)
+    #ic(next.split('/')[1])
     next = next.split('/')
     if next[1] in LANGAGES:
         if lang==request.accept_languages.best_match(LANGAGES):
@@ -59,12 +60,14 @@ def change_lang(lang):
         if lang!=request.accept_languages.best_match(LANGAGES):
             next.insert(1, lang)
     next = '/'.join(next)
-    ic(next)
+    #ic(next)
     return redirect(next)
 
 @app.route('/doc/<path:path>')
 @app.route('/doc/')
 def doc(path=''):
+    if not os.path.exists(os.path.join(app.root_path,app.template_folder, 'doc/site/index.html' if path == '' else f'doc/site/{path}index.html')):
+        return abort(404)
     return render_template('doc/site/index.html' if path == '' else f'doc/site/{path}index.html')
 
 @app.route('/doc/assets/<path:path>')
@@ -76,8 +79,6 @@ def search_doc_files(path):
     return doc_file('search', path)
 
 def doc_file(dir, path:str):
+    if not os.path.exists(os.path.join(app.root_path,app.template_folder, f'doc/site/{dir}/{path}')): 
+        return abort(404)
     return send_from_directory(app.template_folder, f'doc/site/{dir}/{path}', download_name=path.split('/')[-1])
-
-@app.route('/error')
-def error():
-    return 1/0

@@ -1,31 +1,35 @@
 ## obtenir l'accès organisateur
-pour l'instant il n'est pas possible d'avoir l'accès organisateur automatiquement le seul moyens est de m'envoyer un mail à [chrono-des-vignes@ikmail.com](mailto://chrono-des-vignes@ikmail.com)
+Pour l'instant, il n'est pas possible d'avoir l'accès organisateur automatiquement.
+Le seul moyen est de m'envoyer un mail à [chrono-des-vignes@ikmail.com](mailto://chrono-des-vignes@ikmail.com).
 
-## créer un évenement
-- se connecter avec votre compte organisateur.
-- cliquer sur le plus a la fin de la list de vos événements.
-- entrer le nom du nouvel événement.
-- presser enter pour créer l'événement.
+## créer un événement
 
-## modifier un évenement
-chaque événement dispose d'une description personalisable en markdown pour voire les styles possible voire la section [markdown](#description-en-markdown)
+- Se connecter avec votre compte organisateur.
+- Cliquer sur le plus à la fin de la liste de vos événements.
+- Entrer le nom du nouvel événement.
+- Presser enter pour créer l'événement.
 
-l'edition d'un évenement est separé en 3 section:
+## modifier un événement
+Chaque événement dispose d'une description personalisable en markdown.
+Pour voir les styles possibles, voire la section [markdown](#description-en-markdown).
 
-- [les parcours](parcours.md)
-- [les éditions](edition.md)
-- [les coureurs](coureurs.md)
+L'édition d'un événement est séparée en 3 sections:
+
+- [Les parcours](parcours.md)
+- [Les éditions](edition/index.md)
+- [Les coureurs](coureurs.md)
 
 ## supprimer un événement
-!!! warning "attention"
-    la suppression d'événement n'est possible que si vous n'avez pas encore créer ni de parcours ni d'édition.
-- entrer sur la page de l'événement.
-- en bas de la page cliquer sur "supprimer l'événement".
-- cliquer sur le bouton du même nom dans la pop-up.
+!!! warning "Attention"
+    La suppression d'événement n'est possible que si vous n'avez pas encore créé ni de parcours ni d'édition.
+
+- Entrer sur la page de l'événement.
+- En bas de la page, cliquer sur "Supprimer l'événement".
+- Cliquer sur le bouton du même nom dans la pop-up.
 
 ## description en markdown
 ### heading
-la description suporte les heading de 1 à 6
+La description supporte les heading de 1 à 6
 ```markdown
 # H1
 ## H2
@@ -35,28 +39,28 @@ la description suporte les heading de 1 à 6
 ###### H6
 ```
 
-### gras, italique
-vous pouvez mettre un text en italique, gras ou les deux
+### Gras, Italique
+Vous pouvez mettre un texte en italique, en gras, ou les deux :
 ```markdown
 *italique*
 **gras**
 ***les deux***
 ```
 
-### separation
-vous pouvez separer dus contenus avec une ligne horizontal
+### Séparation
+Vous pouvez séparer des contenus avec une ligne horizontale :
 ```markdown
 ---
 ```
 
-### liens
-vous pouvez inserer des liens hypertext
+### Liens
+Vous pouvez insérer des liens hypertextes :
 ```markdown
 [text](https://www.example.com)
 ```
 
-### images
-vous pouvez aussi inserer des images
+### Images
+Vous pouvez aussi insérer des images :
 ```markdown
 ![alt text](https://img.shields.io/badge/made_with-MkDocs-blue?logo=materialformkdocs)
 ```

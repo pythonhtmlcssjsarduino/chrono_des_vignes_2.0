@@ -250,7 +250,7 @@ class Trace(db.Model):
         return dist
 
     def is_last_trace(self)->bool:
-        ic(self.end == self.parcours.end_stand and self.end.end_trace.filter_by(turn_nb=self.turn_nb+1).count()==0, self.end , self.parcours.end_stand, self.end.end_trace.filter_by(turn_nb=self.turn_nb+1).count())
+        #ic(self.end == self.parcours.end_stand and self.end.end_trace.filter_by(turn_nb=self.turn_nb+1).count()==0, self.end , self.parcours.end_stand, self.end.end_trace.filter_by(turn_nb=self.turn_nb+1).count())
         return self.end == self.parcours.end_stand and self.end.end_trace.filter_by(turn_nb=self.turn_nb+1).count()==0
     
     def is_first_trace(self)->bool:

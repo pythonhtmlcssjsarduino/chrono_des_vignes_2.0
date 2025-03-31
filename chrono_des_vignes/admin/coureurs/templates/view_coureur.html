@@ -1,3 +1,23 @@
+<!--
+ * Chrono Des Vignes
+ * a timing system for sports events
+ * 
+ * Copyright © 2024-2025 Romain Maurer
+ * This file is part of Chrono Des Vignes
+ * 
+ * Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software Foundation,
+ * either version 3 of the License, or (at your option) any later version.
+ * 
+ * Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ * You should have received a copy of the GNU General Public License along with Foobar.
+ * If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * You may contact me at chrono-des-vignes@ikmail.com
+-->
+
 {% extends 'layout.html' %} {% block content %}
 <div>
   <h3>{{ _('admin.view.info') }}</h3>
@@ -68,7 +88,7 @@
   </div>
   <div>
     <h3>{{ _('admin.view.participation') }}</h3>
-    <table class="table">
+    <table class="table clickable-table">
       <thead>
         <tr>
           <th scope="col">{{ _('admin.view.parcours') }}</th>
@@ -80,16 +100,21 @@
       </thead>
       <tbody>
         {% for inscription in inscriptions %}
-        <tr>
+        <tr data-href="{{ url_for('livetrack.livetrack_page', inscription_id=inscription.id) }}">
           <th>{{inscription.parcours.name}}</th>
           <th>{{inscription.edition.name}}</th>
           <th>{{inscription.edition.edition_date.strftime('%d.%m.%Y')}}</th>
           <th>{% if inscription.dossard %}{{inscription.dossard}}{% endif %}</th>
-          <th>{% if inscription.end=='finish' %}{{inscription.rank}}{% endif %}</th>
+          <th>{{inscription.rank if inscription.end=='finish' else inscription.status}}</th>
         </tr>
         {% endfor %}
       </tbody>
     </table>
+    <script>
+      $('table tbody tr').on('click', function() {
+        window.location.href = $(this).data('href');
+      });
+    </script>
   </div>
 </div>
 {% endblock content %}

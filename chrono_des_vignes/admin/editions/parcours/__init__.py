@@ -43,6 +43,7 @@ def parcours_connect(auth):
         join_room(session['room'], request.sid)
     else:
         return False # connection not allowed
+
 @socketio.on('disconnect', namespace='/edition/parcours')
 def parcours_disconnect():
     leave_room(session['room'], request.sid)
@@ -66,6 +67,7 @@ def get_parcours_passages(parcours_id):
             for stand, dist in zip(coureur.parcours.iter_chrono_list(), coureur.parcours.get_chrono_dists()):
                 pass_data['parcours'].append({'stand':{'name':stand.name}, 'dist':round(dist, 3), 'delta':'', 'success':None})
             data.append(pass_data)
+    #print(data)
     return data
 
 @socketio.on('launch_parcours', namespace='/edition/parcours')
@@ -74,12 +76,12 @@ def launch_parcours(data):
     edition = Edition.query.get(session['room'].split('-')[3])
     if parcours is not None and data.get('start_time'):
         start_time =datetime.fromtimestamp(data['start_time']/1000)
-        ic('start', start_time)
+        #ic('start', start_time)
         inscription:Inscription
         for inscription in edition.inscriptions.filter(Inscription.parcours==parcours).all():
-            ic(inscription, inscription.has_started(), inscription.present)
+            #ic(inscription, inscription.has_started(), inscription.present, inscription.end)
             if not inscription.has_started() and inscription.present:
-                ic('to start')
+                #ic('to start')
                 passage = Passage(time_stamp=start_time, inscription_id = inscription.id)
                 db.session.add(passage)
                 db.session.commit()
@@ -130,6 +132,7 @@ def stop_parcours(data):
 def disqualify(data):
     if data.get('inscription_id'):
         inscription = Inscription.query.get(data.get('inscription_id'))
+        #ic('disqualify', inscription)
         if inscription.end is None:
             inscription.end = 'disqual'
             db.session.commit()
@@ -139,6 +142,7 @@ def disqualify(data):
 def abandon(data):
     if data.get('inscription_id'):
         inscription = Inscription.query.get(data['inscription_id'])
+        #ic('abandon', inscription)
         if inscription.end is None:
             inscription.end = 'abandon'
             db.session.commit()
@@ -146,9 +150,10 @@ def abandon(data):
 
 @socketio.on('finish', namespace='/edition/parcours')
 def finish(data):
-    ic('finish', data)
+    #ic('finish', data)
     if data.get('inscription_id'):
         inscription:Inscription = Inscription.query.get(data['inscription_id'])
+        #ic('finish', inscription)
         if inscription.end is None:
             inscription.end = 'finish'
             db.session.commit()

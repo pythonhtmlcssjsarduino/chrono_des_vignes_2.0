@@ -63,7 +63,7 @@
 <script>
   var socket = io('/dossard', {auth:{'event_id': {{ event_data.id }}, 'edition_id': {{ edition_data.id }} } })
   function change_dossard(inscription_id){
-    console.log(inscription_id)
+    //console.log(inscription_id)
     let new_dossard = parseInt(window.prompt('enter the new dossard number'))
     if (new_dossard){
       socket.emit('change_dossard', {'inscription_id':inscription_id, 'new_dossard':new_dossard},

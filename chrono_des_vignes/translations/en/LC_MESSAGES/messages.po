@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-03-22 15:36+0100\n"
+"POT-Creation-Date: 2025-03-31 15:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -50,71 +50,71 @@ msgstr "save"
 msgid "admin.view.error.coureurdontexist:coureur"
 msgstr "The runner with ID {coureur} does not exist."
 
-#: chrono_des_vignes/admin/coureurs/templates/coureurs.html:3
+#: chrono_des_vignes/admin/coureurs/templates/coureurs.html:23
 msgid "admin.view.coureurs"
 msgstr "runners"
 
-#: chrono_des_vignes/admin/coureurs/templates/coureurs.html:9
+#: chrono_des_vignes/admin/coureurs/templates/coureurs.html:29
 msgid "admin.coureurs.username"
 msgstr "username"
 
-#: chrono_des_vignes/admin/coureurs/templates/coureurs.html:10
+#: chrono_des_vignes/admin/coureurs/templates/coureurs.html:30
 msgid "admin.coureurs.lastname"
 msgstr "lastname"
 
-#: chrono_des_vignes/admin/coureurs/templates/coureurs.html:11
+#: chrono_des_vignes/admin/coureurs/templates/coureurs.html:31
 msgid "admin.coureurs.name"
 msgstr "name"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:3
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:23
 msgid "admin.view.info"
 msgstr "info"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:8
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:28
 msgid "admin.view.name"
 msgstr "name"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:19
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:39
 msgid "admin.view.lastname"
 msgstr "lastname"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:31
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:51
 msgid "admin.view.email"
 msgstr "email"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:42
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:62
 msgid "admin.view.phone"
 msgstr "phone"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:52
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:72
 msgid "admin.view.birth"
 msgstr "birth date"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:61
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:81
 msgid "admin.view.username"
 msgstr "username"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:70
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:90
 msgid "admin.view.participation"
 msgstr "participations"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:74
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:94
 msgid "admin.view.parcours"
 msgstr "course"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:75
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:95
 msgid "admin.view.edition"
 msgstr "editions"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:76
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:96
 msgid "admin.view.date"
 msgstr "date"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:77
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:97
 msgid "admin.view.dossard"
 msgstr "bib number"
 
-#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:78
+#: chrono_des_vignes/admin/coureurs/templates/view_coureur.html:98
 msgid "admin.view.rank"
 msgstr "rank"
 
@@ -150,53 +150,53 @@ msgstr "starting longitude"
 msgid "form.rdvlat"
 msgstr "starting latitude"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:109
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:129
 msgid "flash.success.newuser:username:name:lastname"
 msgstr "user {username} has been successfully registered"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:191
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:211
 #: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:30
 msgid "admin.editions.dossard.dossard"
 msgstr "Start number"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:192
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:212
 msgid "admin.editions.dossard.name"
 msgstr "first name"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:193
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:213
 msgid "admin.editions.dossard.lastname"
 msgstr "last name"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:194
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:214
 msgid "admin.editions.dossard.email"
 msgstr "email"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:195
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:215
 msgid "admin.editions.dossard.phone"
 msgstr "phone"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:196
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:216
 msgid "admin.editions.dossard.datenaiss"
 msgstr "birth date"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:197
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:217
 msgid "admin.editions.dossard.username"
 msgstr "username"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:198
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:218
 #: chrono_des_vignes/admin/editions/dossard/templates/dossard.html:31
 msgid "admin.editions.dossard.parcours"
 msgstr "course"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:199
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:219
 msgid "admin.editions.dossard.edition_date"
 msgstr "edition date"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:200
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:220
 msgid "admin.editions.dossard.edition_name"
 msgstr "edition name"
 
-#: chrono_des_vignes/admin/editions/dossard/__init__.py:201
+#: chrono_des_vignes/admin/editions/dossard/__init__.py:221
 msgid "admin.editions.dossard.event_name"
 msgstr "event name"
 
@@ -291,7 +291,7 @@ msgstr "disqualify"
 
 #: chrono_des_vignes/admin/editions/parcours/templates/edition_parcours.html:118
 msgid "admin.editions.parcours.abandon"
-msgstr "abandon"
+msgstr "give up"
 
 #: chrono_des_vignes/admin/editions/parcours/templates/edition_parcours.html:119
 msgid "admin.editions.parcours.finish"
@@ -305,11 +305,39 @@ msgstr "launch the course"
 msgid "admin.editions.parcours.end"
 msgstr "end the course"
 
-#: chrono_des_vignes/admin/editions/passages/__init__.py:69
+#: chrono_des_vignes/admin/editions/parcours/templates/edition_parcours.html:317
+msgid "admin.edition.parcours.legend"
+msgstr "legend"
+
+#: chrono_des_vignes/admin/editions/parcours/templates/edition_parcours.html:321
+msgid "legend.disqual"
+msgstr "Disqualified or Withdrawn"
+
+#: chrono_des_vignes/admin/editions/parcours/templates/edition_parcours.html:325
+msgid "legend.finish_right"
+msgstr "finished by following the route"
+
+#: chrono_des_vignes/admin/editions/parcours/templates/edition_parcours.html:329
+msgid "legend.finish_false"
+msgstr "finished without following the course"
+
+#: chrono_des_vignes/admin/editions/parcours/templates/edition_parcours.html:333
+msgid "legend.run"
+msgstr "in the race"
+
+#: chrono_des_vignes/admin/editions/parcours/templates/edition_parcours.html:337
+msgid "legend.not_started"
+msgstr "not left"
+
+#: chrono_des_vignes/admin/editions/passages/__init__.py:87
+msgid "flash.key_not_deleted_edition_passed"
+msgstr "The key could not be deleted because editing has already been completed."
+
+#: chrono_des_vignes/admin/editions/passages/__init__.py:92
 msgid "flash.key_deleted"
 msgstr "The key has been successfully deleted."
 
-#: chrono_des_vignes/admin/editions/passages/__init__.py:72
+#: chrono_des_vignes/admin/editions/passages/__init__.py:95
 msgid "flash.key_not_deleted"
 msgstr "The key could not be deleted."
 
@@ -454,49 +482,45 @@ msgstr "starting longitude"
 msgid "form.create"
 msgstr "create"
 
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:14
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:35
+msgid "admin.parcous.deleteparcours"
+msgstr "delete course"
+
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:41
 msgid "admin.parcours.supprimer"
 msgstr "delete"
 
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:16
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:43
 msgid "admin.parcours.parcoursunmodifyablealreadyused"
 msgstr "course unmodifable because it is already used in an edition"
 
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:19
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:47
 msgid "admin.parcours.desarchiver"
 msgstr "unarchive"
 
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:22
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:50
 msgid "admin.parcours.archiver"
 msgstr "archive"
 
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:27
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:54
 msgid "admin.parcours.dupliquer"
 msgstr "duplicate the course"
 
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:32
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:59
 msgid "admin.parcours.clicknewstand"
 msgstr "click where you want to add the stand"
 
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:41
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:68
 msgid "admin.parcours.changepos"
 msgstr "change position"
 
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:60
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:87
 msgid "admin.parcours.deletape"
 msgstr "delete the stage"
 
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:71
+#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:98
 msgid "admin.parcours.addstand"
 msgstr "new stand"
-
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:245
-msgid "chart.dist"
-msgstr "distance"
-
-#: chrono_des_vignes/admin/parcours/templates/modify_parcours.html:252
-msgid "chart.alt"
-msgstr "altitude"
 
 #: chrono_des_vignes/admin/parcours/templates/parcours.html:24
 msgid "admin.parcours.parcours"
@@ -505,7 +529,7 @@ msgstr "course"
 #: chrono_des_vignes/admin/parcours/templates/parcours.html:29
 #: chrono_des_vignes/admin/parcours/templates/parcours.html:53
 msgid "admin.parcours.name"
-msgstr "close"
+msgstr "name"
 
 #: chrono_des_vignes/admin/parcours/templates/parcours.html:48
 msgid "admin.parcours.archivedparcours"
@@ -517,7 +541,7 @@ msgstr "create a new course"
 
 #: chrono_des_vignes/admin/parcours/templates/parcours.html:84
 msgid "form.start"
-msgstr ""
+msgstr "start"
 
 #: chrono_des_vignes/admin/templates/home_event.html:32
 #: chrono_des_vignes/admin/templates/home_event.html:48
@@ -525,16 +549,16 @@ msgid "admin.deleteevent"
 msgstr "delete the event"
 
 #: chrono_des_vignes/livetrack/templates/livetrack.html:28
-#: chrono_des_vignes/view/templates/view_edition.html:33
+#: chrono_des_vignes/view/templates/view_edition.html:53
 #: chrono_des_vignes/view/templates/view_inscription.html:48
-#: chrono_des_vignes/view/templates/view_parcours.html:20
+#: chrono_des_vignes/view/templates/view_parcours.html:40
 msgid "view.evenement"
 msgstr "event"
 
 #: chrono_des_vignes/livetrack/templates/livetrack.html:37
 #: chrono_des_vignes/view/templates/view_event.html:27
 #: chrono_des_vignes/view/templates/view_inscription.html:57
-#: chrono_des_vignes/view/templates/view_parcours.html:11
+#: chrono_des_vignes/view/templates/view_parcours.html:31
 msgid "view.parcours"
 msgstr "courses"
 
@@ -598,7 +622,7 @@ msgstr "your events"
 #: chrono_des_vignes/templates/0-home.html:69
 #: chrono_des_vignes/templates/0-home.html:126
 msgid "home.eventname"
-msgstr "your events"
+msgstr "event name"
 
 #: chrono_des_vignes/templates/0-home.html:51
 msgid "home.entereventname"
@@ -616,12 +640,12 @@ msgstr "courses"
 #: chrono_des_vignes/templates/0-home.html:71
 #: chrono_des_vignes/templates/0-home.html:128
 msgid "home.edition"
-msgstr "meeting point"
+msgstr "edition"
 
 #: chrono_des_vignes/templates/0-home.html:72
 #: chrono_des_vignes/templates/0-home.html:129
 msgid "home.date"
-msgstr "the"
+msgstr "date"
 
 #: chrono_des_vignes/templates/0-home.html:91
 msgid "home.nextevent"
@@ -800,52 +824,60 @@ msgstr "edit profile"
 msgid "users.profil.editpassword"
 msgstr "change the password."
 
-#: chrono_des_vignes/view/__init__.py:16 chrono_des_vignes/view/__init__.py:28
+#: chrono_des_vignes/view/__init__.py:36 chrono_des_vignes/view/__init__.py:48
 msgid "view.error.notyourinscription"
 msgstr "this is not your registration."
 
-#: chrono_des_vignes/view/__init__.py:55 chrono_des_vignes/view/__init__.py:61
-#: chrono_des_vignes/view/__init__.py:70
+#: chrono_des_vignes/view/__init__.py:75 chrono_des_vignes/view/__init__.py:81
+#: chrono_des_vignes/view/__init__.py:91
 msgid "view.error.eventdontexist:event"
 msgstr "the event \"{event}\" does not exist"
 
-#: chrono_des_vignes/view/__init__.py:62
+#: chrono_des_vignes/view/__init__.py:82
 msgid "view.error.editiondontexist:edition"
 msgstr "the edition \"{edition}\" does not exist"
 
-#: chrono_des_vignes/view/__init__.py:71
+#: chrono_des_vignes/view/__init__.py:92
 msgid "view.error.parcoursdontexist:parcours"
 msgstr "the course \"{parcours}\" does not exist"
 
-#: chrono_des_vignes/view/templates/view_edition.html:11
+#: chrono_des_vignes/view/templates/view_edition.html:31
 #: chrono_des_vignes/view/templates/view_inscription.html:26
 msgid "view.date"
 msgstr "date"
 
-#: chrono_des_vignes/view/templates/view_edition.html:22
+#: chrono_des_vignes/view/templates/view_edition.html:42
 #: chrono_des_vignes/view/templates/view_inscription.html:37
 msgid "view.time"
 msgstr "time"
 
-#: chrono_des_vignes/view/templates/view_edition.html:42
+#: chrono_des_vignes/view/templates/view_edition.html:62
 #: chrono_des_vignes/view/templates/view_inscription.html:66
 msgid "view.rdv"
 msgstr "meeting"
 
-#: chrono_des_vignes/view/templates/view_edition.html:45
+#: chrono_des_vignes/view/templates/view_edition.html:65
 #: chrono_des_vignes/view/templates/view_inscription.html:69
 msgid "view.opengmap"
 msgstr "open on Google Maps"
 
-#: chrono_des_vignes/view/templates/view_edition.html:51
+#: chrono_des_vignes/view/templates/view_edition.html:71
+msgid "view.addtogcalendar"
+msgstr "add to google calendar"
+
+#: chrono_des_vignes/view/templates/view_edition.html:74
+msgid "view.opengcalendar"
+msgstr "open google calendar"
+
+#: chrono_des_vignes/view/templates/view_edition.html:80
 msgid "view.inscriptions"
 msgstr "your registrations"
 
-#: chrono_des_vignes/view/templates/view_edition.html:62
+#: chrono_des_vignes/view/templates/view_edition.html:91
 msgid "view.inscriptionclosed"
 msgstr "registrations are already closed!"
 
-#: chrono_des_vignes/view/templates/view_edition.html:67
+#: chrono_des_vignes/view/templates/view_edition.html:96
 msgid "view.inscriptionsnotopen"
 msgstr "registrations are not yet open!"
 
@@ -862,12 +894,4 @@ msgstr "unsubscribe"
 #: chrono_des_vignes/view/templates/view_inscription.html:80
 msgid "view.plusparticiper"
 msgstr "no longer participate"
-
-#: chrono_des_vignes/view/templates/view_parcours.html:81
-msgid "view.distance"
-msgstr "distance"
-
-#: chrono_des_vignes/view/templates/view_parcours.html:88
-msgid "view.altitude"
-msgstr "altitude"
 

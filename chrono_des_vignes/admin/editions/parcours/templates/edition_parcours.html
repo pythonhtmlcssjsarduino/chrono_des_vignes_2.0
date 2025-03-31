@@ -36,7 +36,7 @@
     
     function get_color(data){
         let color
-        console.log(data)
+        //console.log(data)
         if (data.end!='finish'&&data.end!=null){
             // disqualifié ou abandon
             color = 'bg-danger'
@@ -155,7 +155,7 @@
         let chrono_div = document.getElementById(`chrono-${id}`)
         let start_time = data.start_time*1000
         let delta = Date.now()-start_time
-        console.log(delta, start_time)
+        //console.log(delta, start_time)
         chrono_div.innerText = delta_to_display(delta)
         intervals[data.id] = setInterval(() => {
             delta = Date.now()-start_time
@@ -176,7 +176,7 @@
         } else {
             disqualify_btn.addEventListener('click', function(ev){
                 if (window.confirm('etes vous sur de la disqualifier cette action est irreversible')){
-                    socket.emit('disqualify', {'inscription_id':data.id}, ()=>{console.log('coucu')})
+                    socket.emit('disqualify', {'inscription_id':data.id}, ()=>{})
                 }
             })
             abandon_btn.addEventListener('click', function(ev){
@@ -213,17 +213,17 @@
         div.classList.remove('bg-warning')
         div.classList.remove('bg-info')
         div.classList.add(color)
-        console.log(data, color)
+        //console.log(data, color)
     
     })
 
     socket.on('new_passage', function new_passage(data){
         let node = document.getElementById("detail-table-passage-"+data.id)
-        console.log(data.parcours.length, data)
+        //console.log(data.parcours.length, data)
         if ( data.parcours.length==1){
             let div = document.getElementById('pills-content-' + data.parcours_id)
             node = document.getElementById('passage-'+data.id)
-            console.log(node);
+            //console.log(node);
             
             create_passage(data, div, node)
         }else{
@@ -270,7 +270,7 @@
     <script>
         socket.emit('get_parcours_passage', {{parcours.id}}, function(data){
             let launched = Boolean(data.length)
-            console.log(data, launched)
+            //console.log(data, launched)
             div = document.getElementById("pills-content-{{ parcours.id }}")
             data.forEach(function(passage){
                 create_passage(passage, div)
@@ -313,4 +313,66 @@
     </script>
     {% endfor %}
 </div>
+<div class="legend">
+  <h4>{{_('admin.edition.parcours.legend')}}</h4>
+  <ul>
+    <li>
+      <span class="color-box bg-danger"></span>
+      <span class="legend-text">{{ _('legend.disqual') }}</span>
+    </li>
+    <li>
+      <span class="color-box bg-success"></span>
+      <span class="legend-text">{{ _('legend.finish_right') }}</span>
+    </li>
+    <li>
+      <span class="color-box bg-warning"></span>
+      <span class="legend-text">{{ _('legend.finish_false') }}</span>
+    </li>
+    <li>
+      <span class="color-box bg-primary"></span>
+      <span class="legend-text">{{ _('legend.run') }}</span>
+    </li>
+    <li>
+      <span class="color-box bg-info"></span>
+      <span class="legend-text">{{ _('legend.not_started') }}</span>
+    </li>
+  </ul>
+</div>
+<style>
+.legend {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.legend h4 {
+  margin-top: 0;
+}
+
+.legend ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.legend li {
+  margin-bottom: 10px;
+}
+
+.legend .color-box {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.legend .legend-text {
+  display: inline-block;
+  font-size: 15px;
+  color: #333;
+}
+</style>
 {% endblock %}

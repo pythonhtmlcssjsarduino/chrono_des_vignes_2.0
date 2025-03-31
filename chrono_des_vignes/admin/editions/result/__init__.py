@@ -1,3 +1,23 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 from flask import Blueprint, render_template, send_file, request
 from flask_login import login_required, current_user
 from chrono_des_vignes import admin_required, db, set_route, lang_url_for as url_for
@@ -41,12 +61,21 @@ def get_result_pdf(edition:Edition):
 
     pdf = canvas.Canvas(buffer, pagesize=portrait(size))
     start = 4*cm
+    right_margin = 3*cm
+    left_margin = 3*cm
     up_margin = 2*cm
     down_margin = 2*cm
     for parcours in edition.parcours:
         data = [['place', 'nom', 'prénom', 'dossard', 'temps']]
+        col_cars = [5,3,6,7,5]
         for row in get_result_data(edition, parcours):
-            data.append([row['rank'], row['name'], row['lastname'], row['dossard'], str(row['time'])])
+            line = [str(row['rank']), row['name'], row['lastname'], str(row['dossard']), str(row['time'])]
+            for i, cell in enumerate(line):
+                col_cars[i] = max(col_cars[i], len(cell))
+            data.append(line)
+        fact = (width-right_margin-left_margin)/sum(col_cars)
+        col_widths = [fact*cars for cars in col_cars]
+       #ic([.07*width,.20*width,.20*width,.10*width,.10*width], .07, width)
         # draw title
         title = f'parcours : {parcours.name}'
         pdf.setFontSize(1.5*cm)
@@ -59,7 +88,7 @@ def get_result_pdf(edition:Edition):
                 ('BOX', (0,0), (-1,-1), 0.5, colors.black)
                 ])
         table = Table(data, style=style,
-                    colWidths=[.07*width,.20*width,.20*width,.10*width,.10*width]
+                    colWidths=col_widths#[.07*width,.20*width,.20*width,.10*width,.10*width]#
                     )
         w, h = table.wrapOn(pdf, 0, 0)
         row_height = h/len(data)
@@ -79,7 +108,7 @@ def get_result_pdf(edition:Edition):
                 ('BOX', (0,0), (-1,-1), 0.5, colors.black)
             ])
             table = Table(rows, style=style,
-                colWidths=[.07*width,.20*width,.20*width,.10*width,.10*width]
+                colWidths=col_widths
                 )
             w, h = table.wrapOn(pdf, 0, 0)
             table.drawOn(pdf, (width-w)/2, height-h-m)
