@@ -274,6 +274,12 @@
                     if ( !isNaN(data) ) {
                         send_request(data) // send the request to the server if it is a number
                     }
+                }else if (e.code === 'NumpadEnter') {
+                    var data = parseInt(input.value);
+                    input.value = ''
+                    if ( !isNaN(data) ) {
+                        send_request(data) // send the request to the server if it is a number
+                    }
                 } else {
                     input.focus() // focus le champ de text
                 }

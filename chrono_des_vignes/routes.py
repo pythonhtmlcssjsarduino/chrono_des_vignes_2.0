@@ -64,11 +64,13 @@ def change_lang(lang):
     return redirect(next)
 
 @app.route('/doc/<path:path>')
+@app.route('/doc/<lang>/<path:path>')
 @app.route('/doc/')
-def doc(path=''):
+def doc(path='', lang=''):
     if not os.path.exists(os.path.join(app.root_path,app.template_folder, 'doc/site/index.html' if path == '' else f'doc/site/{path}index.html')):
-        return abort(404)
-    return render_template('doc/site/index.html' if path == '' else f'doc/site/{path}index.html')
+        return render_template('doc/site/404.html')
+    lang=lang+"/" if lang else ""
+    return render_template(f'doc/site/{lang}index.html' if path == '' else f'doc/site/{lang}{path}index.html')
 
 @app.route('/doc/assets/<path:path>')
 def assets_doc_files(path):

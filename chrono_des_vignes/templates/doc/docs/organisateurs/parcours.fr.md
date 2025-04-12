@@ -8,7 +8,7 @@
     | Départ                | Lieu du stand de départ           |
 
 - Validez le formulaire pour créer l'édition.
-- Finissez de créer le parcours de la même manière que pour [le modifier](#supprimer-une-etape).
+- Finissez de créer le parcours de la même manière que pour [le modifier](#modifier-un-parcours).
 
 ## Modifier un parcours
 !!! warning "Attention"

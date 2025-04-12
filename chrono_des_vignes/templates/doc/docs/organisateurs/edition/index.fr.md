@@ -9,7 +9,7 @@
     nom de l'édition        | nom de l'édition
     date de l'édition       | date et heure du premier départ
     description du parcours | description (peut être formatée avec du [markdown](../index.md#description-en-markdown))
-    parcours                | list des parcours à inclure dans l'édition ([les parcours archivé](../parcours.md#) ne sont pas affiché)
+    parcours                | list des parcours à inclure dans l'édition ([les parcours archivé](../parcours.md#dés-archiver-un-parcours) ne sont pas affiché)
     date d'ouverture des inscriptions| date à partir de laquelle les inscriptions seront ouvertes (l'heure n'est pas prise en compte)
     date de fermeture des inscriptions| date à partir de laquelle les inscriptions seront fermées (l'heure n'est pas prise en compte)
     rendez vous pour cette edition| lieu de rendez-vous pour cette édition

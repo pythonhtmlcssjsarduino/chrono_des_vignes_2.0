@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-03-31 15:53+0200\n"
+"POT-Creation-Date: 2025-04-06 20:38+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,17 +17,17 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.17.0\n"
 
-#: chrono_des_vignes/__init__.py:167
+#: chrono_des_vignes/__init__.py:168
 msgid "flash.error.mustadmin"
 msgstr "Sie müssen Administrator sein, um auf diese Seite zuzugreifen."
 
-#: chrono_des_vignes/__init__.py:170
+#: chrono_des_vignes/__init__.py:171
 msgid "flash.error.wrongadminevent"
 msgstr ""
 "Sie müssen Administrator dieser Veranstaltung sein, um auf diese Seite "
 "zuzugreifen."
 
-#: chrono_des_vignes/__init__.py:178
+#: chrono_des_vignes/__init__.py:179
 #: chrono_des_vignes/templates/layout.html:128
 msgid "app.lang"
 msgstr "de"
@@ -205,7 +205,7 @@ msgstr "Ereignisname"
 #: chrono_des_vignes/admin/editions/dossard/form.py:11
 #: chrono_des_vignes/admin/editions/dossard/form.py:25
 #: chrono_des_vignes/users/form.py:37 chrono_des_vignes/users/form.py:54
-#: chrono_des_vignes/users/form.py:65
+#: chrono_des_vignes/users/form.py:67
 msgid "form.name"
 msgstr "Vorname"
 
@@ -213,35 +213,35 @@ msgstr "Vorname"
 #: chrono_des_vignes/admin/editions/dossard/form.py:26
 #: chrono_des_vignes/admin/editions/passages/form.py:7
 #: chrono_des_vignes/users/form.py:38 chrono_des_vignes/users/form.py:55
-#: chrono_des_vignes/users/form.py:66
+#: chrono_des_vignes/users/form.py:68
 msgid "form.lastname"
 msgstr "Nachname"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:13
 #: chrono_des_vignes/admin/editions/dossard/form.py:27
 #: chrono_des_vignes/users/form.py:31 chrono_des_vignes/users/form.py:39
-#: chrono_des_vignes/users/form.py:67
+#: chrono_des_vignes/users/form.py:69
 msgid "form.username"
 msgstr "Benutzername"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:14
 #: chrono_des_vignes/admin/editions/dossard/form.py:28
 #: chrono_des_vignes/users/form.py:41 chrono_des_vignes/users/form.py:56
-#: chrono_des_vignes/users/form.py:68
+#: chrono_des_vignes/users/form.py:70
 msgid "form.email"
 msgstr "E-Mail"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:15
 #: chrono_des_vignes/admin/editions/dossard/form.py:29
 #: chrono_des_vignes/users/form.py:42 chrono_des_vignes/users/form.py:57
-#: chrono_des_vignes/users/form.py:69
+#: chrono_des_vignes/users/form.py:71
 msgid "form.tel"
 msgstr "Telefon"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:16
 #: chrono_des_vignes/admin/editions/dossard/form.py:30
 #: chrono_des_vignes/users/form.py:43 chrono_des_vignes/users/form.py:58
-#: chrono_des_vignes/users/form.py:70
+#: chrono_des_vignes/users/form.py:72
 msgid "form.birth"
 msgstr "Geburtsdatum"
 
@@ -252,7 +252,7 @@ msgid "form.choosedparcours"
 msgstr "gewählter Kurs"
 
 #: chrono_des_vignes/admin/editions/dossard/form.py:20
-#: chrono_des_vignes/users/form.py:51 chrono_des_vignes/users/form.py:62
+#: chrono_des_vignes/users/form.py:51 chrono_des_vignes/users/form.py:64
 msgid "form.register"
 msgstr "registrieren"
 
@@ -359,27 +359,27 @@ msgstr "Schlüssel"
 msgid "form.validate"
 msgstr "validieren"
 
-#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:7
+#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:27
 #: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:55
 msgid "admin.editions.passages.key"
 msgstr "Schlüssel"
 
-#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:8
+#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:28
 msgid "admin.editions.passages.événement"
 msgstr "Ereignis"
 
-#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:11
+#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:31
 #: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:17
 #: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:56
 msgid "admin.editions.passages.stand"
 msgstr "Stand"
 
-#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:11
+#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:31
 #: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:17
 msgid "admin.editions.passages.parcours"
 msgstr "Kurs"
 
-#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:16
+#: chrono_des_vignes/admin/editions/passages/templates/chrono.html:36
 msgid "admin.editions.passages.enterdossardnb"
 msgstr "Startnummer eingeben"
 
@@ -760,7 +760,7 @@ msgstr "Die Anmeldungen sind noch nicht offen! Sie öffnen am {date}"
 msgid "flash.warn.inscriptionclosed"
 msgstr "Die Anmeldungen sind bereits geschlossen!"
 
-#: chrono_des_vignes/users/__init__.py:202
+#: chrono_des_vignes/users/__init__.py:201
 msgid "flash.profilupdated"
 msgstr "Ihr Konto wurde erfolgreich erstellt"
 
@@ -772,7 +772,7 @@ msgstr "Passwort"
 msgid "form.connect"
 msgstr "Einloggen"
 
-#: chrono_des_vignes/users/form.py:45
+#: chrono_des_vignes/users/form.py:45 chrono_des_vignes/users/form.py:63
 msgid "form.repetepwd"
 msgstr "Passwort wiederholen"
 
@@ -780,31 +780,35 @@ msgstr "Passwort wiederholen"
 msgid "form.createaccount"
 msgstr "Konto erstellen"
 
-#: chrono_des_vignes/users/form.py:71
+#: chrono_des_vignes/users/form.py:62
+msgid "form.pwdforconnection"
+msgstr "password (to access your personal space)"
+
+#: chrono_des_vignes/users/form.py:73
 msgid "form.profilpic"
 msgstr "Profilbild"
 
-#: chrono_des_vignes/users/form.py:72
+#: chrono_des_vignes/users/form.py:74
 msgid "form.modifyaccount"
 msgstr "Konto bearbeiten"
 
-#: chrono_des_vignes/users/form.py:75
+#: chrono_des_vignes/users/form.py:77
 msgid "form.oldpwd"
 msgstr "altes Passwort"
 
-#: chrono_des_vignes/users/form.py:76
+#: chrono_des_vignes/users/form.py:78
 msgid "form.newpwd"
 msgstr "neues Passwort"
 
-#: chrono_des_vignes/users/form.py:77
+#: chrono_des_vignes/users/form.py:79
 msgid "form.repetenewpwd"
 msgstr "das neue Passwort wiederholen"
 
-#: chrono_des_vignes/users/form.py:78
+#: chrono_des_vignes/users/form.py:80
 msgid "form.modifypassword"
 msgstr "sein Passwort ändern"
 
-#: chrono_des_vignes/users/templates/inscription.html:4
+#: chrono_des_vignes/users/templates/inscription.html:24
 msgid "inscription"
 msgstr "Anmeldungen"
 

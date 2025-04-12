@@ -59,6 +59,8 @@ class Inscription_form(FlaskForm):
 
     parcours = MultiCheckboxFieldWithDescription(_('form.choosedparcours'), validators=[DataRequired()])
 
+    password = PasswordField(_('form.pwdforconnection'), validators=[DataRequired(), DbLength(table=User, column='password')])
+    repeatpassword = PasswordField(_('form.repetepwd'), validators=[EqualTo('password')])
     submit_btn = SubmitField(_('form.register'))
 
 class ModifyForm(FlaskForm):

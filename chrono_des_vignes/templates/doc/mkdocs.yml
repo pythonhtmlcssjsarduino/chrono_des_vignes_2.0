@@ -6,6 +6,8 @@ repo_url: https://github.com/pythonhtmlcssjsarduino/chrono_des_vignes_2.0
 nav:
   - retour au site: https://chronodesvignes.eu.pythonanywhere.com
   - Home: index.md
+  - contact: contact.md
+  - about: about.md
   - Users: users.md
   - Organisateurs:
     - organisateurs/index.md

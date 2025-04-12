@@ -1,0 +1,3 @@
+- Auf der Seite „Läufer“ haben Sie Zugriff auf die Informationen aller Läufer, die an Ihrer Veranstaltung teilgenommen haben.  
+- Wenn Sie auf die Zeile eines Läufers klicken, gelangen Sie zu seiner Informationsseite.  
+- Auf seiner Seite haben Sie Zugriff auf die Teilnahmedaten des Läufers.

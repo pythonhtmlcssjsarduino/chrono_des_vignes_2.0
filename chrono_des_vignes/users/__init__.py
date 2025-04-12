@@ -122,7 +122,7 @@ def inscription_page(event, edition):
         form.parcours.choices = [str((p.name, p.description)) for p in choices]
 
         if form.validate_on_submit():
-            pwd= 'dev' #! ''.join(secrets.choice(alphabet) for _ in range(10))
+            pwd= form.password.data
             hash_pwd = bcrypt.generate_password_hash(pwd).decode('utf-8')
             username=f'{form.name.data[:10]}.{form.lastname.data[:10]}'
             nb = User.query.filter(User.username==username).count()
@@ -152,7 +152,6 @@ def inscription_page(event, edition):
             db.session.commit()
 
             return redirect(url_for('home'))
-
     return render_template('inscription.html', user_data=user, event_data=event, edition_data=edition, form=form)
 
 @set_route(users, '/profil')
