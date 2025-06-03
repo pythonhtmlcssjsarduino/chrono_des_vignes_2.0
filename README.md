@@ -20,4 +20,4 @@ To get started with Chrono des Vignes, please follow these steps:
 Experience Chrono des Vignes in action by visiting our [Deployed version](https://chronodesvignes.eu.pythonanywhere.com/).
 
 ## Documentation
-For detailed usage instructions, please refer to our [Documentation](chrono_des_vignes/templates/doc).
+For detailed usage instructions, please refer to our [Documentation](https://chronodesvignes.eu.pythonanywhere.com/doc).
