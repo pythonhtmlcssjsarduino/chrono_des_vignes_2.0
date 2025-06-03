@@ -77,6 +77,9 @@ def delete_edition_page(event_name, edition_name):
     if edition.first_inscription <= datetime.now():
         flash('l\'edition ne peut pas être supprimée car les inscriptions sont déjà ouvertes', 'danger')
         return redirect(url_for('admin.editions.modify_edition_page',event_name=event.name, edition_name=edition.name))
+    elif edition.passage_keys.count()>0:
+        flash('l\'edition ne peut pas être supprimée car des passages keys existent', 'danger')
+        return redirect(url_for('admin.editions.modify_edition_page',event_name=event.name, edition_name=edition.name))
 
     db.session.delete(edition)
     db.session.commit()

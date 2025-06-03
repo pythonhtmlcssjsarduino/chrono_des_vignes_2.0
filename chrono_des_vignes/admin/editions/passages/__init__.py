@@ -147,6 +147,7 @@ def get_passage_data(passage:Passage, json=False)->dict:
           'name':passage.inscription.inscrit.name,
           'time_stamp':passage.time_stamp if not json else passage.time_stamp.timestamp(),
           'parcours':[]}
+    ic(passage.inscription, passage, passage.id)
 
     user_passages:list[Passage] = Passage.query.filter(Passage.inscription==passage.inscription, Passage.time_stamp<=passage.time_stamp).all()
     if len(user_passages)>0:
@@ -179,6 +180,7 @@ def get_passage_data(passage:Passage, json=False)->dict:
             hours, remainder = divmod(delta.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             delta= f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"
+            ic(p, p.get_stand(), p.key.stands.all(), p.inscription.parcours)
             data['parcours'].append({'stand':p.get_stand() if not json else {'name':p.get_stand().name}, 'dist':None, 'delta':delta, 'success':success})
         if not current:
             data['parcours'][-1]['current']=True
@@ -243,13 +245,14 @@ def get_passages_data():
 
 @socketio.on('set_passage', namespace='/key')
 def set_passage(data):
-    inscription:Inscription = Inscription.query.filter(Inscription.dossard == data['dossard']).first()
-    if not inscription:
-        emit('passage_response', {"success": False, 'saved':False, 'error':'not valide dossard', 'request':data}, to=session['room'])
-        return
     key = PassageKey.query.filter_by(key=session['room']).first()
     if not key:
         emit('passage_response', {"success": False, 'saved':False, 'error':'not valide key', 'request':data}, to=session['room'])
+        return
+
+    inscription:Inscription = Inscription.query.filter(Inscription.dossard == data['dossard'], Inscription.edition==key.edition).first()
+    if not inscription:
+        emit('passage_response', {"success": False, 'saved':False, 'error':'not valide dossard', 'request':data}, to=session['room'])
         return
     
     if inscription.end == 'finish':

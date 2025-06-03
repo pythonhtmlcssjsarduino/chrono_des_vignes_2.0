@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-04-06 20:38+0200\n"
+"POT-Creation-Date: 2025-05-18 16:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -354,7 +354,7 @@ msgid "form.validate"
 msgstr "validate"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:27
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:55
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:75
 msgid "admin.editions.passages.key"
 msgstr "key"
 
@@ -363,13 +363,13 @@ msgid "admin.editions.passages.événement"
 msgstr "event"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:31
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:17
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:56
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:37
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:76
 msgid "admin.editions.passages.stand"
 msgstr "stand"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:31
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:17
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:37
 msgid "admin.editions.passages.parcours"
 msgstr "course"
 
@@ -377,11 +377,11 @@ msgstr "course"
 msgid "admin.editions.passages.enterdossardnb"
 msgstr "enter bib number"
 
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:53
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:73
 msgid "admin.editions.passages.time"
 msgstr "time"
 
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:54
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:74
 msgid "admin.editions.passages.user"
 msgstr "runner"
 
@@ -428,6 +428,10 @@ msgstr "start by creating a course"
 #: chrono_des_vignes/admin/editions/templates/editions.html:68
 msgid "admin.editions.newedition"
 msgstr "new edition"
+
+#: chrono_des_vignes/admin/editions/templates/editions.html:72
+msgid "admin.editions.rdv"
+msgstr "Meeting point for this edition"
 
 #: chrono_des_vignes/admin/editions/templates/modify_edition.html:24
 msgid "form.editionrdv"
@@ -774,7 +778,7 @@ msgstr "create an account"
 
 #: chrono_des_vignes/users/form.py:62
 msgid "form.pwdforconnection"
-msgstr "Passwort (für den Zugang zu Ihrem persönlichen Bereich)"
+msgstr "password (to access your personal space)"
 
 #: chrono_des_vignes/users/form.py:73
 msgid "form.profilpic"

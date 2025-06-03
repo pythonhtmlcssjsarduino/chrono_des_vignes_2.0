@@ -103,7 +103,8 @@ def launch_parcours(data):
                                     'all_right':inscription.has_all_right(),
                                     'end':inscription.end})
                 emit('new_passage', pass_data, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
-
+    else:
+        ic('error value false', parcours is not None and data.get('start_time'), parcours ,data.get('start_time'), data)
 @socketio.on('stop_parcours', namespace='/edition/parcours')
 def stop_parcours(data):
     parcours = Parcours.query.get(data.get('parcours_id'))

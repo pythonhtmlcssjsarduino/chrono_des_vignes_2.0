@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2025-04-06 20:38+0200\n"
+"POT-Creation-Date: 2025-05-18 16:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -354,7 +354,7 @@ msgid "form.validate"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:27
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:55
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:75
 msgid "admin.editions.passages.key"
 msgstr "XXXXXXXX"
 
@@ -363,13 +363,13 @@ msgid "admin.editions.passages.événement"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:31
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:17
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:56
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:37
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:76
 msgid "admin.editions.passages.stand"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/passages/templates/chrono.html:31
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:17
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:37
 msgid "admin.editions.passages.parcours"
 msgstr "XXXXXXXX"
 
@@ -377,11 +377,11 @@ msgstr "XXXXXXXX"
 msgid "admin.editions.passages.enterdossardnb"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:53
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:73
 msgid "admin.editions.passages.time"
 msgstr "XXXXXXXX"
 
-#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:54
+#: chrono_des_vignes/admin/editions/passages/templates/dashboard.html:74
 msgid "admin.editions.passages.user"
 msgstr "XXXXXXXX"
 
@@ -427,6 +427,10 @@ msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/templates/editions.html:68
 msgid "admin.editions.newedition"
+msgstr "XXXXXXXX"
+
+#: chrono_des_vignes/admin/editions/templates/editions.html:72
+msgid "admin.editions.rdv"
 msgstr "XXXXXXXX"
 
 #: chrono_des_vignes/admin/editions/templates/modify_edition.html:24

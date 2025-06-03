@@ -42,7 +42,7 @@ def home():
         participations = None
         form = None
     date = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-    next_events = Event.query.filter(Event.editions.any(and_(Edition.edition_date>=date,Edition.last_inscription>=date))).all()
+    next_events = Event.query.filter(Event.editions.any(and_(Edition.edition_date>=date,Edition.last_inscription>=date))).filter(Event.id!=1).all()
     return render_template("0-home.html", user_data=user, inscriptions=inscriptions, events = next_events, participations=participations, form=form)
 
 @app.route('/lang/<lang>')

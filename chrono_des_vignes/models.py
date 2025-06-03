@@ -313,7 +313,7 @@ class Inscription(db.Model):
     end=db.Column(db.String(10)) # abandon, disqual, absent, finish or None
 
     def __repr__(self) -> str:
-        return f'<Inscription id:{self.id} dossard:{self.dossard} >'
+        return f'<Inscription id:{self.id} dossard:{self.dossard} user:{self.inscrit.username}>'
     
     def has_started(self)->bool:
         return bool(self.passages.count())
@@ -416,7 +416,7 @@ class Passage(db.Model):
     inscription:Inscription
 
     def __repr__(self) -> str:
-        return f'<Passage time={self.time_stamp} key={self.key.name} inscription={self.inscription.inscrit.username} >'
+        return f'<Passage time={self.time_stamp} key={self.key.name if self.key else None} inscription={self.inscription.inscrit.username} >'
     
     def get_stand(self)->Stand:
         if self.key is None:

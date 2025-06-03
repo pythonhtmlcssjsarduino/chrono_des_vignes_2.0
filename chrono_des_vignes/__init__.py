@@ -218,13 +218,14 @@ def http_error(error:exceptions.HTTPException):
 
 # defini les pages du site web
 from chrono_des_vignes.users import users
-from chrono_des_vignes.admin import admin
-from chrono_des_vignes.view import view
-from chrono_des_vignes.dev import dev
-from chrono_des_vignes.livetrack import livetrack
 app.register_blueprint(users)
+from chrono_des_vignes.admin import admin
 app.register_blueprint(admin)
+from chrono_des_vignes.view import view
 app.register_blueprint(view)
-app.register_blueprint(dev)
+if app.debug:
+    from chrono_des_vignes.dev import dev
+    app.register_blueprint(dev)
+from chrono_des_vignes.livetrack import livetrack
 app.register_blueprint(livetrack)
 from chrono_des_vignes import routes
