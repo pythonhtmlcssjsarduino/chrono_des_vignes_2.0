@@ -1,0 +1,3 @@
+- On the runners page, you have access to information about all runners who participated in your event.
+- By clicking on a runner's row, you access their information page.
+- From their page, you can view the runner's participation data.
