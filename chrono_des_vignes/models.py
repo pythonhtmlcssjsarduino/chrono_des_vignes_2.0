@@ -31,6 +31,7 @@ from collections import namedtuple
 from markdown import markdown
 from sqlalchemy import func, not_
 from flask_sqlalchemy.model import Model
+from sqlalchemy.ext.mutable import MutableDict
 
 md_extentions:list[str] = ['admonition', 'markdown.extensions.tables']
 def get_html_from_markdown(markdown_text: str) -> str:

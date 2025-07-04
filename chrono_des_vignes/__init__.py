@@ -177,6 +177,12 @@ def lang_url_for(*args, **kwargs):
     if 'static' in args or kwargs.get('lang'):
         return url_for(*args, **kwargs)
     lang = _('app.lang')
+    if args[0].startswith('doc'):
+        if lang == 'fr':
+            lang = None
+        url = url_for(*args, lang=lang, **kwargs)
+        if url[-1]!='/':url+='/'
+        return url
     if lang == request.accept_languages.best_match(LANGAGES):
         return url_for(*args, **kwargs)
     return url_for(*args, lang=lang, **kwargs)
