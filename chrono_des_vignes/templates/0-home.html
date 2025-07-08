@@ -74,7 +74,7 @@
                     </thead>
                     <tbody>
                     {% for inscription in inscriptions  | sort(attribute="edition.edition_date") %}
-                        <tr data-href="{{ url_for('view.view_inscription_page', inscription=inscription.id) }}">
+                        <tr data-href="{{ url_for('view.view_inscription_page', inscription_id=inscription.id) }}">
                             <th scope="row">{{inscription.event.name}}</th>
                             <th scope="row">{{inscription.parcours.name}}</th>
                             <th scope="row">{{ inscription.edition.name }}</th>

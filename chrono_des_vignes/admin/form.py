@@ -18,13 +18,11 @@
 # You may contact me at chrono-des-vignes@ikmail.com
 '''
 
-from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField
-from chrono_des_vignes.custom_validators import DataRequired, DbLength, DateTimeNotPast, DateTimeBefore, InputRequired
-from chrono_des_vignes.custom_field import MultiCheckboxFieldWithDescription
+from chrono_des_vignes.custom_validators import DataRequired, DbLength
 from chrono_des_vignes.models import Event
 from flask_babel import lazy_gettext as _
-
+from flask_wtf import FlaskForm
 
 class EventForm(FlaskForm):
     description = TextAreaField(_('form.eventdescription'), render_kw={"rows": 10})

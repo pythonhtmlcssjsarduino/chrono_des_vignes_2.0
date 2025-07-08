@@ -23,7 +23,7 @@
 {% block content %}
 <form action="" method="post" id="form">
   {{ form.hidden_tag() }}
-  {{ form_field(form.data, div_class='d-none') }}
+  {{ form_field(form.lang_data, div_class='d-none') }}
   {{ submit(form) }}
 </form>
 <style>

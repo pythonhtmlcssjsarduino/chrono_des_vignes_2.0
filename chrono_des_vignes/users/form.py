@@ -22,7 +22,7 @@ from flask_wtf import FlaskForm
 from chrono_des_vignes.models import User
 from wtforms import StringField, PasswordField, SubmitField, EmailField, DateField
 from flask_wtf.file import FileField, FileAllowed
-from chrono_des_vignes.custom_validators import DataRequired, Length, EqualTo, DonTExist, DbLength, Email
+from chrono_des_vignes.custom_validators import DataRequired, EqualTo, DbLength, Email
 from chrono_des_vignes.custom_field import MultiCheckboxFieldWithDescription
 from flask_babel import lazy_gettext as _
 from wtforms.validators import Optional

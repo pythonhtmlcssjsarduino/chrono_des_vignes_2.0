@@ -18,24 +18,24 @@
 # You may contact me at chrono-des-vignes@ikmail.com
 '''
 
-import time
-from flask import Blueprint, redirect, render_template, flash, request, jsonify, session
+from flask import Blueprint, redirect, render_template, flash, request, session
 from chrono_des_vignes import admin_required, db, set_route, lang_url_for as url_for, socketio
 from chrono_des_vignes.lib import calc_points_dist
 from flask_login import login_required, current_user
-from chrono_des_vignes.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, User, Inscription, Trace
+from chrono_des_vignes.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, Inscription, Trace
 from datetime import datetime
-from .form import NewKeyForm, ChronoLoginForm, ChronoLoginForm
+from .form import NewKeyForm, ChronoLoginForm
 import secrets
 from flask_socketio import join_room, leave_room, emit
 from flask_babel import _
+from werkzeug.wrappers.response import Response
 
 passages = Blueprint('passages', __name__, template_folder='templates')
 
 @login_required
 @admin_required
 @set_route(passages, "/event/<event_name>/editions/<edition_name>/dashboard", methods=['get', 'post'])
-def dashboard(event_name, edition_name):
+def dashboard(event_name:str, edition_name:str)->str|Response:
     user = current_user
     event = Event.query.filter_by(name= event_name).first_or_404()
     edition:Edition = event.editions.filter_by(name=edition_name).first_or_404()
@@ -44,8 +44,9 @@ def dashboard(event_name, edition_name):
         # formulaire d'ajout
         form:NewKeyForm = NewKeyForm()
         for i, parcours in enumerate(edition.parcours):
-            choices =  [('', '')] + [(f'{s.id}', f'{s.parcours.name} - {s.name}') for s in Stand.query.filter(Stand.parcours.has(Parcours.id==parcours.id), Stand.chrono==True).all()]
-            if len(form.stands.entries)<=i:form.stands.append_entry()
+            choices =  [('', '')] + [(f'{s.id}', f'{s.parcours.name} - {s.name}') for s in Stand.query.filter(Stand.parcours.has(Parcours.id==parcours.id), Stand.chrono==True).all()]  # noqa: E712
+            if len(form.stands.entries)<=i:
+                form.stands.append_entry()
             field = form.stands.entries[i]
             field.choices = choices
             field.label.text = f'parcours {parcours.name}'
@@ -81,7 +82,7 @@ def dashboard(event_name, edition_name):
 @login_required
 @admin_required
 @set_route(passages, '/event/<event_name>/editions/<edition_name>/delete/<key_id>')
-def delete_key(event_name, edition_name, key_id:int):
+def delete_key(event_name:str, edition_name:str, key_id:int):
     key:PassageKey = PassageKey.query.filter_by(id=key_id).first_or_404()
     if  key.edition.edition_date <= datetime.now():
         flash(_('flash.key_not_deleted_edition_passed'), 'danger')
@@ -147,7 +148,7 @@ def get_passage_data(passage:Passage, json=False)->dict:
           'name':passage.inscription.inscrit.name,
           'time_stamp':passage.time_stamp if not json else passage.time_stamp.timestamp(),
           'parcours':[]}
-    ic(passage.inscription, passage, passage.id)
+    ic(passage.inscription, passage, passage.id)  # noqa: F821
 
     user_passages:list[Passage] = Passage.query.filter(Passage.inscription==passage.inscription, Passage.time_stamp<=passage.time_stamp).all()
     if len(user_passages)>0:
@@ -180,7 +181,7 @@ def get_passage_data(passage:Passage, json=False)->dict:
             hours, remainder = divmod(delta.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             delta= f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"
-            ic(p, p.get_stand(), p.key.stands.all(), p.inscription.parcours)
+            ic(p, p.get_stand(), p.key.stands.all(), p.inscription.parcours)  # noqa: F821
             data['parcours'].append({'stand':p.get_stand() if not json else {'name':p.get_stand().name}, 'dist':None, 'delta':delta, 'success':success})
         if not current:
             data['parcours'][-1]['current']=True
@@ -194,7 +195,7 @@ def get_key_passage_data(key:PassageKey, json=False):
     return data
 
 @set_route(passages, '/chrono/<key_code>')
-def chrono_page(key_code):
+def chrono_page(key_code:str):
     user = current_user if current_user.is_authenticated else None
     key = PassageKey.query.filter_by(key=key_code).first_or_404()
     # TODO uncomment this part

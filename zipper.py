@@ -1,19 +1,21 @@
-import os, zipfile, fnmatch
+import os
+import zipfile
+import fnmatch
 
-def match_any(path: str, patterns:list[str]):
+def match_any(path: str, patterns:list[str])-> bool:
     for pattern in patterns:
         if fnmatch.fnmatch(path, pattern):# path.startswith(pattern) or pattern in path:
             return True
     return False
 
-def should_include(path: str, include_list:list[str], exclude_list:list[str], include_files:list[str], exclude_files:list[str]):
+def should_include(path: str, include_list:list[str], exclude_list:list[str], include_files:list[str], exclude_files:list[str])-> bool:
     if match_any(path, include_files) and not match_any(path, exclude_files):
         return True
     if match_any(path, include_list) and not match_any(path, exclude_list):
         return True
     return False
 
-def zip_release(zip_filename:str, include_paths:list[str], exclude_paths:list[str], include_files:list[str], exclude_files:list[str]):
+def zip_release(zip_filename:str, include_paths:list[str], exclude_paths:list[str], include_files:list[str], exclude_files:list[str])-> None:
     include_paths = [ f'*{f}*' for f in include_paths ]
     exclude_paths = [ f'*{f}*' for f in exclude_paths ]
     include_files = [ f'*{f}' for f in include_files ]

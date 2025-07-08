@@ -18,7 +18,7 @@
 # You may contact me at chrono-des-vignes@ikmail.com
 '''
 
-from flask import Blueprint, flash, render_template, redirect, request
+from flask import Blueprint, flash, render_template, redirect
 from chrono_des_vignes import admin_required, db, set_route, lang_url_for as url_for
 from chrono_des_vignes.admin.editions.form import Edition_form
 from flask_login import login_required, current_user
@@ -29,6 +29,7 @@ from .passages import passages
 from .parcours import parcours
 from .result import result
 from sqlalchemy import or_
+from werkzeug.wrappers import Response
 
 editions = Blueprint('editions', __name__, template_folder='templates')
 editions.register_blueprint(dossard)
@@ -39,16 +40,16 @@ editions.register_blueprint(result)
 @set_route(editions, '/event/<event_name>/editions', methods=['POST', 'GET'])
 @login_required
 @admin_required
-def editions_page(event_name):
+def editions_page(event_name: str)->str|Response:
     # * page to access the differents editions of the event
     event = Event.query.filter_by(name=event_name).first_or_404()
     user = current_user
     form = Edition_form()
-    form.parcours.choices=[str((e.name, e.description)) for e in event.parcours.filter_by(archived=False).all()]
+    form.parcours.choices=[str((e.name, e.description)) for e in event.parcours.filter_by(archived=False).all()] # type: ignore
     if form.validate_on_submit():
         if not event.editions.filter_by(name=form.name.data).first():
             #ok nom pas utilisé
-            parcours = [eval(p)[0] for p in form.parcours.data]
+            parcours = [eval(p)[0] for p in form.parcours.data]# type: ignore[union-attr]
             parcours = event.parcours.filter(Parcours.name.in_(parcours)).all()
             edition = Edition(name = form.name.data,
                               event_id=event.id,
@@ -71,7 +72,7 @@ def editions_page(event_name):
 @set_route(editions, '/event/<event_name>/editions/<edition_name>/delete', methods=['POST', 'GET'])
 @login_required
 @admin_required
-def delete_edition_page(event_name, edition_name):
+def delete_edition_page(event_name: str, edition_name: str)-> str|Response:
     event = Event.query.filter_by(name=event_name).first_or_404()
     edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
     if edition.first_inscription <= datetime.now():
@@ -89,7 +90,7 @@ def delete_edition_page(event_name, edition_name):
 @set_route(editions, '/event/<event_name>/editions/<edition_name>', methods=['POST', 'GET'])
 @login_required
 @admin_required
-def modify_edition_page(event_name, edition_name):
+def modify_edition_page(event_name: str, edition_name: str)-> str|Response:
     event : Event = Event.query.filter_by(name=event_name).first_or_404()
     edition : Edition= event.editions.filter_by(name=edition_name).first_or_404()
     user = current_user
@@ -101,7 +102,7 @@ def modify_edition_page(event_name, edition_name):
                               'rdv_lat':edition.rdv_lat,
                               'rdv_lng':edition.rdv_lng,
                               'parcours':[str((p.name, p.description)) for p in edition.parcours]})
-    form.parcours.choices=[str((p.name, p.description)) for p in event.parcours.filter(or_(Parcours.archived==False, Parcours.editions.any(Edition.id==edition.id))).all()]
+    form.parcours.choices=[str((p.name, p.description)) for p in event.parcours.filter(or_(Parcours.archived==False, Parcours.editions.any(Edition.id==edition.id))).all()] # type: ignore # noqa: E712 
 
     #? desactiver le champs si dates deja passé
     form.edition_date.render_kw.pop("disabled", None)
@@ -130,7 +131,7 @@ def modify_edition_page(event_name, edition_name):
             edition.name = form.name.data
             edition.edition_date = form.edition_date.data
             edition.description = form.description.data
-            edition.parcours = event.parcours.filter(Parcours.name.in_([eval(p)[0] for p in form.parcours.data])).all()
+            edition.parcours = event.parcours.filter(Parcours.name.in_([eval(p)[0] for p in form.parcours.data])).all()#type: ignore[union-attr]
             edition.first_inscription = form.first_inscription.data
             edition.last_inscription = form.last_inscription.data
             edition.rdv_lat = form.rdv_lat.data

@@ -20,12 +20,14 @@
 
 from flask import Blueprint, render_template, flash, redirect
 from flask_login import login_required, current_user
-from chrono_des_vignes import admin_required, set_route, db, lang_url_for as url_for, app
+from chrono_des_vignes import admin_required, set_route, db, lang_url_for as url_for
 from chrono_des_vignes.models import Event
 from .form import EventForm, NewEventForm
 from .editions import editions
 from .parcours import parcours_bp
 from .coureurs import coureurs
+from werkzeug.wrappers.response import Response
+from flask_babel import _
 
 admin = Blueprint('admin', __name__, template_folder='templates')
 admin.register_blueprint(parcours_bp)
@@ -36,19 +38,19 @@ admin.register_blueprint(coureurs)
 @set_route(admin, '/event/<event_name>/delete', methods=['POST'])
 @login_required
 @admin_required
-def delete_event(event_name):
+def delete_event(event_name: str)->str|Response:
     event:Event = Event.query.filter_by(name=event_name).first_or_404()
     if event.parcours.count() or event.editions.count():
         flash(_('flash.event_not_deleted'), 'danger')
         return redirect(url_for('admin.home_event', event_name=event.name))
-    db.session.delete(event)
+    db.session.delete(event)#type: ignore[no-untyped-call]
     db.session.commit()
     return redirect(url_for('home'))
 
 @admin.route('/event/new', methods=['POST'])
 @login_required
 @admin_required
-def new_event():
+def new_event()->str|Response:
 
     user = current_user
     form = NewEventForm()
@@ -73,9 +75,9 @@ def new_event():
 @set_route(admin, '/event/<event_name>', methods=['POST', 'GET'])
 @login_required
 @admin_required
-def home_event(event_name):
+def home_event(event_name:str)->str|Response:
     #* page to access and modify an event
-    event_data:Event = Event.query.filter_by(name=event_name).first()
+    event_data:Event = Event.query.filter_by(name=event_name).first()#type: ignore[assignment]
     user = current_user
 
     event_form = EventForm(data={

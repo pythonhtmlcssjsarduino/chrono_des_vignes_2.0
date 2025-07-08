@@ -37,7 +37,7 @@
         <p class="mb-0">{{ _('view.parcours') }}</p>
       </div>
       <div class="col-sm-9">
-        <a class="text-decoration-none link-dark" href="{{ url_for('view.view_parcours_page', event=inscription.event.name, parcours=inscription.parcours.name) }}"><p class="text-muted mb-0">{{inscription.parcours.name}}</p></a>
+        <a class="text-decoration-none link-dark" href="{{ url_for('view.view_parcours_page', event_name=inscription.event.name, parcours_name=inscription.parcours.name) }}"><p class="text-muted mb-0">{{inscription.parcours.name}}</p></a>
       </div>
     </div>
     <hr />

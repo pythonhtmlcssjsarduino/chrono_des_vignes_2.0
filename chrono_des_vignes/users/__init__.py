@@ -26,17 +26,19 @@ from .form import Login_form, Signup_form, Inscription_connected_form, Inscripti
 from chrono_des_vignes import db, set_route, lang_url_for as url_for, bcrypt
 from sqlalchemy import and_, not_
 from datetime import datetime
-import string, secrets, os
+import string
+import secrets
+import os
 from flask_babel import _
 from PIL import Image
 from werkzeug.datastructures import FileStorage
-from wtforms.validators import ValidationError
+from werkzeug.wrappers import Response
 alphabet = string.ascii_letters + string.digits
 
 users = Blueprint('users', __name__, template_folder='templates')
 
 @set_route(users, '/login', methods=['POST', 'GET'])
-def login():
+def login()->str|Response:
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = Login_form()
@@ -47,7 +49,7 @@ def login():
             login_user(user)
             flash(_('flash.connected:name').format(name = user.name), 'success')
             if request.args.get('next'):
-                return redirect(request.args.get('next'))
+                return redirect(request.args['next'])
             else:
                 return redirect(url_for('home'))
         else:
@@ -55,7 +57,7 @@ def login():
     return render_template('login.html', form=form)
 
 @set_route(users, '/signup', methods=['POST', 'GET'])
-def signup():
+def signup()-> str|Response:
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = Signup_form()
@@ -77,26 +79,27 @@ def signup():
 
 @set_route(users, '/logout')
 @login_required
-def logout():
+def logout()-> str|Response:
     logout_user()
     flash(_('flash.deconected'), 'success')
     return redirect(url_for('home'))
 
-@set_route(users, '/<event>/edition/<edition>/inscription', methods=['POST', 'GET'])
-def inscription_page(event, edition):
+@set_route(users, '/<event_name>/edition/<edition_name>/inscription', methods=['POST', 'GET'])
+def inscription_page(event_name: str, edition_name: str)-> str|Response:
     user = current_user if current_user.is_authenticated else None
-    event = Event.query.filter_by(name=event).first_or_404()
-    edition:Edition = event.editions.filter_by(name=edition).first_or_404()
+    event = Event.query.filter_by(name=event_name).first_or_404()
+    edition:Edition = event.editions.filter_by(name=edition_name).first_or_404()
     if edition.first_inscription > datetime.now():
         date = edition.first_inscription.strftime('%A %d %B %Y')
         # pas encore ouvert
         flash(_('flash.warn.inscriptionsnotopen:date').format(date=date), 'warning')
-        return redirect(url_for("view.view_edition_page", event = event.name, edition=edition.name))
+        return redirect(url_for("view.view_edition_page", event_name = event.name, edition_name=edition.name))
     if edition.last_inscription < datetime.now():
         # deja fermé
         flash(_('flash.warn.inscriptionclosed'), 'warning')
-        return redirect(url_for("view.view_edition_page", event = event.name, edition=edition.name))
+        return redirect(url_for("view.view_edition_page", event_name = event.name, edition_name=edition.name))
 
+    form:Inscription_connected_form|Inscription_form
     if user:
         form = Inscription_connected_form()
         choices = edition.parcours.filter( not_(Parcours.inscriptions.any(and_(Inscription.inscrit==user, Inscription.edition==edition))), Parcours.event==event).all()
@@ -156,13 +159,13 @@ def inscription_page(event, edition):
 
 @set_route(users, '/profil')
 @login_required
-def profil():
+def profil()-> str|Response:
     user = current_user
     return render_template('profil.html', user_data=user)
 
-def save_avatar(form_picture:FileStorage, old_picture_name=None):
+def save_avatar(form_picture:FileStorage, old_picture_name: str|None=None)-> str:
     random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
+    _, f_ext = os.path.splitext(form_picture.filename)#type:ignore[type-var]
     picture_name = f'{random_hex}{f_ext}'
     picture_path = os.path.join(app.root_path, 'static/profil_pics', picture_name)
 
@@ -177,7 +180,7 @@ def save_avatar(form_picture:FileStorage, old_picture_name=None):
 
 @set_route(users, '/profil/update', methods=['get', 'post'])
 @login_required
-def modify_profil():
+def modify_profil()-> str|Response:
     user:User = current_user
     form:ModifyForm = ModifyForm(data={'name':user.name,
                             'lastname':user.lastname,
@@ -208,7 +211,7 @@ def modify_profil():
 
 @set_route(users, '/profil/updatepwd', methods=['get', 'post'])
 @login_required
-def modify_password():
+def modify_password()-> str|Response:
     user:User = current_user
     form:ModifyPwdForm = ModifyPwdForm()
 

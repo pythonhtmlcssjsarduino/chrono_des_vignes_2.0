@@ -18,21 +18,22 @@
 # You may contact me at chrono-des-vignes@ikmail.com
 '''
 
-from flask import render_template, request, session, redirect, send_file, send_from_directory, url_for, abort
+from flask import render_template, request, redirect, send_from_directory, abort
 from chrono_des_vignes import app, LANGAGES, set_route
 from flask_login import current_user
-from chrono_des_vignes.models import Edition, Inscription, Event, User
+from chrono_des_vignes.models import Edition, Inscription, Event
 from sqlalchemy import and_
 from datetime import datetime
-from flask_babel import gettext, force_locale, get_locale, lazy_gettext
-from chrono_des_vignes.admin import NewEventForm
+from chrono_des_vignes.admin.form import NewEventForm
+from werkzeug.wrappers.response import Response
+from typing import cast, Any
 import os
 
 @set_route(app, '/')
-def home():
+def home()->str:
     # * home page of the web site
     if current_user.is_authenticated:
-        user:User = current_user
+        user = current_user
         inscriptions = user.inscriptions.filter(Inscription.edition.has(Edition.edition_date>datetime.now())).all()
         participations = user.inscriptions.filter(Inscription.edition.has(Edition.edition_date<=datetime.now())).all()
         form = NewEventForm()
@@ -46,41 +47,38 @@ def home():
     return render_template("0-home.html", user_data=user, inscriptions=inscriptions, events = next_events, participations=participations, form=form)
 
 @app.route('/lang/<lang>')
-def change_lang(lang):
+def change_lang(lang:str)->Response:
     next = request.args.get('next')
-    #ic(next)
-    #ic(next.split('/')[1])
-    next = next.split('/')
-    if next[1] in LANGAGES:
+    next = next.split('/')#type: ignore
+    if next[1] in LANGAGES:#type: ignore
         if lang==request.accept_languages.best_match(LANGAGES):
-            next.pop(1)
+            next.pop(1)#type: ignore
         else:
-            next[1]=lang
+            next[1]=lang#type: ignore
     else:
         if lang!=request.accept_languages.best_match(LANGAGES):
-            next.insert(1, lang)
-    next = '/'.join(next)
-    #ic(next)
+            next.insert(1, lang)#type: ignore
+    next = '/'.join(next)#type: ignore
     return redirect(next)
 
 @app.route('/doc/<path:path>')
 @app.route('/doc/<lang>/<path:path>')
 @app.route('/doc/')
-def doc(path='', lang=''):
-    if not os.path.exists(os.path.join(app.root_path,app.template_folder, 'doc/site/index.html' if path == '' else f'doc/site/{path}index.html')):
+def doc(path: str='', lang: str='')-> str:
+    if not os.path.exists(os.path.join(app.root_path,cast(str, app.template_folder), 'doc/site/index.html' if path == '' else f'doc/site/{path}index.html')):
         return render_template('doc/site/404.html')
     lang=lang+"/" if lang else ""
     return render_template(f'doc/site/{lang}index.html' if path == '' else f'doc/site/{lang}{path}index.html')
 
 @app.route('/doc/assets/<path:path>')
-def assets_doc_files(path):
+def assets_doc_files(path:str)->Any:
     return doc_file('assets', path)
 
 @app.route('/doc/search/<path:path>')
-def search_doc_files(path):
+def search_doc_files(path: str)->Any:
     return doc_file('search', path)
 
-def doc_file(dir, path:str):
-    if not os.path.exists(os.path.join(app.root_path,app.template_folder, f'doc/site/{dir}/{path}')): 
+def doc_file(dir:str, path:str)->Any:
+    if not os.path.exists(os.path.join(app.root_path,str(app.template_folder), f'doc/site/{dir}/{path}')): 
         return abort(404)
-    return send_from_directory(app.template_folder, f'doc/site/{dir}/{path}', download_name=path.split('/')[-1])
+    return send_from_directory(str(app.template_folder), f'doc/site/{dir}/{path}', download_name=path.split('/')[-1])

@@ -17,11 +17,11 @@
 # 
 # You may contact me at chrono-des-vignes@ikmail.com
 '''
-
-from flask import Blueprint, redirect, render_template, flash, jsonify, request, abort
-from chrono_des_vignes import admin_required, db, app, LANGAGES, lang_url_for as url_for
+from flask import Blueprint, redirect, render_template, flash, jsonify, abort
+from chrono_des_vignes import app, LANGAGES, lang_url_for as url_for
 from functools import wraps
-import glob, os
+import glob
+import os
 from babel.messages.pofile import read_po, write_po
 from babel.messages.catalog import Catalog
 from io import StringIO
@@ -31,7 +31,7 @@ from chrono_des_vignes.custom_validators import DataRequired
 
 
 class langForm(FlaskForm):
-    data = StringField('data', validators=[DataRequired()])
+    lang_data = StringField('data', validators=[DataRequired()])
     submit_btn = SubmitField('submit')
 
 def dev_required(func):

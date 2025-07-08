@@ -19,18 +19,19 @@
 '''
 
 from datetime import datetime
-from flask import Blueprint, redirect, render_template, flash, request, jsonify, session
+from flask import Blueprint, redirect, render_template, flash, request, session
 from chrono_des_vignes import admin_required, db, set_route, lang_url_for as url_for, socketio
-from chrono_des_vignes.admin.parcours import calc_points_dist
 from flask_login import login_required, current_user
-from chrono_des_vignes.models import  Event, Edition, PassageKey, Stand, Parcours, Passage, User, Inscription, Trace
+from chrono_des_vignes.models import  Event, Edition, Parcours, Passage, Inscription
 from flask_socketio import join_room, leave_room, emit
 from ..passages import get_passage_data
+from typing import Any
+from werkzeug.wrappers.response import Response
 
 parcours = Blueprint('parcours', __name__, template_folder='templates')
 
 @socketio.on('connect', namespace='/edition/parcours')
-def parcours_connect(auth):
+def parcours_connect(auth: dict[str, Any])-> bool:
     if current_user.is_authenticated and auth.get('event_id') and auth.get('edition_id'):
         event:Event = Event.query.get(auth['event_id'])
         if not event or event.createur != current_user:
@@ -40,17 +41,18 @@ def parcours_connect(auth):
             return False # connection not allowed
         
         session['room'] = f'edition-parcours-{event.id}-{edition.id}'
-        join_room(session['room'], request.sid)
+        join_room(session['room'], request.sid)#type: ignore
     else:
         return False # connection not allowed
+    return True
 
 @socketio.on('disconnect', namespace='/edition/parcours')
-def parcours_disconnect():
-    leave_room(session['room'], request.sid)
+def parcours_disconnect()-> None:
+    leave_room(session['room'], request.sid)#type: ignore
     del session['room']
 
 @socketio.on('get_parcours_passage', namespace='/edition/parcours')
-def get_parcours_passages(parcours_id):
+def get_parcours_passages(parcours_id: int)-> list[dict[str, Any]]:
     parcours = Parcours.query.get(parcours_id)
     edition = Edition.query.get(session['room'].split('-')[3])
     inscriptions:list[Inscription] = Inscription.query.filter_by(edition=edition, parcours=parcours).all()
@@ -71,7 +73,7 @@ def get_parcours_passages(parcours_id):
     return data
 
 @socketio.on('launch_parcours', namespace='/edition/parcours')
-def launch_parcours(data):
+def launch_parcours(data: dict[str, Any])-> None:
     parcours = Parcours.query.get(data.get('parcours_id'))
     edition = Edition.query.get(session['room'].split('-')[3])
     if parcours is not None and data.get('start_time'):
@@ -104,9 +106,9 @@ def launch_parcours(data):
                                     'end':inscription.end})
                 emit('new_passage', pass_data, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
     else:
-        ic('error value false', parcours is not None and data.get('start_time'), parcours ,data.get('start_time'), data)
+        ic('error value false', parcours is not None and data.get('start_time'), parcours ,data.get('start_time'), data)  # noqa: F821
 @socketio.on('stop_parcours', namespace='/edition/parcours')
-def stop_parcours(data):
+def stop_parcours(data: dict[str, Any])-> None:
     parcours = Parcours.query.get(data.get('parcours_id'))
     edition = Edition.query.get(session['room'].split('-')[3])
 
@@ -130,7 +132,7 @@ def stop_parcours(data):
                 emit('stop', {'type':end, 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
 @socketio.on('disqualify', namespace='/edition/parcours')
-def disqualify(data):
+def disqualify(data: dict[str, Any])->None:
     if data.get('inscription_id'):
         inscription = Inscription.query.get(data.get('inscription_id'))
         #ic('disqualify', inscription)
@@ -140,7 +142,7 @@ def disqualify(data):
             emit('stop', {'type':'disqual', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
 @socketio.on('abandon', namespace='/edition/parcours')
-def abandon(data):
+def abandon(data: dict[str, Any])->None:
     if data.get('inscription_id'):
         inscription = Inscription.query.get(data['inscription_id'])
         #ic('abandon', inscription)
@@ -150,7 +152,7 @@ def abandon(data):
             emit('stop', {'type':'abandon', 'inscription_id':inscription.id}, namespace='/edition/parcours', to=f'edition-parcours-{inscription.event.id}-{inscription.edition.id}')
 
 @socketio.on('finish', namespace='/edition/parcours')
-def finish(data):
+def finish(data: dict[str, Any])->None:
     #ic('finish', data)
     if data.get('inscription_id'):
         inscription:Inscription = Inscription.query.get(data['inscription_id'])
@@ -163,7 +165,7 @@ def finish(data):
 @set_route(parcours, '/event/<event_name>/editions/<edition_name>/parcours')
 @login_required
 @admin_required
-def view(event_name, edition_name):
+def view(event_name:str, edition_name:str)->str|Response:
     user = current_user
     event = Event.query.filter_by(name=event_name).first_or_404()
     edition:Edition = event.editions.filter_by(name=edition_name).first_or_404()

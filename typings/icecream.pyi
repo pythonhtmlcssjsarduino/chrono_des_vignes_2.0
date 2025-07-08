@@ -1,0 +1,9 @@
+
+from typing import Any, TypeVar, Union
+
+T = TypeVar("T")
+
+def ic(*args: Union[Any, T]) -> Union[Any, T]: ...
+
+def install() -> None: ...
+def uninstall() -> None: ...

@@ -1,51 +1,74 @@
+'''
+# Chrono Des Vignes
+# a timing system for sports events
+# 
+# Copyright © 2024-2025 Romain Maurer
+# This file is part of Chrono Des Vignes
+# 
+# Chrono Des Vignes is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+# 
+# Chrono Des Vignes is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+# You should have received a copy of the GNU General Public License along with Foobar.
+# If not, see <https://www.gnu.org/licenses/>.
+# 
+# You may contact me at chrono-des-vignes@ikmail.com
+'''
+
 from wtforms import validators
 from datetime import datetime
-from chrono_des_vignes.models import get_column_max_length
+from chrono_des_vignes.models import get_column_max_length, Model
+from wtforms import StringField, DateTimeField
+from wtforms.form import BaseForm
+from typing import Type
 
 class Email(validators.Email):
-    def __init__(self, message=None):
+    def __init__(self, message:str|None=None):
         super().__init__(message)
 
-    def __call__(self, form, field):
+    def __call__(self, form: BaseForm, field:StringField)->None:
         super().__call__(form, field)
 
 class DataRequired:
-    def __init__(self, message=None):
+    def __init__(self, message:str|None=None):
         self.validator = validators.DataRequired(message)
 
-    def __call__(self, form, field):
+    def __call__(self, form: BaseForm, field: StringField)->None:
         self.validator.__call__(form, field)
 
 class InputRequired:
-    def __init__(self, message=None):
+    def __init__(self, message:str|None=None):
         self.validator = validators.InputRequired(message)
-    def __call__(self, form, field):
+    def __call__(self, form: BaseForm, field: StringField)->None:
         self.validator.__call__(form, field)
 
 class Length:
-    def __init__(self,min = -1, max=-1, message=None):
+    def __init__(self,min:int = -1, max:int=-1, message:str|None=None):
         self.validator = validators.Length(min,max,message)
 
-    def __call__(self, form, field):
+    def __call__(self, form: BaseForm, field: StringField)->None:
         self.validator.__call__(form, field)
 
 class DbLength(Length):
-    def __init__(self, table, column, min=-1, message=None):
+    def __init__(self, table:Type[Model], column:str, min:int=-1, message:str|None=None):
         max = get_column_max_length(table, column)
         super().__init__(min, max, message)
 
 class EqualTo:
-    def __init__(self, fieldname, message=None):
+    def __init__(self, fieldname: str, message:str|None=None):
         self.validator = validators.EqualTo(fieldname,message)
 
-    def __call__(self, form, field):
+    def __call__(self, form: BaseForm, field: StringField)->None:
         self.validator.__call__(form, field)
 
 class DateTimeNotPast:
-    def __init__(self, message=None):
+    def __init__(self, message:str|None=None):
         self.message=message if message else 'The date cannot be in the past!'
 
-    def __call__(self,form, field):
+    def __call__(self,form: BaseForm, field: DateTimeField)->None:
         if field.render_kw.get('disabled') == "disabled":
             return
         if field.data is None:
@@ -54,11 +77,11 @@ class DateTimeNotPast:
             raise validators.ValidationError(self.message)
 
 class DateTimeBefore:
-    def __init__(self, other_field, message=None):
+    def __init__(self, other_field:str, message:str|None=None):
         self.other_field = other_field
         self.message = message
 
-    def __call__(self, form, field):
+    def __call__(self, form: BaseForm, field: DateTimeField)->None:
         try:
             other = form[self.other_field]
         except KeyError:
@@ -75,12 +98,12 @@ class DateTimeBefore:
 
 
 class DonTExist:
-    def __init__(self, table, filter:str, id = None, message = None):
+    def __init__(self, table: Type[Model], filter:str, id: int|None = None, message: str|None = None):
         self.message = message
         self.table = table
         self.filter =filter
 
-    def __call__(self, form, field):
+    def __call__(self, form: BaseForm, field: StringField)->None:
         filter = {self.filter:field.data}
         first = self.table.query.filter_by(**filter).first()
         if first:

@@ -24,12 +24,12 @@ from time import time
 from datetime import timedelta, datetime
 import urllib
 
-def midpoint(latlng1, latlng2):
+def midpoint(latlng1: tuple[float, float], latlng2: tuple[float, float])-> tuple[float, float]:
     lat = (latlng1[0]+latlng2[0])/2
     lng = (latlng1[1]+latlng2[1])/2
     return (lat, lng)
 
-def get_points_elevation(points:list[tuple[float, float]]) -> list[dict[str, float]]:
+def get_points_elevation(points:list[tuple[float, float]]) -> list[dict[str, float]]:#type: ignore
     """Get the elevation of a list of points using the open-elevation API
 
     Args:
@@ -58,17 +58,17 @@ def get_points_elevation(points:list[tuple[float, float]]) -> list[dict[str, flo
         #ic(time() - start, 'get_points_elevation')
         if response.status_code == 200:
             #ic(response.json())
-            return response.json()['results'] # [{'latitude':float, 'longitude':float, 'elevation':float}, ...]
+            return response.json()['results']#type: ignore # [{'latitude':float, 'longitude':float, 'elevation':float}, ...]
         else :
             ##ic('open-elevation api error', response.status_code)
             pass
 
-def calc_points_dist(lat1, lng1, lat2, lng2):
+def calc_points_dist(lat1: float, lng1: float, lat2: float, lng2: float)-> float:
     'return the spherical dist of the two points in km'
     return acos((sin(radians(lat1)) * sin(radians(lat2))) + (cos(radians(lat1)) * cos(radians(lat2))) * (cos(radians(lng2) - radians(lng1)))) * 6371
 
 
-def deg_to_dms(deg):
+def deg_to_dms(deg: float)-> tuple[int, int, float]:
     """Convert from decimal degrees to degrees, minutes, seconds."""
     m, s = divmod(abs(deg)*3600, 60)
     d, m = divmod(m, 60)
@@ -84,7 +84,7 @@ def format_timedelta(delta: timedelta) -> str:
 
     return f"{f'{days} jours, ' if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"
 
-def create_gcalendar_link(title, start:datetime, end:datetime, detail='', location='')->str:
+def create_gcalendar_link(title: str, start:datetime, end:datetime, detail: str='', location: str='')->str:
     link='https://calendar.google.com/calendar/u/0/r/eventedit'
     link += '?text='+urllib.parse.quote(title).replace('%20','+')
     if start!=end:link += f'&dates={start.strftime("%Y%m%dT%H%M%S")}/{end.strftime("%Y%m%dT%H%M%S")}'
