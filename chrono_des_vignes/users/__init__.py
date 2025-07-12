@@ -18,10 +18,10 @@
 # You may contact me at chrono-des-vignes@ikmail.com
 '''
 
-from flask import Blueprint, redirect, flash, render_template, request
+from flask import Blueprint, redirect, flash, render_template, request, session
 from flask_login import login_required, current_user, login_user, logout_user
 from chrono_des_vignes.models import User, Event, Parcours, Inscription, Edition
-from chrono_des_vignes import app, DEFAULT_PROFIL_PIC, PICTURE_SIZE
+from chrono_des_vignes import app, DEFAULT_PROFIL_PIC, PICTURE_SIZE, username
 from .form import Login_form, Signup_form, Inscription_connected_form, Inscription_form, ModifyForm, ModifyPwdForm
 from chrono_des_vignes import db, set_route, lang_url_for as url_for, bcrypt
 from sqlalchemy import and_, not_
@@ -43,7 +43,7 @@ def login()->str|Response:
         return redirect(url_for('home'))
     form = Login_form()
     if form.validate_on_submit():
-        user= User.query.filter_by(username=form.username.data).first()
+        user:User|None = db.session.query(User).filter_by(username=form.username.data).first()
 
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user)
@@ -62,7 +62,7 @@ def signup()-> str|Response:
         return redirect(url_for('home'))
     form = Signup_form()
     if form.validate_on_submit():
-        hash_pwd= bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        hash_pwd= bcrypt.generate_password_hash(form.password.data).decode('utf-8')# type: ignore[arg-type]
         user = User(name=form.name.data,
                     lastname=form.lastname.data,
                     username=form.username.data,
@@ -102,11 +102,11 @@ def inscription_page(event_name: str, edition_name: str)-> str|Response:
     form:Inscription_connected_form|Inscription_form
     if user:
         form = Inscription_connected_form()
-        choices = edition.parcours.filter( not_(Parcours.inscriptions.any(and_(Inscription.inscrit==user, Inscription.edition==edition))), Parcours.event==event).all()
-        form.parcours.choices = [str((p.name, p.description)) for p in choices]
+        choices = edition.parcours.filter( not_(Parcours.inscriptions.any(and_(Inscription.inscrit==user, Inscription.edition==edition))), Parcours.event==event).all()#type: ignore[no-untyped-call]
+        form.parcours.choices = [str((p.name, p.description)) for p in choices]#type: ignore[misc]
 
         if form.validate_on_submit():
-            choices = event.parcours.filter(Parcours.name.in_([eval(data)[0] for data in form.parcours.data])).all()
+            choices = event.parcours.filter(Parcours.name.in_([eval(data)[0] for data in form.parcours.data])).all()#type: ignore[union-attr]
 
             inscriptions = []
             for parcours in choices:
@@ -122,12 +122,12 @@ def inscription_page(event_name: str, edition_name: str)-> str|Response:
     else:
         form = Inscription_form()
         choices = edition.parcours
-        form.parcours.choices = [str((p.name, p.description)) for p in choices]
+        form.parcours.choices = [str((p.name, p.description)) for p in choices]#type: ignore[misc]
 
         if form.validate_on_submit():
             pwd= form.password.data
-            hash_pwd = bcrypt.generate_password_hash(pwd).decode('utf-8')
-            username=f'{form.name.data[:10]}.{form.lastname.data[:10]}'
+            hash_pwd = bcrypt.generate_password_hash(pwd).decode('utf-8')# type: ignore[arg-type]
+            username=f'{form.name.data[:10]}.{form.lastname.data[:10]}'#type: ignore[index]
             nb = User.query.filter(User.username==username).count()
             username += f'({nb})' if nb>0 else ''
             user = User(name=form.name.data,
@@ -142,7 +142,7 @@ def inscription_page(event_name: str, edition_name: str)-> str|Response:
             db.session.refresh(user)
             login_user(user)
             #print(user, form.parcours.data)
-            choices = event.parcours.filter(Parcours.name.in_([eval(data)[0] for data in form.parcours.data])).all()
+            choices = event.parcours.filter(Parcours.name.in_([eval(data)[0] for data in form.parcours.data])).all()#type: ignore[union-attr]
 
             inscriptions = []
             for parcours in choices:
@@ -216,8 +216,8 @@ def modify_password()-> str|Response:
     form:ModifyPwdForm = ModifyPwdForm()
 
     if form.validate_on_submit():
-        if bcrypt.check_password_hash(user.password, field.data):
-            hash_pwd= bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        if bcrypt.check_password_hash(user.password, form.old_pwd.data):# type: ignore[arg-type]
+            hash_pwd= bcrypt.generate_password_hash(form.password.data).decode('utf-8')# type: ignore[arg-type]
             user.password = hash_pwd
             db.session.commit()
             return redirect(url_for('users.profil'))

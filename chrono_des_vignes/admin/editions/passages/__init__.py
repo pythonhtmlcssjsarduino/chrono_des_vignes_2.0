@@ -29,11 +29,12 @@ import secrets
 from flask_socketio import join_room, leave_room, emit
 from flask_babel import _
 from werkzeug.wrappers.response import Response
+from typing import Any, Optional
 
 passages = Blueprint('passages', __name__, template_folder='templates')
 
 @login_required
-@admin_required
+@admin_required#type: ignore[arg-type]
 @set_route(passages, "/event/<event_name>/editions/<edition_name>/dashboard", methods=['get', 'post'])
 def dashboard(event_name:str, edition_name:str)->str|Response:
     user = current_user
@@ -44,11 +45,11 @@ def dashboard(event_name:str, edition_name:str)->str|Response:
         # formulaire d'ajout
         form:NewKeyForm = NewKeyForm()
         for i, parcours in enumerate(edition.parcours):
-            choices =  [('', '')] + [(f'{s.id}', f'{s.parcours.name} - {s.name}') for s in Stand.query.filter(Stand.parcours.has(Parcours.id==parcours.id), Stand.chrono==True).all()]  # noqa: E712
+            choices:list[tuple[str, str]] =  [('', '')] + [(f'{s.id}', f'{s.parcours.name} - {s.name}') for s in Stand.query.filter(Stand.parcours.has(Parcours.id==parcours.id), Stand.chrono==True).all()] #type: ignore # noqa: E712
             if len(form.stands.entries)<=i:
                 form.stands.append_entry()
             field = form.stands.entries[i]
-            field.choices = choices
+            field.choices = choices#type: ignore[assignment]
             field.label.text = f'parcours {parcours.name}'
 
         if form.validate_on_submit():
@@ -72,17 +73,17 @@ def dashboard(event_name:str, edition_name:str)->str|Response:
             else:
                 form.name.errors = list(form.name.errors)+['vous utiliser déjà ce nom.']
     else:
-        form = None
+        form = None#type: ignore
 
 
-    passages = Passage.query.filter(Passage.key.has(PassageKey.edition == edition)).all()
+    passages = Passage.query.filter(Passage.key.has(PassageKey.edition == edition)).all()#type: ignore
 
     return render_template('dashboard.html', event_data=event, edition_data = edition, user_data=user, now = datetime.now(), keys=keys, passages=passages, form=form, event_modif=True, edition_sidebar=True)
 
 @login_required
-@admin_required
+@admin_required#type: ignore[arg-type]
 @set_route(passages, '/event/<event_name>/editions/<edition_name>/delete/<key_id>')
-def delete_key(event_name:str, edition_name:str, key_id:int):
+def delete_key(event_name:str, edition_name:str, key_id:int)->str|Response:
     key:PassageKey = PassageKey.query.filter_by(id=key_id).first_or_404()
     if  key.edition.edition_date <= datetime.now():
         flash(_('flash.key_not_deleted_edition_passed'), 'danger')
@@ -97,7 +98,7 @@ def delete_key(event_name:str, edition_name:str, key_id:int):
         return redirect(url_for('admin.editions.passages.dashboard', event_name=key.event.name, edition_name=key.edition.name))
 
 @set_route(passages, '/chrono', methods=["GET", 'post'])
-def chrono_home():
+def chrono_home()->str|Response:
     user = current_user if current_user.is_authenticated else None
 
 
@@ -111,13 +112,13 @@ def chrono_home():
     return render_template('chrono_home.html', user_data=user, form=form)
 
 
-def parcours_chrono_list_dist(parcours:Parcours, dist_stand:list[int]):
+def parcours_chrono_list_dist(parcours:Parcours, dist_stand:list[int])->None:
     part_list = []
     dist_list = []
     start = parcours.start_stand
     new_stand=start
     last_point=None
-    dist=0
+    dist:float=0
     # si aucun depart alors ne mettre aucun stand
     if start:
         part_list.append(start)
@@ -139,16 +140,16 @@ def parcours_chrono_list_dist(parcours:Parcours, dist_stand:list[int]):
                     if len(dist_stand)==0:
                         break
 
-                dist += trace.get
+                dist += trace.get#type: ignore
             else:
                 break
 
-def get_passage_data(passage:Passage, json=False)->dict:
+def get_passage_data(passage:Passage, json: bool=False)->dict[str, Any]:
     data={'dossard':passage.inscription.dossard,
           'name':passage.inscription.inscrit.name,
           'time_stamp':passage.time_stamp if not json else passage.time_stamp.timestamp(),
           'parcours':[]}
-    ic(passage.inscription, passage, passage.id)  # noqa: F821
+    ic(passage.inscription, passage, passage.id) #type: ignore # noqa: F821
 
     user_passages:list[Passage] = Passage.query.filter(Passage.inscription==passage.inscription, Passage.time_stamp<=passage.time_stamp).all()
     if len(user_passages)>0:
@@ -181,13 +182,13 @@ def get_passage_data(passage:Passage, json=False)->dict:
             hours, remainder = divmod(delta.seconds, 3600)
             minutes, seconds = divmod(remainder, 60)
             delta= f"{f'{days} days, 'if days>0 else ''}{hours:02}:{minutes:02}:{seconds:02}"
-            ic(p, p.get_stand(), p.key.stands.all(), p.inscription.parcours)  # noqa: F821
+            ic(p, p.get_stand(), p.key.stands.all(), p.inscription.parcours) #type: ignore # noqa: F821
             data['parcours'].append({'stand':p.get_stand() if not json else {'name':p.get_stand().name}, 'dist':None, 'delta':delta, 'success':success})
         if not current:
             data['parcours'][-1]['current']=True
     return data
 
-def get_key_passage_data(key:PassageKey, json=False):
+def get_key_passage_data(key:PassageKey, json: bool=False)->list[dict[str, Any]]:
     data = []
     passage:Passage
     for passage in Passage.query.filter_by(key=key).order_by(Passage.time_stamp.asc()).all():
@@ -195,7 +196,7 @@ def get_key_passage_data(key:PassageKey, json=False):
     return data
 
 @set_route(passages, '/chrono/<key_code>')
-def chrono_page(key_code:str):
+def chrono_page(key_code:str)->str|Response:
     user = current_user if current_user.is_authenticated else None
     key = PassageKey.query.filter_by(key=key_code).first_or_404()
     # TODO uncomment this part
@@ -206,7 +207,7 @@ def chrono_page(key_code:str):
     return render_template('chrono.html', user_data=user, key=key)
 
 @socketio.on('connect', namespace='/dashboard')
-def dashboard_connect(auth):
+def dashboard_connect(auth: dict[str, Any])-> bool:
     if current_user.is_authenticated and auth.get('event_id') and auth.get('edition_id'):
         event:Event = Event.query.get(auth['event_id'])
         if not event or event.createur != current_user:
@@ -216,36 +217,38 @@ def dashboard_connect(auth):
             return False # connection not allowed
         
         session['room'] = f'{event.id}-{edition.id}'
-        join_room(session['room'], request.sid)
+        join_room(session['room'], request.sid)#type: ignore
 
     else:
         return False # connection not allowed
+    return True
 
 @socketio.on('disconnect', namespace='/dashboard')
-def dashboard_disconnect():
-    leave_room(session['room'], request.sid)
+def dashboard_disconnect()-> None:
+    leave_room(session['room'], request.sid)#type: ignore
     del session['room']
 
 @socketio.on('connect', namespace='/key')
-def key_connect(auth):
+def key_connect(auth: dict[str, Any])-> bool:
     if not auth.get('key', False):
         return False # connection not allowed
     session['room'] = auth['key']
-    join_room(session['room'], request.sid)
+    join_room(session['room'], request.sid)#type: ignore
+    return True
 
 @socketio.on('disconnect', namespace='/key')
-def key_disconnect():
-    leave_room(session['room'], request.sid)
+def key_disconnect()-> None:
+    leave_room(session['room'], request.sid)#type: ignore
     del session['room']
 
 @socketio.on('get_passages', namespace='/key')
-def get_passages_data():
+def get_passages_data()->Optional[list[dict[str, Any]]]:#type: ignore
     key = PassageKey.query.filter_by(key=session['room']).first()
     if key:
         return get_key_passage_data(key, json=True)
 
 @socketio.on('set_passage', namespace='/key')
-def set_passage(data):
+def set_passage(data: dict[str, Any])->None:
     key = PassageKey.query.filter_by(key=session['room']).first()
     if not key:
         emit('passage_response', {"success": False, 'saved':False, 'error':'not valide key', 'request':data}, to=session['room'])

@@ -19,14 +19,16 @@
 '''
 
 from flask import Blueprint, render_template
-from chrono_des_vignes import app, set_route
+from chrono_des_vignes import set_route
 from chrono_des_vignes.models import Inscription, Passage
 from chrono_des_vignes.lib import format_timedelta
+from typing import Any
+from werkzeug.wrappers import Response
 
 livetrack = Blueprint('livetrack', __name__, template_folder='templates')
 
-def get_run_result(inscription:Inscription, json=False)->list[dict]:
-    data = []
+def get_run_result(inscription:Inscription, json: bool=False)->list[dict[str, Any]]:
+    data:list[dict[str, Any]] = []
 
     user_passages:list[Passage] = inscription.passages.order_by(Passage.time_stamp.asc()).all()
     if len(user_passages)>0:
@@ -68,7 +70,7 @@ def get_run_result(inscription:Inscription, json=False)->list[dict]:
     return data
 
 @set_route(livetrack, '/livetrack/<inscription_id>')
-def livetrack_page(inscription_id):
+def livetrack_page(inscription_id: str)->str|Response:
     inscription:Inscription = Inscription.query.get_or_404(inscription_id)
 
     #ic(get_run_result(inscription))

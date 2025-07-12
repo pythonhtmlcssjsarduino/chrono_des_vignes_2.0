@@ -7,13 +7,13 @@ class Bcrypt:
 
     def generate_password_hash(
         self,
-        password: Union[str, bytes],
+        password: str,
         rounds: Optional[int] = ...,
         prefix: Optional[bytes] = ...,
     ) -> bytes: ...
 
     def check_password_hash(
         self,
-        pw_hash: Union[str, bytes],
+        pw_hash: str,
         password: Union[str, bytes]
     ) -> bool: ...

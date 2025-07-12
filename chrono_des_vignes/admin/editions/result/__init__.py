@@ -2,7 +2,7 @@
 # Chrono Des Vignes
 # a timing system for sports events
 # 
-# Copyright © 2025 Romain Maurer
+# Copyright © 2024-2025 Romain Maurer
 # This file is part of Chrono Des Vignes
 # 
 # Chrono Des Vignes is free software: you can redistribute it and/or modify it under
@@ -20,22 +20,23 @@
 
 from flask import Blueprint, render_template, send_file, request
 from flask_login import login_required, current_user
-from chrono_des_vignes import admin_required, db, set_route, lang_url_for as url_for
-from chrono_des_vignes.models import Event, Edition, Passage, PassageKey, Stand, Inscription
-from sqlalchemy import and_
+from chrono_des_vignes import admin_required, set_route
+from chrono_des_vignes.models import Event, Edition, Parcours, Inscription
 from datetime import datetime
 from io import BytesIO
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4, portrait
-from reportlab.lib.units import mm, cm
+from reportlab.lib.units import cm
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle
 from xlsxwriter import Workbook
 from math import floor
+from typing import Any, cast
+from werkzeug.wrappers import Response
 
 result = Blueprint('result', __name__, template_folder='templates')
 
-def get_result_data(edition, parcours):
+def get_result_data(edition: Edition, parcours:Parcours)->list[dict[str, Any]]:
     coureurs:list[Inscription] = Inscription.query.filter(Inscription.edition==edition, Inscription.parcours==parcours).all()
     fini = []
     non_fini = []
@@ -46,16 +47,16 @@ def get_result_data(edition, parcours):
         if coureur.end == 'finish':
             fini.append(data)
         else:
-            data['rank'] = {'abandon':'abandon', 'disqual':'disqualifié', 'absent':'absent'}[coureur.end]
+            data['rank'] = {'abandon':'abandon', 'disqual':'disqualifié', 'absent':'absent'}[coureur.end]#type:ignore[index]
             non_fini.append(data)
     fini = sorted(fini, key=lambda item:item['time'])
-    for i, coureur in enumerate(fini):
+    for i, _ in enumerate(fini):
         fini[i]['rank'] = i+1
 
     non_fini = sorted(non_fini, key=lambda item:{'abandon':1, 'disqualifié':2, 'absent':3}[item['rank']])
     return fini + non_fini 
 
-def get_result_pdf(edition:Edition):
+def get_result_pdf(edition:Edition)->BytesIO:
     buffer = BytesIO()
     width, height = size = A4
 
@@ -126,12 +127,12 @@ def get_result_pdf(edition:Edition):
 @set_route(result, '/event/<event_name>/editions/<edition_name>/result_pdf')
 @login_required
 @admin_required
-def pdf_result(event_name, edition_name):
+def pdf_result(event_name: str, edition_name: str)->str|Response:
     event = Event.query.filter_by(name=event_name).first_or_404()
     edition:Edition = event.editions.filter_by(name=edition_name).first_or_404()
-    return send_file(get_result_pdf(edition), download_name='result.pdf', as_attachment=request.args.get('download', False))
+    return cast(Response,send_file(get_result_pdf(edition), download_name='result.pdf', as_attachment=bool(request.args.get('download', False))))
 
-def get_result_excel(edition:Edition):
+def get_result_excel(edition:Edition)->BytesIO:
     buffer = BytesIO()
 
     workbook = Workbook(buffer)
@@ -150,15 +151,15 @@ def get_result_excel(edition:Edition):
 @set_route(result, '/event/<event_name>/editions/<edition_name>/result_xlsx')
 @login_required
 @admin_required
-def xlsx_result(event_name, edition_name):
+def xlsx_result(event_name: str, edition_name: str)->str|Response:
     event = Event.query.filter_by(name=event_name).first_or_404()
     edition:Edition = event.editions.filter_by(name=edition_name).first_or_404()
-    return send_file(get_result_excel(edition), download_name='result.xlsx', as_attachment=request.args.get('download', False))
+    return cast(Response,send_file(get_result_excel(edition), download_name='result.xlsx', as_attachment=bool(request.args.get('download', False))))
 
 @set_route(result, '/event/<event_name>/editions/<edition_name>/result')
 @login_required
 @admin_required
-def result_page(event_name, edition_name):
+def result_page(event_name: str, edition_name: str)->str|Response:
     user = current_user
     event = Event.query.filter_by(name=event_name).first_or_404()
     edition:Edition = event.editions.filter_by(name=edition_name).first_or_404()

@@ -25,8 +25,9 @@ import os
 from datetime import datetime
 from functools import wraps
 from logging.handlers import SMTPHandler
-from typing import Any, Callable, ParamSpec, TypeVar, cast
+from typing import Any, Callable, ParamSpec, TypeVar, cast, Final, override
 from urllib.parse import quote
+from flask.typing import ResponseReturnValue
 from flask_babel import Babel, _, gettext
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, current_user
@@ -41,12 +42,14 @@ from flask import (
     Flask,
     abort,
     flash,
+    make_response,
     redirect,
     render_template,
     request,
     session,
     url_for,
 )
+from sqlalchemy.orm import DeclarativeBase, MappedAsDataclass
 from dotenv import load_dotenv
 install()
 load_dotenv()
@@ -72,13 +75,16 @@ app.url_map.default_subdomain = ""
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config["SQLALCHEMY_POOL_RECYCLE"] = 280
 
-DEFAULT_PROFIL_PIC = "icone.png"
-LANGAGES = ["de", "fr", "en"]
+DEFAULT_PROFIL_PIC:Final[str] = "icone.png"
+LANGAGES:Final[tuple[str,...]] = ("de", "fr", "en")
 if app.debug:
-    LANGAGES += ["ids", "pseudo"]
-PICTURE_SIZE = (200, 200)
+    LANGAGES += ("ids", "pseudo")  # pyright: ignore[reportConstantRedefinition, reportGeneralTypeIssues]
+PICTURE_SIZE:Final[tuple[int, int]] = (200, 200)
 
-db = SQLAlchemy(app)
+class Base(DeclarativeBase, MappedAsDataclass):  # pyright: ignore[reportUnsafeMultipleInheritance]
+  pass
+
+db = SQLAlchemy(app, model_class=Base)
 
 migrate = Migrate(app, db)
 
@@ -92,21 +98,22 @@ login_manager.login_view = "users.login"
 login_manager.login_message_category = "info"
 
 # ? error report
-mail_host = tuple(json.loads(cast(str, os.getenv("mail_host"))))
+mail_host = cast(str, json.loads(cast(str, os.getenv("mail_host"))))
 from_addr = cast(str, os.getenv("from_addr"))
 mail_token = cast(str, os.getenv("mail_token"))
-to_addrs = json.loads(cast(str, os.getenv("to_addrs")))
+to_addrs = cast(str, json.loads(cast(str, os.getenv("to_addrs"))))
 # ic(mail_host, from_addr, mail_token, to_addrs)
 
 
 class MailFormatter(logging.Formatter):
+    @override
     def format(self, record: logging.LogRecord) -> str:
         # region
         try:
             post_data = "\n\t".join(
                 [
                     f'"{k}": "{v}"' if v else f'"{k}"'
-                    for k, v in request.get_json().items()# type: ignore[union-attr]
+                    for k, v in request.get_json().items()  # pyright: ignore[reportAny]
                 ]
             )
         except:  # noqa: E722
@@ -179,32 +186,26 @@ if app.debug:
     LOCALE_ALIASES["pseudo"] = "pseudo"
     LOCALE_ALIASES["ids"] = "ids"
 
-babel = Babel(app)
-
-
-@babel.localeselector 
 def get_locale() -> str:
     # if a user is logged in, use the locale from the user settings
     # ic(session.get('lang'), request.accept_languages.best_match(LANGAGES))
-    if session.get("lang"):
-        return session["lang"]  # type: ignore[no-any-return]
+    if session.get("lang"):  # pyright: ignore[reportUnknownMemberType]
+        return cast(str, session["lang"])
     # otherwise try to guess the language from the user accept
     # header the browser transmits.  We support de/fr/en in this
     # example.  The best match wins.
-    return request.accept_languages.best_match(LANGAGES)# type: ignore[return-value]
+    return request.accept_languages.best_match(LANGAGES, default="en")
 
+babel = Babel(app, locale_selector=get_locale)
 
 from chrono_des_vignes.models import User  # noqa: E402
 
-
-@login_manager.user_loader  # type: ignore[misc]
-def load_user(user_id: str) -> User | None:
-    return User.query.filter_by(id=user_id).first()  # type: ignore[no-any-return]
-
+@login_manager.user_loader
+def load_user(user_id: str):
+    return db.session.query(User).filter_by(id=user_id).first()
 
 param = ParamSpec("param")
 ret = TypeVar("ret")
-
 
 def admin_required(func: Callable[param, ret]) -> Callable[param, ret | Response]:
     """
@@ -247,7 +248,7 @@ def lang_url_for(*args: Any, **kwargs: Any) -> str:
 
 
 @app.context_processor
-def jinja_context() -> dict[str, Any]:
+def jinja_context():
     return dict(
         _=gettext,
         url_for=lang_url_for,
@@ -257,17 +258,15 @@ def jinja_context() -> dict[str, Any]:
 
 
 routeP = ParamSpec("routeP")
-routeR = TypeVar("routeR")
-
-
+routeR = TypeVar("routeR", bound=ResponseReturnValue)
 def set_route(
     blueprint: Flask | Blueprint, path: str, **options: Any
-) -> Callable[[Callable[routeP, routeR]], routeR]:
-    def decorator(func):  # type: ignore
+) -> Callable[..., Callable[routeP, routeR]]:
+    def decorator(func: Callable[routeP, routeR])->Callable[routeP, routeR]:
         @blueprint.route(f"/<lang>{path}", **options)
         @blueprint.route(path, **options)
         @wraps(func)
-        def wrap(*args, **kwargs):  # type: ignore
+        def wrap(*args: routeP.args, **kwargs: routeP.kwargs):
             lang = kwargs.pop("lang", None)
             # ic('hey', lang, path, func.__name__)
             if lang is None:
@@ -285,15 +284,15 @@ def set_route(
 # ? error Handling
 
 
-@app.errorhandler(exceptions.Forbidden)  # type: ignore
+@app.errorhandler(exceptions.Forbidden)
 @app.errorhandler(exceptions.InternalServerError)
 @app.errorhandler(exceptions.MethodNotAllowed)
 @app.errorhandler(exceptions.NotFound)
 @app.errorhandler(exceptions.TooManyRequests)
-@app.errorhandler(exceptions.ImATeapot)# type: ignore
-def http_error(error: exceptions.HTTPException) -> tuple[str, int | None]:
-    return render_template("error/simple_error.html", error=error), error.code
-
+@app.errorhandler(exceptions.ImATeapot)
+def http_error(error: exceptions.HTTPException) -> Response:
+    html = render_template("error/simple_error.html", error=error)
+    return make_response(html, error.code)
 
 # ? end error Handling
 
@@ -314,4 +313,4 @@ if app.debug:
 from chrono_des_vignes.livetrack import livetrack  # noqa: E402
 
 app.register_blueprint(livetrack)
-from chrono_des_vignes import routes  # noqa: E402, F401
+from chrono_des_vignes import routes  # noqa: E402, F401  # pyright: ignore[reportUnusedImport]

@@ -24,11 +24,13 @@ from .form import  Parcours_name_form, Etape_modif_form, Stand_modif_form, New_p
 from flask_login import login_required, current_user
 from chrono_des_vignes.models import Event, Stand, Trace, Parcours
 from folium import Map, Marker, Icon, PolyLine, Popup, LayerControl, TileLayer
-from jinja2 import Template
+from folium.template import Template
 from colour import Color
 from chrono_des_vignes.lib import get_points_elevation, calc_points_dist, midpoint
 from sqlalchemy import or_
 from werkzeug.wrappers.response import Response
+from flask_wtf import FlaskForm
+from typing import Any, Literal
 
 parcours_bp = Blueprint('parcours', __name__, template_folder='templates')
 
@@ -126,7 +128,7 @@ def parcours_page(event_name:str)->str|Response:
     
     return render_template("parcours.html", user_data=user, event_data=event, archived_parcours=archived_parcours, active_parcours=active_parcours, event_modif=True, form=form)
 
-def build_alt_graph(graph_data):
+def build_alt_graph(graph_data:list[Stand|Trace])->Any|None:
     return None
     
     points = []
@@ -172,10 +174,10 @@ def build_alt_graph(graph_data):
     return points
 
 
-def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_stand_id=None, current_trace_id=None):
+def create_map_and_alt_graph(parcours:Parcours, modif:bool= False, rdv: tuple[float, float]|None=None, current_stand_id:str|None=None, current_trace_id: str|None=None)-> Any:
      #! create the map
     map_style = request.args.get('map', 'osm')
-    map_styles={'topo':{'tiles':'https://tile.opentopomap.org/{z}/{x}/{y}.png',
+    map_styles:dict[str, dict[str, str|int|None]]={'topo':{'tiles':'https://tile.opentopomap.org/{z}/{x}/{y}.png',
                         'attr':'opentopomap',
                         'name':'topographie',
                         'max_zoom':17},
@@ -190,8 +192,8 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
     map_styles = {k:v if k==map_style else {**v, 'show':False} for k,v in map_styles.items()}
 
     program_list=[]
-    part_list = []
-    marker_coordonee = []
+    part_list:list[Stand|Trace] = []
+    marker_coordonee:list[tuple[float, float]] = []
     stands=set()
     next_path_name =[]
     last_path_name = []
@@ -210,10 +212,11 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
                 var {{this.get_name()}} = L.popup({{ this.options|tojson }});
                 {{ this._parent.get_name() }}.on("click", function() {on_marker_click(%s)})
                 """%start.id)
-        last_m=Marker((start.lat, start.lng),
+        last_m:Marker=Marker((start.lat, start.lng),
                 tooltip=start.name,
                 icon=Icon(icon_color=start.color.hex, icon='flag-checkered', prefix='fa', color='orange' if new_stand.id != current_stand_id else 'green'),
-                popup=popup if modif else None).add_to(map)
+                popup=popup if modif else None)
+        last_m.add_to(map)
         element_name = last_m.get_name()
         part_list.append(start)
         program_list.append({'type':'marker', 'lat':start.lat, 'lng':start.lng, 'name':start.name, 'id':start.id, 'color':start.color.hex, 'step':0})
@@ -242,7 +245,8 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
                     last_m=Marker((new_stand.lat, new_stand.lng),
                         tooltip=new_stand.name,
                         icon=Icon(icon_color=new_stand.color.hex, prefix='fa', icon='stopwatch' if new_stand.chrono else 'circle-info'),
-                        popup=popup if modif else None).add_to(map)
+                        popup=popup if modif else None)
+                    last_m.add_to(map)
                     if current_stand_id is not None and new_stand.id == current_stand_id :
                         last_m.icon.options['markerColor']='green'
                         element_name = last_m.get_name()
@@ -256,7 +260,7 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
                 program_list.append({'type':'trace', 'name':trace.name, 'id':trace.id, 'trace':eval(trace.trace)})
                 program_list.append({'type':'marker', 'lat':new_stand.lat, 'lng':new_stand.lng, 'name':new_stand.name, 'id':new_stand.id, 'color':new_stand.color.hex, 'step':step})
 
-                poly_points = [[old_stand.lat, old_stand.lng ],*([lat, lng] for lat, lng, _ in eval(trace.trace)),[new_stand.lat, new_stand.lng]]
+                poly_points = [(old_stand.lat, old_stand.lng ),*((lat, lng) for lat, lng, _ in eval(trace.trace)),(new_stand.lat, new_stand.lng)]
                 marker_coordonee += poly_points
                 if modif:
                     popup = Popup()
@@ -265,7 +269,7 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
                                 {{ this._parent.get_name() }}.on("click", function() {on_trace_click(%s)})
                                 """%trace.id)
                 if str(trace.id)!=current_trace_id:
-                    poly = PolyLine(poly_points, tooltip=trace.name, popup=popup if modif else None).add_to(map)
+                    poly = PolyLine(poly_points, tooltip=trace.name, popup=popup if modif else None).add_to(map)#type: ignore
                 if current_stand_id is not None and new_stand.id == current_stand_id :
                     last_path_name.append(poly.get_name())
                 elif current_stand_id is not None and old_stand.id == current_stand_id :
@@ -287,18 +291,18 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
         trace = Trace.query.filter_by(id=current_trace_id).first()
         if trace is None or trace.parcours != parcours:
             abort(400)
-        poly_points = [[trace.start.lat, trace.start.lng ],*[[lat, lng] for lat, lng, _ in eval(trace.trace)],[trace.end.lat, trace.end.lng]]
-        marker_coordonee += poly_points
+        points :list[tuple[float, float]]= [(trace.start.lat, trace.start.lng ),*[(lat, lng) for lat, lng, _ in eval(trace.trace)],(trace.end.lat, trace.end.lng)]
+        marker_coordonee += points
         popup = Popup()
         popup._template = Template("""
                     var {{this.get_name()}} = L.popup({{ this.options|tojson }});
                     {{ this._parent.get_name() }}.on("click", function() {on_trace_click(%s)})
                     """%trace.id)
-        line = PolyLine(poly_points, dash_array='5', tooltip=trace.name, popup=popup).add_to(map)
+        line = PolyLine(points, dash_array='5', tooltip=trace.name, popup=popup).add_to(map)#type: ignore
         element_name= line.get_name()
-        last_point = tuple(poly_points[0])
+        last_point:tuple[float, float] = points[0]
         i=-1
-        for i,( lat, lng) in enumerate(poly_points[1:-1]): # affiche chaque marker d'angle et les signes plus pour ajouter un point
+        for i,( lat, lng) in enumerate(points[1:-1]): # affiche chaque marker d'angle et les signes plus pour ajouter un point
             popup = Popup()
             popup._template = Template("""
                         var {{this.get_name()}} = L.popup({{ this.options|tojson }});
@@ -324,7 +328,7 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
             markers_name.append({'lat':lat, 'lng':lng, 'name':marker.get_name()})
             last_point = (lat, lng)
         # affiche le dernier point d'ajout
-        midlatlng = midpoint(last_point, poly_points[-1])
+        midlatlng = midpoint(last_point, points[-1])
         popup = Popup()
         popup._template = Template("""
                 var {{this.get_name()}} = L.popup({{ this.options|tojson }});
@@ -336,14 +340,14 @@ def create_map_and_alt_graph(parcours:Parcours, modif= False, rdv=None, current_
 
     # trouver et centre la map sur le parcours
     lats, lngs = set([i[0] for i in marker_coordonee]), set([i[1] for i in marker_coordonee])
-    marker_coordonee = [[la, lo] for la, lo in marker_coordonee]
+    marker_coordonee = [(la, lo) for la, lo in marker_coordonee]
     if len(lats)!=0 or len(lngs)!=0:
         map.fit_bounds([min(marker_coordonee), max(marker_coordonee)], max_zoom=19)
     # ? ajout different layer
     #TileLayer('OpenStreetMap', max_zoom=20).add_to(map)
     #TileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr='Esri', name='satelite', max_zoom=20).add_to(map)
     for name, data in map_styles.items():
-        TileLayer(**data).add_to(map)
+        TileLayer(**data).add_to(map)#type: ignore
     LayerControl().add_to(map)
 
     if rdv:
@@ -396,7 +400,7 @@ def modify_stand(event_name:str, parcours_name:str, stand_id: int)->str|Response
                 # lng
                 stand.lng = modif_form.lng.data
                 # elevation
-                ele = get_points_elevation([(modif_form.lat.data, modif_form.lng.data)])
+                ele = get_points_elevation([(modif_form.lat.data, modif_form.lng.data)])#type: ignore
                 if ele:
                     stand.elevation = ele[0]['elevation']
             # color
@@ -428,20 +432,20 @@ def modify_trace(event_name:str, parcours_name:str, trace_id: int)->str|Response
             # name
             trace.name = modif_form.name.data
             try:
-                def float_int(value):
+                def float_int(value: str)->float|int:
                     try:
                         str(value).index('.')
                         return float(value)
                     except (ValueError, TypeError):
                         return int(value)
 
-                new = [[float_int(lat),float_int(lng)] for lat,lng in list(eval(modif_form.path.data))]
+                new = [(float_int(lat),float_int(lng)) for lat,lng in list(eval(modif_form.path.data))]#type: ignore
                 elevation = get_points_elevation(new)
-                new = str([[float_int(lat),float_int(lng), float_int(ele['elevation'])] for (lat,lng), ele in zip(list(eval(modif_form.path.data)), elevation)])
+                new_trace = str([[float_int(lat),float_int(lng), float_int(ele['elevation'])] for (lat,lng), ele in zip(list(eval(modif_form.path.data)), elevation)])#type: ignore
             except Exception:
                 return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
             else:
-                trace.trace = new
+                trace.trace = new_trace
             db.session.commit()
             #return redirect(request.path)
         else:
@@ -460,7 +464,7 @@ def new_stand(event_name:str, parcours_name:str, last_marker: int)->str|Response
     turn_nb = 1
     stand : Stand = parcours.start_stand
     for i in range(last_marker):
-        stand:Stand = stand.start_trace.filter_by(turn_nb=turn_nb).first().end
+        stand = stand.start_trace.filter_by(turn_nb=turn_nb).first().end
         if stand == parcours.start_stand:
             turn_nb += 1
    #ic(stand, turn_nb)
@@ -469,12 +473,12 @@ def new_stand(event_name:str, parcours_name:str, last_marker: int)->str|Response
     modif_form= Stand_modif_form()
    #ic(stand.start_trace.filter_by(turn_nb=turn_nb).count())
     if last_marker == -1 or not stand.start_trace.filter_by(turn_nb=turn_nb).count():
-        modif_form.chrono.data=1
+        modif_form.chrono.data=True
         modif_form.chrono.render_kw  = {'disabled':''}
 
     if modif_form.validate_on_submit():
-        elevation = get_points_elevation([(modif_form.lat.data, modif_form.lng.data)])
-        elevation = elevation[0]['elevation'] if elevation else None
+        elev = get_points_elevation([(modif_form.lat.data, modif_form.lng.data)])#type: ignore
+        elevation = elev[0]['elevation'] if elev else None
         new_stand = Stand(name=modif_form.name.data,
                         lat=modif_form.lat.data,
                         lng=modif_form.lng.data,
@@ -642,7 +646,7 @@ def delete_trace(event_name:str, parcours_name:str, trace_id: int)->str|Response
         
     return redirect(url_for('admin.parcours.modify_parcours', event_name=event.name, parcours_name=parcours.name))
 
-def render_modify_parcours(event, parcours, modif_form_type=None, modif_form=None, **kwargs)->str|Response:
+def render_modify_parcours(event:Event, parcours: Parcours, modif_form_type:Literal['marker', 'trace', 'new']|None=None, modif_form:FlaskForm|None=None, **kwargs: Any)->str|Response:
     user = current_user
     already_use = bool(parcours.editions.count())
     if not (modif_form_type and modif_form):
@@ -665,7 +669,11 @@ def render_modify_parcours(event, parcours, modif_form_type=None, modif_form=Non
         else:
             name_form.name.errors = list(name_form.name.errors)+['vous utiliser deja ce nom.']
 
-    map_data = create_map_and_alt_graph(parcours, modif=not already_use, current_stand_id=kwargs.get('stand').id if 'stand' in kwargs else None, current_trace_id=kwargs.get('trace').id if 'trace' in kwargs else None)
+    map_data = create_map_and_alt_graph(parcours,
+                                        modif=not already_use, 
+                                        current_stand_id=kwargs['stand'].id if 'stand' in kwargs else None, 
+                                        current_trace_id=kwargs['trace'].id if 'trace' in kwargs else None)
+    
     element_name, last_path_name, next_path_name, markers_name, program_list, map, graph = map_data
 
     #? render the map

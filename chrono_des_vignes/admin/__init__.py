@@ -85,7 +85,7 @@ def home_event(event_name:str)->str|Response:
     })
 
     if event_form.validate_on_submit():
-        event_data.description = event_form.description.data
+        event_data.description = event_form.description.data#type: ignore[assignment]
         db.session.commit()
         flash('l\'évenement a bien été mise a jour.', 'success')
 

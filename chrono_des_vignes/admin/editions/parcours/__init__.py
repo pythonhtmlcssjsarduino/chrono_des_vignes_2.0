@@ -27,6 +27,7 @@ from flask_socketio import join_room, leave_room, emit
 from ..passages import get_passage_data
 from typing import Any
 from werkzeug.wrappers.response import Response
+from icecream import ic
 
 parcours = Blueprint('parcours', __name__, template_folder='templates')
 

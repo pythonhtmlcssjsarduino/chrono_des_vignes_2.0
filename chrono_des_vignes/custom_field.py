@@ -18,10 +18,11 @@
 # You may contact me at chrono-des-vignes@ikmail.com
 '''
 
+from collections.abc import Iterable
 from markupsafe import Markup
 from wtforms import widgets, SelectMultipleField, StringField, Field
 from wtforms.widgets import Input
-from typing import Any
+from typing import Any, cast
 
 class BootstrapListWidget(widgets.ListWidget):
     def __call__(self, field: Field, **kwargs: Any)->Markup:
@@ -34,7 +35,7 @@ class BootstrapListWidget(widgets.ListWidget):
         """
         kwargs.setdefault("id", field.id)
         html = [f"<{self.html_tag} {widgets.html_params(**kwargs)}>"]
-        for subfield in field:# type: ignore[attr-defined]
+        for subfield in cast(Iterable[Field], cast(object, field)):
             if self.prefix_label:
                 html.append(f"<li class='list-group-item'>{subfield.label} {subfield(class_='form-check-input ms-1')}</li>")
             else:
@@ -46,7 +47,7 @@ class BootstrapListWidgetWithDescription(widgets.ListWidget):
     def __call__(self, field: Field, **kwargs: Any)->Markup:
         kwargs.setdefault("id", field.id)
         html = [f"<{self.html_tag} {widgets.html_params(**kwargs)}>"]
-        for subfield in field:# type: ignore[attr-defined]
+        for subfield in cast(Iterable[Field], cast(object, field)):
             try: 
                 data = eval(subfield.data)
             except (SyntaxError, TypeError): 
